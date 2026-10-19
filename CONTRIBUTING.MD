@@ -388,7 +388,7 @@ As the project grows, the team can introduce:
 These are future improvements, not requirements that are already implemented.
 
 ---
-
+##
 ## Final Principle
 
 **Every branch should represent a clear task, every pull request should explain a clear change, and `main` should remain the shared version of the project that everyone can trust.**
