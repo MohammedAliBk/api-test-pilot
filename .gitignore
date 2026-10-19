@@ -1,0 +1,102 @@
+# ==========================================
+# Environment variables and secrets
+# ==========================================
+.env
+.env.*
+!.env.example
+#!.env.*.example
+*.pem
+*.key
+secrets/
+secrets.json
+
+# ==========================================
+# OS and editor files
+# ==========================================
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# ==========================================
+# Frontend: Node.js, React, Vite
+# ==========================================
+node_modules/
+dist/
+.vite/
+coverage/
+.npm/
+*.tsbuildinfo
+
+# ==========================================
+# .NET / ASP.NET Core
+# ==========================================
+**/bin/
+**/obj/
+**/TestResults/
+*.user
+*.suo
+*.cache
+artifacts/
+
+# ==========================================
+# Python / FastAPI
+# ==========================================
+__pycache__/
+*.py[cod]
+*$py.class
+.python-version
+.venv/
+venv/
+env/
+ENV/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+*.egg-info/
+pip-wheel-metadata/
+
+# ==========================================
+# Logs and temporary files
+# ==========================================
+*.log
+logs/
+tmp/
+temp/
+*.tmp
+*.bak
+
+# ==========================================
+# Databases and local data
+# ==========================================
+*.db
+*.sqlite
+*.sqlite3
+database-data/
+sqlserver-data/
+
+# ==========================================
+# Test reports and generated output
+# ==========================================
+test-results/
+playwright-report/
+blob-report/
+
+# ==========================================
+# Docker local overrides
+# ==========================================
+docker-compose.override.yaml
+docker-compose.override.yml
+
+# ==========================================
+# Local deployment configuration
+# ==========================================
+deploy/.env
+deploy/*.local.yaml
+deploy/*.local.yml
+
