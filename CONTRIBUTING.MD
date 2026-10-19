@@ -386,7 +386,7 @@ As the project grows, the team can introduce:
 - Deployment health checks and recovery procedures.
 
 These are future improvements, not requirements that are already implemented.
-#
+
 ---
 
 ## Final Principle
