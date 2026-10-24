@@ -3,7 +3,7 @@ name: .NET
 on:
   workflow_dispatch:
   push: 
-    branches: ["init-service", "main"]
+    branches: ["Init-service", "main"]
   pull_request:
       branches: ["main"]
 
