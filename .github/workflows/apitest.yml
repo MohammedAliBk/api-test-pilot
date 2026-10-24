@@ -2,24 +2,33 @@ name: .NET
 
 on:
   push: 
-    branches: ["init-service"]
-  pull_request: ["main"]
+    branches: ["init-service", "main"]
+  pull_request:
+      branches: ["main"]
 
 
 jobs:
   build:
-  runs-on: ubuntu-latest
+    runs-on: ubuntu-latest
 
-  steps:
-    - uses: actions/checkout@v4
-    - name: setup .NET
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: 8.0.x
-    - name: restore dependencies
-      run: dotnet restore
-    - name: build 
-      run: dotnet build --no-restore
-    - name: test
-      run: dotnet test --no-build --verbosity normal
+    defaults:
+      run:
+        working-directory: ./backend
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "10.0.x"
+      
+      - name: restore dependencies
+        run: dotnet restore APITestPilot/APITestPilot.slnx
+      
+      - name: build 
+        run: dotnet build APITestPilot/APITestPilot.slnx --no-restore
+      
+      - name: test
+        run: dotnet test APITestPilot/APITestPilot.slnx --no-build --verbosity normal
 
