@@ -42,3 +42,4 @@ Requests for shared contracts or infrastructure outside `frontend/`:
 | Date | Target Team | Service Area | Request Summary | Status |
 |---|---|---|---|---|
 | 2026-10-24 | Backend (Ahmed Mohamed) | API Contracts | Export generated OpenAPI v3 JSON spec from .NET backend (`Scalar`/`SwaggerGen`) to verify DTO schemas for TestRun, TestCase, and TestResult. | PENDING |
+| 2026-10-25 | DevOps (Mohamed Ali, Mohamed Samir) | CI/CD & Docker | Handover guide provided for frontend Dockerfile multi-stage build, Nginx SPA routing, and GitHub Actions CI workflow (see `docs/summaries/DEVOPS_INTEGRATION_HANDOVER.md`). | PENDING |
