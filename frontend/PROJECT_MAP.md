@@ -43,7 +43,22 @@ frontend/
 │   ├── tools/                               # Token validation scripts
 │   │   └── check-tokens.mjs                 # Linter for token violations & raw values
 │   └── prototypes/                          # Standalone HTML prototypes (v1-v4)
-└── src/                                     # Application source code (initialized in build phase)
+└── src/                                     # Application source code
+    ├── components/                          # Shared UI and domain components
+    │   ├── ui/                              # Headless primitives (36px control metric)
+    │   └── domain/                          # Test state badges & execution cards
+    ├── features/                            # Feature slices (Import, Explorer, Runs, Results)
+    ├── hooks/                               # Custom application hooks
+    ├── lib/                                 # Utilities (cn helper, query client, API client)
+    │   └── utils.ts                         # Class merging utility (clsx + tailwind-merge)
+    ├── store/                               # Zustand client state stores
+    ├── test/                                # Testing setup and mock polyfills
+    │   └── setup.ts                         # Vitest setup (jest-dom + ResizeObserver mock)
+    ├── types/                               # TypeScript declarations & OpenAPI schemas
+    ├── App.tsx                              # Root application component & domain showcase
+    ├── App.test.tsx                         # Unit tests verifying App & domain states
+    ├── globals.css                          # Global stylesheet linking tokens.css
+    └── main.tsx                             # Application entry point with QueryClientProvider
 ```
 
 ---

@@ -134,3 +134,16 @@ This document is the chronological log of all architectural, library, schema, an
 - **Decision**: Option 1. Structured Conventional Commits (`chore:`, `docs:`) with explicit `frontend/` staging paths.
 - **Rationale**: Ensures transparent history and strict adherence to the scope lock rule.
 - **Consequences**: Git staging is executed via `git add frontend/...`, never `git add -A`.
+
+---
+
+### DEC-011: Dependencies and Tooling Stack Selection
+- **Date**: 2026-10-25
+- **Related Task**: TASK-002
+- **Question**: Which packages and tooling configurations should be installed for Vite, React, TypeScript, styling, state, UI primitives, forms, charts, and API client?
+- **Options Considered**:
+  1. Vite + React 18 + TypeScript + Tailwind CSS v3 (wired to `design/reference/tailwind.preset.js`) + shadcn/ui / Radix UI primitives + `@tanstack/react-query` v5 + `react-hook-form` + `zod` + `@hookform/resolvers` + `recharts` + `lucide-react` + `openapi-fetch` / `openapi-typescript` + `vitest` + `@testing-library/react` (Approved).
+  2. Minimalist manual fetch with custom components.
+- **Decision**: Option 1, explicitly requested and approved by Memo (2026-10-25).
+- **Rationale**: Combines maximum type safety, accessibility, headless token integration, OpenAPI contract synchronization, and data visualization without reinventing established developer tool utilities.
+- **Consequences**: Installed strictly under `frontend/package.json` with `pnpm`. Zero dependencies at the root. All UI primitives must enforce the 36px control metric and design tokens.

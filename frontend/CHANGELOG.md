@@ -10,6 +10,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- TASK-002: Initialized base tooling and production Vite application harness under `frontend/`.
+- Configured Vite with React 18, TypeScript (strict mode, bundler resolution), and `@/*` path alias.
+- Integrated Tailwind CSS consuming `design/reference/tailwind.preset.js` and `design/reference/tokens.css`.
+- Installed and verified core stack: `@tanstack/react-query` v5, `zustand`, `react-hook-form`, `zod`, `@hookform/resolvers`, `recharts`, `lucide-react`, `openapi-fetch`, and `openapi-typescript`.
+- Configured Vitest test runner with `@testing-library/react`, `@testing-library/jest-dom`, and JSDOM environment.
+- Added standard application utility `src/lib/utils.ts` (`cn` helper using `clsx` and `tailwind-merge`).
+- Added responsive domain state harness `src/App.tsx` and unit tests in `src/App.test.tsx`.
 - TASK-001: Established frontend agent operating system, directory layout, and orchestration framework.
 - Core rules under `.agents/rules/`: `scope-lock`, `core-rules`, `loop-and-orchestration`, `frontend-design`, `frontend-quality`, and `frontend-domain`.
 - Modular specialized skills under `.agents/skills/`: `frontend-architecture`, `design-system-tokens`, `design-research`, `design-prototype`, `page-implementation`, `api-integration`, `frontend-review`, `frontend-testing`, `task-management`, and `docs-writing`.

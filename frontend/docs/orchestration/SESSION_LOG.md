@@ -37,3 +37,38 @@ This log tracks every engineering session on the API Test Pilot frontend.
   - Rule & file size limits: All rules and skills verified under 12,000 characters.
   - Orchestration Integrity Check: 100% passed.
 - **Resume here**: Start TASK-002: Base Tooling & Vite Application Bootstrap (`/new-task Base Tooling & Vite Application Bootstrap`).
+
+---
+
+## Session 2026-10-25: TASK-002 Base Tooling & Vite Application Bootstrap
+
+- **Timestamp**: 2026-10-25T16:52:38+03:00
+- **Operator**: Frontend Agent Orchestrator & Memo (Frontend Developer)
+- **Active Branch**: `chore/fe-tooling-vite-bootstrap`
+- **Starting State**: TASK-001 merged into `chore/frontend-agent-setup`. Switched to `chore/fe-tooling-vite-bootstrap`.
+- **Approved Scope**: Memo approved installing:
+  - React + TypeScript + Vite
+  - Tailwind CSS (consuming `tailwind.preset.js`)
+  - shadcn/ui primitives (`@radix-ui/*`, `class-variance-authority`, `clsx`, `tailwind-merge`, `tailwindcss-animate`)
+  - TanStack Query v5 (`@tanstack/react-query`)
+  - React Hook Form + Zod (`react-hook-form`, `zod`, `@hookform/resolvers`)
+  - Recharts (`recharts`)
+  - OpenAPI-generated client tooling (`openapi-fetch`, `openapi-typescript`)
+  - Lucide React icons (`lucide-react`)
+  - Vitest + Testing Library
+- **Decisions Recorded**: `DEC-011` added to `DECISIONS.md`.
+- **Task Registered**: `TASK-002` created in `TASKS.md` with status `IN_PROGRESS` -> `READY_FOR_REVIEW`.
+- **Execution Completed**:
+  - Scaffolding `package.json`, TS configs, Vite, Tailwind, globals.css, utils.ts, setup.ts, App.tsx, App.test.tsx.
+  - Dependencies installed cleanly via `pnpm install`.
+  - Fixed JSDOM ResizeObserver for Recharts in `setup.ts`.
+  - Fixed relative CSS import for tokens.css in `globals.css`.
+  - `pnpm type-check`: 0 errors.
+  - `pnpm test`: 4/4 tests passed.
+  - `pnpm build`: production assets generated cleanly in `dist/`.
+  - `node design/tools/check-tokens.mjs`: 0 token violations.
+  - `git status`: 100% of untracked/modified files strictly under `frontend/`.
+  - Gate G3 approved by Memo (2026-10-25).
+  - Committed on `chore/fe-tooling-vite-bootstrap` under `chore: bootstrap vite react typescript tooling, tailwind, tanstack query, and vitest`.
+  - Set TASK-002 status to `DONE`.
+- **Resume here**: Start TASK-004: Page Pipeline — Import Spec View (`/new-page import-spec`).

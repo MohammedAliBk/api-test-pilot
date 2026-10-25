@@ -9,6 +9,7 @@ This registry tracks all engineering tasks for the API Test Pilot frontend.
 | ID | Title | Status | Branch | Version | Created | Updated | Depends on |
 |---|---|---|---|---|---|---|---|
 | TASK-001 | Frontend Agent Operating System Setup | DONE | chore/frontend-agent-setup | 0.0.1-alpha | 2026-10-24 | 2026-10-25 | None |
+| TASK-002 | Base Tooling & Vite Application Bootstrap | DONE | chore/fe-tooling-vite-bootstrap | 0.0.1-alpha | 2026-10-25 | 2026-10-25 | TASK-001 |
 
 ---
 
@@ -16,11 +17,7 @@ This registry tracks all engineering tasks for the API Test Pilot frontend.
 
 These items are proposals awaiting Memo's formal promotion into tracked tasks:
 
-1. **TASK-002: Base Tooling & Vite Application Bootstrap**  
-   *Scope*: Initialize Vite + React 19/18 + TypeScript + Tailwind CSS preset + Vitest + ESLint + Prettier in `frontend/`.  
-   *Depends on*: TASK-001.
-
-2. **TASK-003: Design Reference Page & Component Primitives**  
+1. **TASK-003: Design Reference Page & Component Primitives**  
    *Scope*: Implement interactive `reference.html` and headless base components (`Button`, `Input`, `Select`, `Dialog`, `StatusBadge`) in `src/components/ui/` adhering to the 36px control metric.  
    *Depends on*: TASK-002.
 
