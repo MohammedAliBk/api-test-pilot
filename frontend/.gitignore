@@ -1,0 +1,21 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Production build output
+dist/
+dist-ssr/
+
+# Vite & IDE caches
+.vite/
+*.local
+*.tsbuildinfo
+
+# Test and coverage output
+coverage/
+test-results/
+
+# Environment files and credentials
+.env
+.env.*
+!.env.example

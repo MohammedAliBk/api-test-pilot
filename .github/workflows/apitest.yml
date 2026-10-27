@@ -1,0 +1,35 @@
+name: .NET 
+
+on:
+  workflow_dispatch:
+  push: 
+    branches: ["Init-service", "main"]
+  pull_request:
+      branches: ["main"]
+
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: ./backend
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "10.0.x"
+      
+      - name: restore dependencies
+        run: dotnet restore APITestPilot/APITestPilot.slnx
+      
+      - name: build 
+        run: dotnet build APITestPilot/APITestPilot.slnx --no-restore
+      
+      - name: test
+        run: dotnet test APITestPilot/APITestPilot.slnx --no-build --verbosity normal
+

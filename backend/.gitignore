@@ -1,0 +1,92 @@
+# ==============================
+# .NET / Visual Studio
+# ==============================
+
+[Bb]in/
+[Oo]bj/
+[Ll]ogs/
+[Ll]og/
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Aa]rtifacts/
+[Tt]est[Rr]esults/
+[Bb]uild[Ll]og.*
+
+# Visual Studio
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.rsuser
+*.sln.ide
+
+# Rider / JetBrains
+.idea/
+*.sln.iml
+
+# VS Code
+.vscode/*
+!.vscode/extensions.json
+!.vscode/launch.json
+!.vscode/tasks.json
+
+# ==============================
+# .NET Secrets / Configuration
+# ==============================
+
+appsettings.Development.json
+appsettings.*.Development.json
+secrets.json
+
+# User-specific certificates and keys
+*.pfx
+*.p12
+*.key
+*.pem
+
+# ==============================
+# EF Core / Database
+# ==============================
+
+# Local database files
+*.mdf
+*.ldf
+*.db
+*.sqlite
+*.sqlite3
+
+# ==============================
+# Environment Variables
+# ==============================
+
+.env
+.env.*
+!.env.example
+
+# ==============================
+# Packages / Dependencies
+# ==============================
+
+node_modules/
+packages/
+.npm/
+
+# ==============================
+# OS Files
+# ==============================
+
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ==============================
+# Temporary Files
+# ==============================
+
+*.tmp
+*.temp
+*.bak
+*.log

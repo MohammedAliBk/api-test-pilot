@@ -1,0 +1,31 @@
+@import '../design/reference/tokens.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    @apply border-line;
+  }
+
+  body {
+    background-color: var(--color-surface);
+    color: var(--color-text-primary);
+    font-family: var(--font-sans);
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+    -webkit-font-smoothing: antialiased;
+  }
+}
+
+/* Tactical interaction affordances */
+.btn-press:active {
+  transform: scale(0.98);
+}
+
+.focus-ring:focus-visible {
+  border-color: var(--color-primary);
+  outline: none;
+}
