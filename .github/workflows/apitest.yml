@@ -4,8 +4,14 @@ on:
   workflow_dispatch:
   push: 
     branches: ["Init-service", "main"]
+    paths:
+      - 'backend/**'
+      - '.github/workflows/**'
   pull_request:
-      branches: ["main"]
+    branches: ["main"]
+    paths:
+      - 'frontend/**'
+      - '.github/workflows/**'   
 
 
 jobs:
