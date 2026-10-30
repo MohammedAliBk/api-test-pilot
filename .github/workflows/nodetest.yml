@@ -2,13 +2,15 @@ name: node.js CI
 
 on:
   push:
-    branches: ["main" , "CI/fe-tooling-vite-bootstrap"]
+    branches:
+      - '**'
     paths:
       - 'frontend/**'
       - '.github/workflows/**'
 
   pull_request:
-    branches: ["main"]
+    branches:
+      - '**'
     paths:
       - 'frontend/**'
       - '.github/workflows/**'
