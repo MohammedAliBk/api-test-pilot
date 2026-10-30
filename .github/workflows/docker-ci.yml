@@ -1,0 +1,154 @@
+
+name: Docker CI/CD
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'backend/**'
+      - 'frontend/**'
+      - '.github/workflows/docker-ci.yml'
+
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'backend/**'
+      - 'frontend/**'
+      - '.github/workflows/docker-ci.yml'
+
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+
+env:
+  REGISTRY: ghcr.io
+
+jobs:
+  backend:
+    name: Backend Docker Build & Test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set image owner
+        run: |
+          echo "IMAGE_OWNER=${GITHUB_REPOSITORY_OWNER,,}" >> "$GITHUB_ENV"
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build backend image
+        run: |
+          docker buildx build \
+            --load \
+            -t $REGISTRY/$IMAGE_OWNER/api-test-pilot-backend:${GITHUB_SHA} \
+            -f backend/Dockerfile \
+            backend/
+
+      - name: Test backend container
+        run: |
+          docker run -d \
+            --name backend-test \
+            -p 8080:8080 \
+            $REGISTRY/$IMAGE_OWNER/api-test-pilot-backend:${GITHUB_SHA}
+
+          for i in {1..30}; do
+            if curl -fsS http://localhost:8080/swagger > /dev/null; then
+              echo "Backend Swagger test passed!"
+              exit 0
+            fi
+
+            sleep 2
+          done
+
+          docker logs backend-test
+          exit 1
+
+      - name: Login to GHCR
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          echo "${{ secrets.GITHUB_TOKEN }}" | docker login $REGISTRY \
+            -u "$GITHUB_ACTOR" --password-stdin
+
+      - name: Push backend image
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          IMAGE=$REGISTRY/$IMAGE_OWNER/api-test-pilot-backend
+
+          docker tag $IMAGE:$GITHUB_SHA $IMAGE:latest
+
+          docker push $IMAGE:$GITHUB_SHA
+          docker push $IMAGE:latest
+
+      - name: Cleanup
+        if: always()
+        run: docker rm -f backend-test || true
+
+  frontend:
+    name: Frontend Docker Build & Test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set image owner
+        run: |
+          echo "IMAGE_OWNER=${GITHUB_REPOSITORY_OWNER,,}" >> "$GITHUB_ENV"
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build frontend image
+        run: |
+          docker buildx build \
+            --load \
+            -t $REGISTRY/$IMAGE_OWNER/api-test-pilot-frontend:${GITHUB_SHA} \
+            -f frontend/Dockerfile \
+            frontend/
+
+      - name: Test frontend container
+        run: |
+          docker run -d \
+            --name frontend-test \
+            -p 8081:80 \
+            $REGISTRY/$IMAGE_OWNER/api-test-pilot-frontend:${GITHUB_SHA}
+
+          for i in {1..30}; do
+            if curl -fsS http://localhost:8081/ > /dev/null; then
+              echo "Frontend HTTP test passed!"
+              exit 0
+            fi
+
+            sleep 2
+          done
+
+          docker logs frontend-test
+          exit 1
+
+      - name: Login to GHCR
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          echo "${{ secrets.GITHUB_TOKEN }}" | docker login $REGISTRY \
+            -u "$GITHUB_ACTOR" --password-stdin
+
+      - name: Push frontend image
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          IMAGE=$REGISTRY/$IMAGE_OWNER/api-test-pilot-frontend
+
+          docker tag $IMAGE:$GITHUB_SHA $IMAGE:latest
+
+          docker push $IMAGE:$GITHUB_SHA
+          docker push $IMAGE:latest
+
+      - name: Cleanup
+        if: always()
+        run: docker rm -f frontend-test || true
+
