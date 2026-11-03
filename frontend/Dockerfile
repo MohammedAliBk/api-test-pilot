@@ -14,7 +14,6 @@ RUN corepack enable && corepack prepare pnpm@latest --activate
 # 3. Install dependencies using pnpm
 # 3. Install dependencies using pnpm and allow build scripts
 RUN pnpm install --unsafe-perm=true --no-frozen-lockfile --allow-build=esbuild
-RUN pnpm install --unsafe-perm=true --no-frozen-lockfile --config.ignore-build=false
 
 # 4. Copy configuration files and source code
 COPY tsconfig*.json ./

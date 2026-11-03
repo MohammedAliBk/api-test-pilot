@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  # 1.  MySQL
+  db:
+    image: mysql:8.4
+    container_name: pilot_mysql_db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: YourStrongPassword123!
+      MYSQL_DATABASE: ApiTestPilotDb
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  # 2. الـ Backend (.NET 10)
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: pilot_backend
+    ports:
+      - "8080:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Server=db;Port=3306;Database=ApiTestPilotDb;Uid=root;Pwd=YourStrongPassword123!;
+    depends_on:
+      - db
+
+  # 3. الـ Frontend (React)
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: pilot_frontend
+    ports:
+      - "80:80"
+    environment:
+      - REACT_APP_API_URL=http://localhost:80
+    depends_on:
+      - backend
+
+volumes:
+  mysql_data:
