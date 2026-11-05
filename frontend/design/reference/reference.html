@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>API Test Pilot — Design System Token & Component Reference</title>
+  <link rel="stylesheet" href="./tokens.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="./tailwind.preset.js"></script>
+  <script>
+    if (typeof preset !== 'undefined') {
+      tailwind.config = preset;
+    }
+  </script>
+  <style>
+    body {
+      background-color: var(--color-surface);
+      color: var(--color-text-primary);
+      font-family: var(--font-sans);
+      margin: 0;
+      padding: 0;
+      -webkit-font-smoothing: antialiased;
+    }
+    .focus-ring:focus {
+      border-color: var(--color-primary);
+      outline: none;
+    }
+    .btn-press:active {
+      transform: scale(0.98);
+    }
+  </style>
+</head>
+<body class="min-h-screen p-6 max-w-7xl mx-auto">
+
+  <!-- Header & Theme Switcher -->
+  <header class="flex flex-wrap items-center justify-between pb-6 mb-8 border-b border-[var(--color-line)] gap-4">
+    <div>
+      <div class="flex items-center gap-3">
+        <h1 class="text-2xl font-bold tracking-tight">API Test Pilot — Design Reference</h1>
+        <span class="px-2 py-0.5 rounded-[var(--radius-control)] bg-[var(--color-primary-subtle)] text-[var(--color-primary)] text-xs font-bold uppercase tracking-wider">v1.0 Baseline</span>
+      </div>
+      <p class="text-[var(--color-text-secondary)] text-sm mt-1">Single source of truth for visual tokens, UI metrics, and domain test states.</p>
+    </div>
+    <div class="flex items-center gap-3">
+      <button id="themeToggle" class="min-h-[36px] px-3.5 py-1.5 rounded-[var(--radius-control)] border border-[var(--color-line-strong)] bg-[var(--color-surface-raised)] text-[var(--color-text-primary)] text-[13px] font-bold btn-press flex items-center gap-2 cursor-pointer transition-all duration-150">
+        <span id="themeLabel">🌙 Dark Mode</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Section 1: Surface & Structure Tokens -->
+  <section class="mb-10">
+    <h2 class="text-lg font-bold mb-4 flex items-center gap-2">
+      <span class="w-2.5 h-2.5 rounded-full bg-[var(--color-primary)]"></span>
+      1. Surfaces & Structural Borders
+    </h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+      <div class="p-4 rounded-[var(--radius-card)] border border-[var(--color-line)] bg-[var(--color-surface)]">
+        <span class="text-xs text-[var(--color-text-secondary)] block">--color-surface</span>
+        <span class="text-sm font-semibold mt-1 block">Canvas Background</span>
+      </div>
+      <div class="p-4 rounded-[var(--radius-card)] border border-[var(--color-line)] bg-[var(--color-surface-raised)] shadow-sm">
+        <span class="text-xs text-[var(--color-text-secondary)] block">--color-surface-raised</span>
+        <span class="text-sm font-semibold mt-1 block">Elevated Card / Modal</span>
+      </div>
+      <div class="p-4 rounded-[var(--radius-card)] border border-[var(--color-line)] bg-[var(--color-surface-subtle)]">
+        <span class="text-xs text-[var(--color-text-secondary)] block">--color-surface-subtle</span>
+        <span class="text-sm font-semibold mt-1 block">Subtle Row / Hover</span>
+      </div>
+      <div class="p-4 rounded-[var(--radius-card)] border border-[var(--color-line-strong)] bg-[var(--color-surface-raised)]">
+        <span class="text-xs text-[var(--color-text-secondary)] block">--color-line-strong</span>
+        <span class="text-sm font-semibold mt-1 block">Control Border</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 2: Domain Test Execution States -->
+  <section class="mb-10">
+    <h2 class="text-lg font-bold mb-2 flex items-center gap-2">
+      <span class="w-2.5 h-2.5 rounded-full bg-[var(--color-primary)]"></span>
+      2. Domain Test Execution States (First-Class Visual Language)
+    </h2>
+    <p class="text-sm text-[var(--color-text-secondary)] mb-4">Every test execution state has dedicated semantic foreground, background, and border tokens with AA contrast.</p>
+
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+      <!-- Queued -->
+      <div class="p-3 rounded-[var(--radius-card)] border border-[var(--color-state-queued-border)] bg-[var(--color-state-queued-bg)] text-[var(--color-state-queued-fg)]">
+        <div class="flex items-center justify-between">
+          <span class="text-xs uppercase tracking-wider font-bold">Queued</span>
+          <span class="w-2 h-2 rounded-full bg-[var(--color-state-queued-fg)]"></span>
+        </div>
+        <p class="text-xs mt-2 opacity-80">Pending in worker queue</p>
+      </div>
+
+      <!-- Running -->
+      <div class="p-3 rounded-[var(--radius-card)] border border-[var(--color-state-running-border)] bg-[var(--color-state-running-bg)] text-[var(--color-state-running-fg)]">
+        <div class="flex items-center justify-between">
+          <span class="text-xs uppercase tracking-wider font-bold">Running</span>
+          <span class="w-2 h-2 rounded-full bg-[var(--color-state-running-fg)] animate-ping"></span>
+        </div>
+        <p class="text-xs mt-2 opacity-80">Active HTTP execution</p>
+      </div>
+
+      <!-- Passed -->
+      <div class="p-3 rounded-[var(--radius-card)] border border-[var(--color-state-passed-border)] bg-[var(--color-state-passed-bg)] text-[var(--color-state-passed-fg)]">
+        <div class="flex items-center justify-between">
+          <span class="text-xs uppercase tracking-wider font-bold">Passed</span>
+          <span class="text-xs font-bold">✓</span>
+        </div>
+        <p class="text-xs mt-2 opacity-80">Deterministic match</p>
+      </div>
+
+      <!-- Failed -->
+      <div class="p-3 rounded-[var(--radius-card)] border border-[var(--color-state-failed-border)] bg-[var(--color-state-failed-bg)] text-[var(--color-state-failed-fg)]">
+        <div class="flex items-center justify-between">
+          <span class="text-xs uppercase tracking-wider font-bold">Failed</span>
+          <span class="text-xs font-bold">✕</span>
+        </div>
+        <p class="text-xs mt-2 opacity-80">Assertion failure (API bug)</p>
+      </div>
+
+      <!-- Error -->
+      <div class="p-3 rounded-[var(--radius-card)] border border-[var(--color-state-error-border)] bg-[var(--color-state-error-bg)] text-[var(--color-state-error-fg)]">
+        <div class="flex items-center justify-between">
+          <span class="text-xs uppercase tracking-wider font-bold">Error</span>
+          <span class="text-xs font-bold">⚠</span>
+        </div>
+        <p class="text-xs mt-2 opacity-80">Infrastructure / network failure</p>
+      </div>
+
+      <!-- Retrying -->
+      <div class="p-3 rounded-[var(--radius-card)] border border-[var(--color-state-retrying-border)] bg-[var(--color-state-retrying-bg)] text-[var(--color-state-retrying-fg)]">
+        <div class="flex items-center justify-between">
+          <span class="text-xs uppercase tracking-wider font-bold">Retrying</span>
+          <span class="text-xs font-bold">⟳</span>
+        </div>
+        <p class="text-xs mt-2 opacity-80">Bounded retry attempt</p>
+      </div>
+
+      <!-- Recovered -->
+      <div class="p-3 rounded-[var(--radius-card)] border border-[var(--color-state-recovered-border)] bg-[var(--color-state-recovered-bg)] text-[var(--color-state-recovered-fg)]">
+        <div class="flex items-center justify-between">
+          <span class="text-xs uppercase tracking-wider font-bold">Recovered</span>
+          <span class="text-xs font-bold">⚡</span>
+        </div>
+        <p class="text-xs mt-2 opacity-80">Resumed after worker crash</p>
+      </div>
+
+      <!-- Uncertain -->
+      <div class="p-3 rounded-[var(--radius-card)] border border-[var(--color-state-uncertain-border)] bg-[var(--color-state-uncertain-bg)] text-[var(--color-state-uncertain-fg)]">
+        <div class="flex items-center justify-between">
+          <span class="text-xs uppercase tracking-wider font-bold">Uncertain</span>
+          <span class="text-xs font-bold">?</span>
+        </div>
+        <p class="text-xs mt-2 opacity-80">Target reached, unpersisted</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 3: AI Segregation vs Deterministic Evidence -->
+  <section class="mb-10">
+    <h2 class="text-lg font-bold mb-2 flex items-center gap-2">
+      <span class="w-2.5 h-2.5 rounded-full bg-[var(--color-primary)]"></span>
+      3. AI Segregation vs. Deterministic Results
+    </h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div class="p-4 rounded-[var(--radius-card)] border border-[var(--color-line)] bg-[var(--color-surface-raised)]">
+        <div class="flex items-center gap-2 mb-2">
+          <span class="px-2 py-0.5 rounded-[var(--radius-control)] border border-[var(--color-state-failed-border)] bg-[var(--color-state-failed-bg)] text-[var(--color-state-failed-fg)] text-[11px] font-bold">DETERMINISTIC ASSERTION</span>
+          <span class="text-xs text-[var(--color-text-secondary)] font-mono">Status: 500 ≠ 200</span>
+        </div>
+        <p class="text-[13px] text-[var(--color-text-primary)]">Deterministic validation failed: Expected HTTP 200 OK, received 500 Internal Server Error in <bdi class="tabular-nums font-mono">142ms</bdi>.</p>
+      </div>
+
+      <div class="p-4 rounded-[var(--radius-card)] border border-[var(--color-ai-badge-border)] bg-[var(--color-ai-card-bg)]">
+        <div class="flex items-center gap-2 mb-2">
+          <span class="px-2 py-0.5 rounded-[var(--radius-control)] border border-[var(--color-ai-badge-border)] bg-[var(--color-ai-badge-bg)] text-[var(--color-ai-badge-fg)] text-[11px] font-bold flex items-center gap-1">✨ AI EXPLANATION</span>
+          <span class="text-xs text-[var(--color-text-secondary)]">Non-proof interpretation</span>
+        </div>
+        <p class="text-[13px] text-[var(--color-text-primary)]">The target API crashed with a NullReferenceException in the authentication middleware when the Bearer token was empty.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 4: The 36px Control Metric -->
+  <section class="mb-10">
+    <h2 class="text-lg font-bold mb-2 flex items-center gap-2">
+      <span class="w-2.5 h-2.5 rounded-full bg-[var(--color-primary)]"></span>
+      4. The 36px Control Metric (Strictly Standardized)
+    </h2>
+    <p class="text-sm text-[var(--color-text-secondary)] mb-4">All buttons, inputs, selects, search bars, and segmented controls are strictly 36px tall, 13px bold, with 6px radius.</p>
+
+    <div class="p-5 rounded-[var(--radius-card)] border border-[var(--color-line)] bg-[var(--color-surface-raised)] flex flex-wrap items-center gap-4">
+      <button class="min-h-[36px] px-3.5 py-1.5 rounded-[var(--radius-control)] bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover)] text-white text-[13px] font-bold btn-press cursor-pointer transition-all duration-150">
+        Primary Action
+      </button>
+
+      <button class="min-h-[36px] px-3.5 py-1.5 rounded-[var(--radius-control)] border border-[var(--color-line-strong)] bg-[var(--color-surface-raised)] hover:bg-[var(--color-surface-subtle)] text-[var(--color-text-primary)] text-[13px] font-bold btn-press cursor-pointer transition-all duration-150">
+        Secondary Action
+      </button>
+
+      <button class="min-h-[36px] px-3.5 py-1.5 rounded-[var(--radius-control)] border border-[var(--color-state-failed-border)] bg-[var(--color-state-failed-bg)] text-[var(--color-state-failed-fg)] text-[13px] font-bold btn-press cursor-pointer transition-all duration-150">
+        Danger Button
+      </button>
+
+      <button disabled class="min-h-[36px] px-3.5 py-1.5 rounded-[var(--radius-control)] border border-[var(--color-line)] bg-[var(--color-surface-subtle)] text-[var(--color-text-muted)] text-[13px] font-bold opacity-60 cursor-not-allowed">
+        Disabled Control
+      </button>
+
+      <input type="text" placeholder="https://api.target.com/v1" class="min-h-[36px] px-3 py-1.5 rounded-[var(--radius-control)] border border-[var(--color-line-strong)] bg-[var(--color-surface)] text-[var(--color-text-primary)] text-[13px] font-medium focus-ring w-64" />
+
+      <select class="min-h-[36px] px-3 py-1.5 rounded-[var(--radius-control)] border border-[var(--color-line-strong)] bg-[var(--color-surface)] text-[var(--color-text-primary)] text-[13px] font-bold focus-ring cursor-pointer">
+        <option>All Endpoints (48)</option>
+        <option>Failed Assertions (3)</option>
+        <option>Uncertain States (1)</option>
+      </select>
+    </div>
+  </section>
+
+  <!-- Section 5: Data Table Specimen -->
+  <section class="mb-10">
+    <h2 class="text-lg font-bold mb-4 flex items-center gap-2">
+      <span class="w-2.5 h-2.5 rounded-full bg-[var(--color-primary)]"></span>
+      5. Data Table Row & Density Specimen
+    </h2>
+    <div class="rounded-[var(--radius-card)] border border-[var(--color-line)] bg-[var(--color-surface-raised)] overflow-hidden">
+      <table class="w-full text-start border-collapse text-[13px]">
+        <thead>
+          <tr class="border-b border-[var(--color-line)] bg-[var(--color-surface-subtle)] text-[var(--color-text-secondary)] text-[11px] uppercase font-bold tracking-wider">
+            <th class="text-start px-3.5 py-2.5">Method & Path</th>
+            <th class="text-start px-3.5 py-2.5">State</th>
+            <th class="text-start px-3.5 py-2.5">Duration</th>
+            <th class="text-start px-3.5 py-2.5">Category</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-[var(--color-line)]">
+          <tr class="hover:bg-[var(--color-surface-subtle)] transition-colors duration-150 cursor-pointer">
+            <td class="px-3.5 py-2.5 font-mono"><span class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 mr-2">GET</span>/api/v1/projects</td>
+            <td class="px-3.5 py-2.5"><span class="px-2 py-0.5 rounded-[var(--radius-control)] border border-[var(--color-state-passed-border)] bg-[var(--color-state-passed-bg)] text-[var(--color-state-passed-fg)] text-[11px] font-bold">PASSED</span></td>
+            <td class="px-3.5 py-2.5 font-mono"><bdi class="tabular-nums">48 ms</bdi></td>
+            <td class="px-3.5 py-2.5 text-[var(--color-text-secondary)]">Functional</td>
+          </tr>
+          <tr class="hover:bg-[var(--color-surface-subtle)] transition-colors duration-150 cursor-pointer">
+            <td class="px-3.5 py-2.5 font-mono"><span class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-blue-500/10 text-blue-500 border border-blue-500/20 mr-2">POST</span>/api/v1/test-runs</td>
+            <td class="px-3.5 py-2.5"><span class="px-2 py-0.5 rounded-[var(--radius-control)] border border-[var(--color-state-failed-border)] bg-[var(--color-state-failed-bg)] text-[var(--color-state-failed-fg)] text-[11px] font-bold">FAILED</span></td>
+            <td class="px-3.5 py-2.5 font-mono"><bdi class="tabular-nums">215 ms</bdi></td>
+            <td class="px-3.5 py-2.5 text-[var(--color-text-secondary)]">Validation</td>
+          </tr>
+          <tr class="hover:bg-[var(--color-surface-subtle)] transition-colors duration-150 cursor-pointer">
+            <td class="px-3.5 py-2.5 font-mono"><span class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-amber-500/10 text-amber-500 border border-amber-500/20 mr-2">DELETE</span>/api/v1/targets/89</td>
+            <td class="px-3.5 py-2.5"><span class="px-2 py-0.5 rounded-[var(--radius-control)] border border-[var(--color-state-uncertain-border)] bg-[var(--color-state-uncertain-bg)] text-[var(--color-state-uncertain-fg)] text-[11px] font-bold">UNCERTAIN</span></td>
+            <td class="px-3.5 py-2.5 font-mono"><bdi class="tabular-nums">—</bdi></td>
+            <td class="px-3.5 py-2.5 text-[var(--color-text-secondary)]">Recovery Required</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <script>
+    // Theme Switcher Logic
+    const toggleBtn = document.getElementById('themeToggle');
+    const label = document.getElementById('themeLabel');
+    let isDark = true;
+
+    toggleBtn.addEventListener('click', () => {
+      isDark = !isDark;
+      if (isDark) {
+        document.documentElement.removeAttribute('data-theme');
+        label.textContent = '🌙 Dark Mode';
+      } else {
+        document.documentElement.setAttribute('data-theme', 'light');
+        label.textContent = '☀️ Light Mode';
+      }
+    });
+  </script>
+</body>
+</html>

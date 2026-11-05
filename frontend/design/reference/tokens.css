@@ -1,0 +1,265 @@
+/**
+ * API Test Pilot — Design System Tokens
+ * Source of Truth: design/reference/tokens.css
+ * Theme: Dual Theme (Dark Default, Light via [data-theme="light"])
+ * AA Contrast Ratio compliant (WCAG 2.1 AA)
+ */
+
+:root {
+  /* =========================================================================
+   * 1. Surfaces & Canvas (Dark Default)
+   * ========================================================================= */
+  --color-surface: #0e1117;              /* App workspace canvas */
+  --color-surface-raised: #161b22;       /* Cards, elevated panels, modal backgrounds */
+  --color-surface-subtle: #21262d;       /* Hover states, active table rows, chip backgrounds */
+  --color-surface-overlay: rgba(14, 17, 23, 0.85); /* Modal backdrops with blur */
+
+  /* =========================================================================
+   * 2. Borders & Dividers
+   * ========================================================================= */
+  --color-line: #30363d;                 /* Structural dividers & card borders (1px) */
+  --color-line-strong: #484f58;          /* Control borders (inputs, selects, buttons) */
+  --color-line-focus: #3b82f6;           /* Focus border indicator */
+
+  /* =========================================================================
+   * 3. Typography & Text Hierarchy
+   * ========================================================================= */
+  --color-text-primary: #f0f6fc;         /* Main headings, active labels, body copy */
+  --color-text-secondary: #8b949e;       /* Secondary metadata, subtitles, labels */
+  --color-text-muted: #6e7681;           /* Disabled text, placeholder text */
+  --color-text-inverse: #0e1117;         /* High-contrast text on bright backgrounds */
+
+  /* =========================================================================
+   * 4. Brand & Action Accent
+   * ========================================================================= */
+  --color-primary: #3b82f6;              /* Primary action blue (contrast > 4.5:1) */
+  --color-primary-hover: #2563eb;
+  --color-primary-active: #1d4ed8;
+  --color-primary-subtle: rgba(59, 130, 246, 0.15); /* Accent tint badge */
+
+  /* =========================================================================
+   * 5. General Semantic Status Colors
+   * ========================================================================= */
+  --color-success: #10b981;
+  --color-warning: #f59e0b;
+  --color-danger: #ef4444;
+  --color-info: #06b6d4;
+
+  /* =========================================================================
+   * 6. Domain Test Execution States (First-Class Invariants)
+   * ========================================================================= */
+  /* Queued: Waiting in worker queue */
+  --color-state-queued-bg: #1e293b;
+  --color-state-queued-fg: #94a3b8;
+  --color-state-queued-border: #334155;
+
+  /* Running: Active execution */
+  --color-state-running-bg: #0c4a6e;
+  --color-state-running-fg: #38bdf8;
+  --color-state-running-border: #0284c7;
+
+  /* Passed: Deterministic assertion verified */
+  --color-state-passed-bg: #064e3b;
+  --color-state-passed-fg: #34d399;
+  --color-state-passed-border: #059669;
+
+  /* Failed: Deterministic assertion failed (target bug) */
+  --color-state-failed-bg: #4c0519;
+  --color-state-failed-fg: #fb7185;
+  --color-state-failed-border: #e11d48;
+
+  /* Error: Infrastructure/worker runtime failure */
+  --color-state-error-bg: #451a03;
+  --color-state-error-fg: #fb923c;
+  --color-state-error-border: #d97706;
+
+  /* Retrying: Bounded retry in flight */
+  --color-state-retrying-bg: #422006;
+  --color-state-retrying-fg: #facc15;
+  --color-state-retrying-border: #ca8a04;
+
+  /* Recovered: Safely recovered from crash */
+  --color-state-recovered-bg: #3b0764;
+  --color-state-recovered-fg: #c084fc;
+  --color-state-recovered-border: #9333ea;
+
+  /* Uncertain: Worker interrupted; request reached target unconfirmed */
+  --color-state-uncertain-bg: #500724;
+  --color-state-uncertain-fg: #f472b6;
+  --color-state-uncertain-border: #db2777;
+
+  /* =========================================================================
+   * 7. AI Visual Segregation Tokens
+   * ========================================================================= */
+  --color-ai-badge-bg: #1e1b4b;
+  --color-ai-badge-fg: #a5b4fc;
+  --color-ai-badge-border: #4338ca;
+  --color-ai-card-bg: rgba(30, 27, 75, 0.35);
+
+  /* =========================================================================
+   * 8. Typography Scale
+   * ========================================================================= */
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+  --font-arabic: 'Tajawal', var(--font-sans);
+
+  --text-2xs: 10px;
+  --text-xs: 11px;
+  --text-sm: 12px;
+  --text-base: 13px; /* Standard 13px control & table body font */
+  --text-md: 14px;
+  --text-lg: 16px;
+  --text-xl: 18px;
+  --text-2xl: 22px;
+
+  --leading-none: 1;
+  --leading-tight: 1.25;
+  --leading-normal: 1.5;
+
+  /* =========================================================================
+   * 9. Spacing & Dimensions (4px Grid)
+   * ========================================================================= */
+  --space-0-5: 2px;
+  --space-1: 4px;
+  --space-1-5: 6px;
+  --space-2: 8px;
+  --space-2-5: 10px;
+  --space-3: 12px;
+  --space-3-5: 14px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+
+  /* Element Dimensions */
+  --control-height: 36px;       /* Mandatory 36px control metric */
+  --control-height-sm: 28px;
+  --control-height-lg: 44px;
+
+  --icon-sm: 14px;
+  --icon-md: 16px;
+  --icon-lg: 20px;
+
+  --badge-height: 22px;
+  --table-row-compact: 32px;
+  --table-row-comfortable: 44px;
+  --tab-height: 36px;
+
+  --sidebar-width: 260px;
+  --sidebar-collapsed-width: 64px;
+  --topbar-height: 52px;
+  --drawer-width: 440px;
+
+  /* =========================================================================
+   * 10. Radii & Shape
+   * ========================================================================= */
+  --radius-control: 6px;        /* Buttons, inputs, segmented controls */
+  --radius-card: 10px;          /* Cards, menus, popovers, dropdowns */
+  --radius-panel: 14px;         /* Modals, sliding drawers, main panels */
+  --radius-pill: 9999px;
+
+  /* =========================================================================
+   * 11. Shadows & Depth
+   * ========================================================================= */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.5), 0 2px 4px -2px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.6), 0 4px 6px -4px rgba(0, 0, 0, 0.6);
+  --shadow-panel: 0 20px 25px -5px rgba(0, 0, 0, 0.7);
+
+  /* =========================================================================
+   * 12. Transitions & Motion
+   * ========================================================================= */
+  --duration-fast: 100ms;
+  --duration-normal: 150ms;
+  --duration-slow: 250ms;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* =========================================================================
+   * 13. Z-Index Layers
+   * ========================================================================= */
+  --z-base: 1;
+  --z-sticky: 100;
+  --z-dropdown: 200;
+  --z-modal: 500;
+  --z-toast: 1000;
+  --z-tooltip: 1100;
+
+  /* =========================================================================
+   * 14. Responsive Shell Breakpoint
+   * ========================================================================= */
+  --breakpoint-shell: 900px;
+}
+
+/* ===========================================================================
+ * LIGHT THEME OVERRIDES
+ * =========================================================================== */
+[data-theme="light"] {
+  --color-surface: #f8fafc;
+  --color-surface-raised: #ffffff;
+  --color-surface-subtle: #f1f5f9;
+  --color-surface-overlay: rgba(248, 250, 252, 0.85);
+
+  --color-line: #e2e8f0;
+  --color-line-strong: #cbd5e1;
+  --color-line-focus: #2563eb;
+
+  --color-text-primary: #0f172a;
+  --color-text-secondary: #475569;
+  --color-text-muted: #94a3b8;
+  --color-text-inverse: #ffffff;
+
+  --color-primary: #2563eb;
+  --color-primary-hover: #1d4ed8;
+  --color-primary-active: #1e40af;
+  --color-primary-subtle: #eff6ff;
+
+  --color-success: #059669;
+  --color-warning: #d97706;
+  --color-danger: #dc2626;
+  --color-info: #0891b2;
+
+  /* Domain Test States (Light Mode) */
+  --color-state-queued-bg: #f1f5f9;
+  --color-state-queued-fg: #475569;
+  --color-state-queued-border: #cbd5e1;
+
+  --color-state-running-bg: #e0f2fe;
+  --color-state-running-fg: #0369a1;
+  --color-state-running-border: #7dd3fc;
+
+  --color-state-passed-bg: #ecfdf5;
+  --color-state-passed-fg: #047857;
+  --color-state-passed-border: #a7f3d0;
+
+  --color-state-failed-bg: #fff1f2;
+  --color-state-failed-fg: #be123c;
+  --color-state-failed-border: #fecdd3;
+
+  --color-state-error-bg: #fffbeb;
+  --color-state-error-fg: #b45309;
+  --color-state-error-border: #fde68a;
+
+  --color-state-retrying-bg: #fefce8;
+  --color-state-retrying-fg: #a16207;
+  --color-state-retrying-border: #fef08a;
+
+  --color-state-recovered-bg: #faf5ff;
+  --color-state-recovered-fg: #7e22ce;
+  --color-state-recovered-border: #e9d5ff;
+
+  --color-state-uncertain-bg: #fdf2f8;
+  --color-state-uncertain-fg: #be185d;
+  --color-state-uncertain-border: #fbcfe8;
+
+  /* AI Segregation (Light Mode) */
+  --color-ai-badge-bg: #eef2ff;
+  --color-ai-badge-fg: #4338ca;
+  --color-ai-badge-border: #c7d2fe;
+  --color-ai-card-bg: #f5f7ff;
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+  --shadow-panel: 0 20px 25px -5px rgba(0, 0, 0, 0.15);
+}

@@ -1,0 +1,54 @@
+name: node.js CI
+
+on:
+  push:
+    branches:
+      - '**'
+    paths:
+      - 'frontend/**'
+      - '.github/workflows/**'
+
+  pull_request:
+    branches:
+      - '**'
+    paths:
+      - 'frontend/**'
+      - '.github/workflows/**'
+
+jobs: 
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./frontend
+      
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 12
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: frontend/pnpm-lock.yaml
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: type-check
+        run: pnpm type-check
+
+      - name: Run Tests
+        run: pnpm test
+
+      - name: Check design token
+        run: pnpm check-tokens
+
+      - name: build Prod app
+        run: pnpm build
+
+
