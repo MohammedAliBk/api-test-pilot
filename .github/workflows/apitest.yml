@@ -2,17 +2,20 @@ name: .NET
 
 on:
   workflow_dispatch:
-  push: 
-    branches: ["Init-service", "main"]
+
+  push:
+    branches:
+      - '**'
     paths:
       - 'backend/**'
       - '.github/workflows/**'
+
   pull_request:
-    branches: ["main"]
+    branches:
+      - '**'
     paths:
       - 'frontend/**'
-      - '.github/workflows/**'   
-
+      - '.github/workflows/**'
 
 jobs:
   build:
