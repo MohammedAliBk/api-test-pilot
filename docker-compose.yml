@@ -1,34 +1,48 @@
-version: '3.8'
 
 services:
-  # 1.  MySQL
-  db:
-    image: mysql:8.4
-    container_name: pilot_mysql_db
-    restart: always
+  # 1. SQL Server
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: apitestpilot-db
+    restart: unless-stopped
     environment:
-      MYSQL_ROOT_PASSWORD: YourStrongPassword123!
-      MYSQL_DATABASE: ApiTestPilotDb
+      ACCEPT_EULA: "Y"
+      MSSQL_PID: Developer
+      MSSQL_SA_PASSWORD: "DevOps_P@ssw0rd2026!"
     ports:
-      - "3306:3306"
+      - "1433:1433"
     volumes:
-      - mysql_data:/var/lib/mysql
+      - sqlserver_data:/var/opt/mssql
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P 'DevOps_P@ssw0rd2026!' -C -Q 'SELECT 1' || exit 1"
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
 
-  # 2. الـ Backend (.NET 10)
+  # 2. Backend
   backend:
     build:
       context: ./backend
       dockerfile: Dockerfile
-    container_name: pilot_backend
+    container_name: apitestpilot-backend
+    restart: unless-stopped
     ports:
       - "8080:8080"
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ConnectionStrings__DefaultConnection=Server=db;Port=3306;Database=ApiTestPilotDb;Uid=root;Pwd=YourStrongPassword123!;
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_HTTP_PORTS: 8080
+      ConnectionStrings__DefaultConnection: "Server=sqlserver,1433;Database=APITestPilot;User Id=sa;Password=DevOps_P@ssw0rd2026!;Encrypt=True;TrustServerCertificate=True"
     depends_on:
-      - db
+      sqlserver:
+        condition: service_healthy
 
-  # 3. الـ Frontend (React)
+
+  # 3. Frontend
   frontend:
     build:
       context: ./frontend
@@ -37,9 +51,10 @@ services:
     ports:
       - "80:80"
     environment:
-      - REACT_APP_API_URL=http://localhost:80
+      REACT_APP_API_URL: http://localhost:8080
     depends_on:
       - backend
 
 volumes:
-  mysql_data:
+  sqlserver_data:
+
