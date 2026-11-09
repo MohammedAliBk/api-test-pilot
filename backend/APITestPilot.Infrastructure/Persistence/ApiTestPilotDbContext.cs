@@ -1,10 +1,13 @@
+using APITestPilot.Application.Interfaces;
 using APITestPilot.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+
 namespace APITestPilot.Infrastructure.Persistence;
 
-public sealed class APITestPilotDbContext : DbContext
+public sealed class APITestPilotDbContext : DbContext, IAPITestPilotDbContext
 {
-    public APITestPilotDbContext(DbContextOptions<APITestPilotDbContext> options) : base(options){}
+    public APITestPilotDbContext(DbContextOptions<APITestPilotDbContext> options) : base(options) { }
+
     public DbSet<User> Users => Set<User>();
     public DbSet<Project> Projects => Set<Project>();
     public DbSet<ApiSpecification> ApiSpecifications => Set<ApiSpecification>();
@@ -21,5 +24,11 @@ public sealed class APITestPilotDbContext : DbContext
     public DbSet<TestResult> TestResults => Set<TestResult>();
     public DbSet<AssertionResult> AssertionResults => Set<AssertionResult>();
     public DbSet<TestCaseExtraction> TestCaseExtractions => Set<TestCaseExtraction>();
-    protected override void OnModelCreating(ModelBuilder modelBuilder) { base.OnModelCreating(modelBuilder); modelBuilder.ApplyConfigurationsFromAssembly(typeof(APITestPilotDbContext).Assembly); }
+    public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        base.OnModelCreating(modelBuilder);
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(APITestPilotDbContext).Assembly);
+    }
 }

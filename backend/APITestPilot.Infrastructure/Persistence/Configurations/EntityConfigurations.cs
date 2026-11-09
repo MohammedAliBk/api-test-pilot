@@ -334,3 +334,26 @@ public sealed class TestCaseExtractionConfiguration : IEntityTypeConfiguration<T
         b.HasIndex(x => new { x.TestCaseId, x.VariableName }).IsUnique();
     }
 }
+
+
+public sealed class RefreshTokenConfiguration : IEntityTypeConfiguration<RefreshToken>
+{
+    public void Configure(EntityTypeBuilder<RefreshToken> b)
+    {
+        b.ToTable("RefreshTokens");
+
+        b.HasKey(x => x.Id);
+
+        b.Property(x => x.TokenHash).HasMaxLength(64).IsRequired();
+        b.Property(x => x.ReplacedByTokenHash).HasMaxLength(64);
+
+        b.HasIndex(x => x.TokenHash).IsUnique();
+
+        b.Ignore(x => x.IsActive);
+
+        b.HasOne(x => x.User)
+         .WithMany(u => u.RefreshTokens)
+         .HasForeignKey(x => x.UserId)
+         .OnDelete(DeleteBehavior.Cascade);
+    }
+}
