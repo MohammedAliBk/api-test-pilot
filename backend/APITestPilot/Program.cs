@@ -123,7 +123,7 @@ builder.Services.AddSwaggerGen(options =>
 // ─────────────────────────────────────────────────────────────────────────────
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment() || app.Environment.IsProduction() )
 {
     // ── Scalar  →  http://localhost:{port}/scalar/v1 ──────────────────────────
     app.MapOpenApi();
