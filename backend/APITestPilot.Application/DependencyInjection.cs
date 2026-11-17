@@ -8,8 +8,9 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddApplication(this IServiceCollection services)
     {
-        services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(AssemblyMarker).Assembly));
-        services.AddValidatorsFromAssembly(typeof(AssemblyMarker).Assembly);
+        var applicationAssembly = typeof(DependencyInjection).Assembly;
+        services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(applicationAssembly));
+        services.AddValidatorsFromAssembly(applicationAssembly);
         return services;
     }
 }

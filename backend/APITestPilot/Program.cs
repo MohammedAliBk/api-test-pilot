@@ -60,6 +60,21 @@ else if (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("GOOGLE_APPLIC
     FirebaseApp.Create(new AppOptions { Credential = GoogleCredential.GetApplicationDefault() });
 }
 
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontend", policy =>
+    {
+        policy.WithOrigins(
+                "https://mohamed1551.runasp.net/"
+            )
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials();
+    });
+});
+
+
 // ─── 2. Application & Infrastructure Services ─────────────────────────────────
 builder.Services.AddApplication();
 builder.Services.AddPersistence(builder.Configuration);
@@ -123,7 +138,7 @@ builder.Services.AddSwaggerGen(options =>
 // ─────────────────────────────────────────────────────────────────────────────
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
 {
     // ── Scalar  →  http://localhost:{port}/scalar/v1 ──────────────────────────
     app.MapOpenApi();
@@ -145,6 +160,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseCors("AllowFrontend");
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
