@@ -132,6 +132,8 @@ const preset = {
         lg: 'var(--shadow-lg)',
         panel: 'var(--shadow-panel)',
         card: 'var(--shadow-card)',
+        'scalar-1': 'var(--shadow-scalar-1)',
+        'scalar-2': 'var(--shadow-scalar-2)',
         hero: 'var(--shadow-hero)',
         glow: 'var(--shadow-glow)',
         'glow-purple': 'var(--shadow-glow-purple)',

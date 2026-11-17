@@ -11,7 +11,15 @@ API Test Pilot is an AI-assisted API testing platform featuring intelligent Open
 
 1. **FE_ROOT Boundary (Mandatory)**: All file creation, editing, and deletion must remain strictly inside `frontend/`. Writing outside `frontend/` (e.g., in `backend/`, `ai-service/`, `deploy/`, root `README.MD`, root `.github/`) is strictly prohibited.
 2. **Authority & Decisions**: Never make decisions on behalf of Memo (the frontend developer). Every architectural, library, schema, contract, or design decision requires explicit approval and is recorded in [DECISIONS.md](file:///Volumes/disk1/Projects/api-test-pilot/frontend/docs/orchestration/DECISIONS.md).
-3. **Communication vs. Persistence Language**:
+3. **Commit & Pull Request Protocol (Memo's Strict Workflow)**:
+   - **Wait for Review Before Committing**: After making any code, design, or doc changes on a branch, **NEVER commit immediately**. Present the modifications to Memo in chat (Egyptian Arabic). Stop and wait for Memo to inspect, review, and make any edits or adjustments. Only create the git commit after Memo explicitly approves.
+   - **Branch Completion & PR Details Draft**: When work on the branch is complete, draft the exact Pull Request details (title, summary, changes list, test evidence) and present them to Memo in chat.
+   - **Memo's Description Review**: Stop and wait for Memo to review, edit, or adjust the PR description.
+   - **Pre-PR Verification & Execution**: Only when Memo explicitly instructs: *"اعمل بول ريكويست"* (Create the pull request):
+     1. Run the final verification suite (`check-tokens`, `type-check`, `test`, `build`).
+     2. Verify 100% green pass.
+     3. Only after green evidence is confirmed, open the Pull Request on GitHub with the approved description.
+4. **Communication vs. Persistence Language**:
    - Conversations with Memo in chat: **Egyptian Arabic (عامية مصرية)**. Technical terms stay in English.
    - Everything written to disk: **English only** (code, docs, task files, commit messages, comments).
    - Exception: End-user visible UI copy follows project UI language decisions ([DEC-001](file:///Volumes/disk1/Projects/api-test-pilot/frontend/docs/orchestration/DECISIONS.md)).

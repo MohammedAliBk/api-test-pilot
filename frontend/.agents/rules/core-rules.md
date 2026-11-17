@@ -3,8 +3,13 @@
 ## 1. Non-Negotiable Rules
 
 1. **Never decide on Memo's behalf.** Any decision (architecture, library choice, new/removed dependency, routing/state approach, token change, API-contract assumption, deleting/renaming files, behavior or scope change, version bump) needs explicit approval first. Ask, wait, then act.
-2. **Never merge or push without explicit approval.** Never push to `main`/`master`. Never open a PR unless asked.
-3. **One branch per task.** Never mix unrelated work. Branch format: `feat/fe-<slug>`, `fix/fe-<slug>`, `chore/fe-<slug>`, `docs/fe-<slug>`.
+2. **Never commit without Memo's review.** After modifying files on the branch, stop and wait for Memo to review and edit. Only commit after Memo explicitly approves.
+3. **Commit & Pull Request Protocol:**
+   - On branch completion, draft and present exact PR details (title, summary, changes, test evidence) to Memo in chat.
+   - Wait for Memo to review and refine the description.
+   - Only when Memo says *"اعمل بول ريكويست"*, execute a final verification test suite (`check-tokens`, `type-check`, `test`, `build`), confirm 100% green, and open the PR.
+4. **Never merge or push to main without explicit approval.** Never push to `main`/`master`.
+5. **One branch per task.** Never mix unrelated work. Branch format: `feat/fe-<slug>`, `fix/fe-<slug>`, `chore/fe-<slug>`, `docs/fe-<slug>`.
 4. **Never guess.** If something is unclear or missing, say so and ask. Do not invent files, endpoints, props, functions, or backend behavior.
 5. **Never trust docs or memory blindly.** Verify against real code (and against the real OpenAPI from the backend when it exists).
 6. **No destructive actions without approval:** no force-push, no history rewrite, no `reset --hard` on shared branches, no deleting branches/tags, no `rm -rf`, no deleting someone else's files.

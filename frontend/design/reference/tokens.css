@@ -61,6 +61,7 @@
   --color-state-running-bg: #0d2042;
   --color-state-running-fg: #518eff;
   --color-state-running-border: #1c4794;
+  --color-shimmer-highlight: #ffffff;
 
   /* Passed: Deterministic assertion verified */
   --color-state-passed-bg: #052e1b;
@@ -159,20 +160,24 @@
   --drawer-width: 440px;
 
   /* =========================================================================
-   * 10. Radii & Shape
+   * 10. Radii & Shape (Technical Engineering Metrics — Scalar Inspired)
    * ========================================================================= */
-  --radius-control: 6px;        /* Buttons, inputs, segmented controls */
-  --radius-card: 10px;          /* Cards, menus, popovers, dropdowns */
-  --radius-panel: 14px;         /* Modals, sliding drawers, main panels */
-  --radius-pill: 9999px;
+  --radius-control: 4px;        /* Compact engineering inputs, buttons, chips (Scalar metric) */
+  --radius-card: 8px;           /* Cards, dropdowns, code containers */
+  --radius-panel: 12px;         /* Modals, drawers, top navigation shell */
+  --radius-pill: 9999px;        /* Status badges, method chips, pill tags */
 
   /* =========================================================================
-   * 11. Shadows & Depth (Landing Page Glows & Elevations)
+   * 11. Shadows & Depth (Landing Page Glows + Scalar Technical Elevations)
    * ========================================================================= */
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
   --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.5), 0 2px 4px -2px rgba(0, 0, 0, 0.5);
   --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.6), 0 4px 6px -4px rgba(0, 0, 0, 0.6);
   --shadow-panel: 0 20px 25px -5px rgba(0, 0, 0, 0.7);
+
+  /* Scalar Technical Depth */
+  --shadow-scalar-1: 0 1px 3px 0 rgba(0, 0, 0, 0.25);
+  --shadow-scalar-2: 0 13px 20px 0 rgba(0, 0, 0, 0.35), 0 3px 8px 0 rgba(0, 0, 0, 0.2), inset 0 0 0 0.5px rgba(255, 255, 255, 0.08);
 
   /* Landing Brand Glows */
   --shadow-card: inset 0 1px rgba(255, 255, 255, 0.07), 0 24px 60px -32px rgba(0, 0, 0, 0.7);
@@ -243,6 +248,7 @@
   --color-state-running-bg: #e0f2fe;
   --color-state-running-fg: #0369a1;
   --color-state-running-border: #7dd3fc;
+  --color-shimmer-highlight: #38bdf8;
 
   --color-state-passed-bg: #ecfdf5;
   --color-state-passed-fg: #047857;
@@ -302,4 +308,29 @@
   background-image: linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px),
                     linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px);
   background-size: 56px 56px;
+}
+
+/* AI / Execution State Shimmer Animation (Left to Right Shine) */
+@keyframes text-shimmer {
+  0% {
+    background-position: 100% 0;
+  }
+  100% {
+    background-position: -100% 0;
+  }
+}
+
+.shimmer-text {
+  background-image: linear-gradient(
+    90deg,
+    var(--color-state-running-fg) 0%,
+    var(--color-shimmer-highlight) 50%,
+    var(--color-state-running-fg) 100%
+  );
+  background-size: 200% 100%;
+  color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
+  animation: text-shimmer 2.2s linear infinite;
+  display: inline-block;
 }

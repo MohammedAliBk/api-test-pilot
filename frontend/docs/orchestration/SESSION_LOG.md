@@ -106,3 +106,27 @@ This log tracks every engineering session on the API Test Pilot frontend.
   - `pnpm build`: PASSED (production build completed in 6.09s).
   - Scope Lock Audit: `git status` confirmed 100% of untracked/modified files are under `frontend/`. Zero files touched outside `frontend/`.
 - **Resume here**: Memo to review Gate G3 and approve commit / PR merge into `main`. Once merged, proceed to TASK-004: Page Pipeline — Import Spec View.
+
+---
+
+## Session 2026-11-17 (Part 2): Hybrid Design System (Scalar Shapes + Landing Palette) & Commit/PR Rules Protocol
+
+- **Timestamp**: 2026-11-17T14:08:20+02:00
+- **Operator**: Frontend Agent Orchestrator & Memo (Frontend Developer)
+- **Active Branch**: `chore/fe-brand-tokens-sync`
+- **User Requests**:
+  1. Extract favicon and brand logo from the landing page.
+  2. Scrape `https://mohamed1551.runasp.net/scalar/` to extract design shapes, input boxes, typography, hairlines, and shadows.
+  3. Merge Scalar's technical structure with the landing page's brand colors.
+  4. Codify strict rule: After modifying files, agent MUST stop and wait for Memo to review and edit before committing. On branch completion, draft PR details, wait for Memo's edits, and upon explicit "اعمل بول ريكويست", run final tests first, then open PR.
+- **Decisions Recorded**:
+  - `DEC-013`: Hybrid Visual Architecture — Scalar Control Shapes & Typography with Landing Page Palette.
+  - `DEC-014`: Commit & Pull Request Workflow Protocol.
+- **Execution Completed**:
+  - Downloaded official favicon SVG to `public/favicon.svg` and linked in `index.html` and `reference.html`.
+  - Built token-driven reusable `<Logo />` component in `src/components/ui/Logo.tsx` with accessible wordmark and zero hardcoded colors.
+  - Scraped `https://mohamed1551.runasp.net/scalar/scalar.js` (280KB CSS bundle); extracted 4px compact control radii, hairline borders (0.5px), pill badge styles, and technical shadows (`--shadow-scalar-1`, `--shadow-scalar-2`).
+  - Updated `tokens.css`, `tailwind.preset.js`, `globals.css`, `App.tsx`, and `reference.html`.
+  - Codified the Pre-Commit Review and Pre-PR Verification Protocol in `AGENTS.md`, `.agents/rules/core-rules.md`, and `OPERATING_MANUAL.md`.
+  - Halted immediately without committing, per Memo's strict rule, waiting for Memo's review and adjustments.
+- **Resume here**: Waiting for Memo's review and edits on the modified files. Once Memo approves, proceed to commit.

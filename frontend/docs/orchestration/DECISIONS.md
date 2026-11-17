@@ -160,3 +160,32 @@ This document is the chronological log of all architectural, library, schema, an
 - **Decision**: Option 1, requested by Memo (2026-11-17).
 - **Rationale**: Establishes seamless visual unity between marketing landing page and the web application platform. Gives API Test Pilot its distinctive modern developer-tool aesthetic with dark obsidian surfaces and neon accents.
 - **Consequences**: All application pages, base primitives, and prototypes inherit the electric azure/violet glow, Space Grotesk display headings, and high-contrast status colors while adhering to WCAG AA contrast rules.
+
+---
+
+### DEC-013: Hybrid Visual Architecture — Scalar Control Shapes & Typography with Landing Page Palette
+- **Date**: 2026-11-17
+- **Related Task**: TASK-003
+- **Question**: How should UI form controls, shapes, input boxes, typography hierarchy, and shadows be modeled?
+- **Options Considered**:
+  1. Scrape `https://mohamed1551.runasp.net/scalar/` to adopt Scalar's technical developer tool aesthetics (crisp 4px radius controls, 36px compact form metrics, hairline borders `0.5px`, Inter sans + JetBrains Mono code fonts, pill badges with `rounded-pill` / `rounded-full`, and layered elevation shadows) while strictly retaining the landing page brand color palette (Electric Azure, Electric Violet, Obsidian Canvas, status colors) and landing page Logo/Favicon (Approved).
+  2. Maintain generic rounded-md shadcn defaults.
+- **Decision**: Option 1, explicitly requested by Memo (2026-11-17).
+- **Rationale**: Scalar is the gold standard for developer-facing OpenAPI and API reference documentation. Combining Scalar's engineering ergonomics (hairlines, compact technical inputs, mono badges, clear typography) with the landing page's dark obsidian and electric azure/violet brand identity creates a world-class, purpose-built developer testing interface.
+- **Consequences**: `tokens.css` and `tailwind.preset.js` provide `--radius-control: 4px`, `--radius-card: 8px`, `--radius-panel: 12px`, `--radius-pill: 9999px`, `--shadow-scalar-1`, and `--shadow-scalar-2`. Favicon is placed in `public/favicon.svg` and a reusable `<Logo />` component is established in `src/components/ui/Logo.tsx`. All colors remain 100% from the landing page.
+
+---
+
+### DEC-014: Commit & Pull Request Workflow Protocol
+- **Date**: 2026-11-17
+- **Related Task**: TASK-003 (Governance update)
+- **Question**: What protocol must the agent follow regarding code modification review, git committing, and pull request creation?
+- **Options Considered**:
+  1. Mandatory Pre-Commit Review & Pre-PR Verification Protocol:
+     - Never commit immediately after modifying files; wait for Memo to review and adjust.
+     - Once branch work completes, draft and present PR details for Memo's review.
+     - When Memo says *"اعمل بول ريكويست"*, run final tests first, verify 100% green, then open PR (Approved).
+  2. Automatic commit and push immediately after loop green.
+- **Decision**: Option 1, explicitly requested and codified by Memo (2026-11-17).
+- **Rationale**: Gives Memo complete control and inspection over the git history, code quality, commit staging, and pull request content before anything is sealed in git or pushed to remote pull requests.
+- **Consequences**: Codified in `AGENTS.md`, `.agents/rules/core-rules.md`, and `OPERATING_MANUAL.md`. Agent halts after every edit set and waits for Memo's review before committing. PR is only opened after explicit "اعمل بول ريكويست" instruction and passing final tests.

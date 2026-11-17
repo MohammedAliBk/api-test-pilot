@@ -21,10 +21,15 @@ This manual is the **single source of truth** for operating principles, governan
 
 ---
 
-## 3. The 4 Verification Gates
+## 3. The Verification Gates
 
 - **Gate G1 — Plan Approval**: Before implementation begins. Review task scope, files, components, tests, risks, and rollback. Approval authorises branching and coding.
 - **Gate GD — Design Choice (UI tasks)**: After research note and the 4 interactive HTML prototypes are built. Memo selects the direction; chosen version is copied to `chosen.html`. React coding starts only after GD.
+- **Gate G-Commit — Pre-Commit Review**: After modifying files on a branch, never commit immediately. Present changes in chat; wait for Memo to review and adjust. Commit only after explicit approval.
+- **Gate G-PR — Pre-PR Review & Final Verification**:
+  1. On branch completion, draft and present exact PR details (title, description, changes list, test evidence).
+  2. Wait for Memo to review and edit description.
+  3. When Memo explicitly says *"اعمل بول ريكويست"*, run final test suite (`check-tokens`, `type-check`, `test`, `build`). Confirm 100% green before opening PR.
 - **Gate G2 — Escalation**: Triggered after 3 failed attempts on the same finding, or if a fix requires a scope/architectural/token change, or when blocked on another team.
 - **Gate G3 — Merge Approval**: Triggered only after all 7 loop stages are GREEN in the same iteration and the Orchestration Integrity Check passes. Memo chooses the merge strategy (squash, merge, rebase).
 

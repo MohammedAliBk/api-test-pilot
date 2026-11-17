@@ -1,4 +1,4 @@
-# TASK-003: Brand Identity & Design Tokens Alignment with Landing Page
+# TASK-003: Brand Identity, Scalar Control Shapes & Design Tokens Alignment
 
 - **Status**: READY_FOR_REVIEW
 - **Created**: 2026-11-17   **Started**: 2026-11-17   **Completed**: 2026-11-17
@@ -10,19 +10,18 @@
 
 ## Goal & Scope (and Out-of-Scope)
 
-- **Goal**: Scrape and extract the visual identity from the official landing page (`https://api-test-pilot-landing.lovable.app/#top`), update `design/reference/tokens.css`, `tailwind.preset.js`, `reference.html`, and `index.html` with the brand color palette, obsidian dark surfaces, electric azure/violet glows, custom shadows, and Space Grotesk display typography.
+- **Goal**: Establish a unified hybrid visual language by combining the landing page's official brand palette (`https://api-test-pilot-landing.lovable.app/#top` - obsidian dark canvas, electric azure `#518eff`, electric violet `#8d5ef9`, glowing shadows, logo, favicon) with the technical shapes, compact input boxes, pill badges, and shadows from Scalar (`https://mohamed1551.runasp.net/scalar/`).
 - **In-Scope**:
-  - Web scrape and CSS extraction of `https://api-test-pilot-landing.lovable.app/`.
-  - Brand Palette in `tokens.css`:
-    - Primary: Electric Azure (`#518eff` / `oklch(66.4% 0.182 261.7)`).
-    - Glow Accent: Electric Violet (`#8d5ef9` / `oklch(61.3% 0.219 292.7)`).
-    - Obsidian Surfaces: Canvas (`#07080d`), Raised Card (`#0d1017`), Subtle Row (`#141722`), Accent (`#1c2237`).
-    - High-contrast Status Colors: Success (`#26e78d`), Warning (`#ffba4f`), Destructive (`#ff4f6b`).
-  - Typography: Space Grotesk (`var(--font-display)`), Inter (`var(--font-sans)`), JetBrains Mono (`var(--font-mono)`).
-  - Shadows & Glows: `--shadow-hero`, `--shadow-glow`, `--shadow-glow-purple`, `--shadow-card`.
-  - Utilities: `.gradient-text`, `.hero-glow`, `.bg-grid`.
-  - Update `tailwind.preset.js` to expose new tokens to Vite and prototypes.
-  - Update `reference.html` interactive visual inspector.
+  - Web scrape and CSS extraction of `https://api-test-pilot-landing.lovable.app/` (colors, gradients, display typography, favicon, SVG logo).
+  - Web scrape and CSS extraction of `https://mohamed1551.runasp.net/scalar/` (Scalar 4px compact radius, hairline borders `0.5px`, input boxes, pill badges, shadows).
+  - Favicon: Saved to `public/favicon.svg` and linked in `index.html` and `reference.html`.
+  - Reusable `<Logo />` Component: Created under `src/components/ui/Logo.tsx` using semantic CSS tokens.
+  - Hybrid Token System in `tokens.css`:
+    - Brand Palette: Electric Azure, Electric Violet glow, Obsidian Canvas, status colors.
+    - Technical Radii: `--radius-control: 4px`, `--radius-card: 8px`, `--radius-panel: 12px`, `--radius-pill: 9999px`.
+    - Technical Depth: `--shadow-scalar-1`, `--shadow-scalar-2`, `--shadow-hero`, `--shadow-card`.
+  - Update `tailwind.preset.js` with new shadows and radii.
+  - Update `App.tsx` and `reference.html` to integrate the Logo, Scalar inputs, and pill badges.
   - Verification: `check-tokens.mjs`, `pnpm type-check`, `pnpm test`, `pnpm build`.
 - **Out-of-Scope**:
   - Modifying any files outside `frontend/`.
@@ -32,26 +31,31 @@
 ## Acceptance Criteria
 
 1. All brand tokens extracted from the landing page are accurately defined in `tokens.css`.
-2. `tailwind.preset.js` exposes `fontFamily.display`, `primary.glow`, and custom glow shadows.
-3. `reference.html` renders all new brand tokens cleanly with dark/light theme switching.
-4. `node design/tools/check-tokens.mjs` passes with 0 violations.
-5. `pnpm type-check`, `pnpm test`, and `pnpm build` pass with 0 errors.
-6. Zero files touched outside `frontend/`.
+2. Favicon SVG saved to `public/favicon.svg` and linked in `index.html`.
+3. Reusable `<Logo />` component implemented in `src/components/ui/Logo.tsx` with zero hardcoded hex values.
+4. Scalar technical ergonomics (4px radius, 36px inputs, pill badges, shadows) integrated with landing page palette.
+5. `tailwind.preset.js` exposes all hybrid tokens to Vite and prototypes.
+6. `reference.html` renders all new brand tokens and Scalar hybrid controls with theme switching.
+7. `node design/tools/check-tokens.mjs` passes with 0 violations.
+8. `pnpm type-check`, `pnpm test`, and `pnpm build` pass with 0 errors.
+9. Zero files touched outside `frontend/`.
 
 ---
 
 ## Decisions Taken
 
 - [DEC-012](file:///Volumes/disk1/Projects/api-test-pilot/frontend/docs/orchestration/DECISIONS.md#dec-012-landing-page-visual-identity-alignment): Landing Page Visual Identity Alignment.
+- [DEC-013](file:///Volumes/disk1/Projects/api-test-pilot/frontend/docs/orchestration/DECISIONS.md#dec-013-hybrid-visual-architecture--scalar-control-shapes--typography-with-landing-page-palette): Hybrid Visual Architecture — Scalar Control Shapes & Typography with Landing Page Palette.
 
 ---
 
 ## Implementation Log
 
 - 2026-11-17: Scraped `https://api-test-pilot-landing.lovable.app/` assets and extracted CSS tokens, OKLCH values, fonts, and shadows.
-- 2026-11-17: Updated `tokens.css` with the brand obsidian palette, electric azure/violet primary and glow, and domain states.
-- 2026-11-17: Updated `tailwind.preset.js` and `UI_CONVENTIONS.md`.
-- 2026-11-17: Updated `reference.html` and `index.html` to load Google Fonts (Space Grotesk, Inter, JetBrains Mono).
+- 2026-11-17: Extracted favicon SVG to `public/favicon.svg` and linked in `index.html` and `reference.html`.
+- 2026-11-17: Implemented reusable token-driven `<Logo />` component in `src/components/ui/Logo.tsx`.
+- 2026-11-17: Scraped `https://mohamed1551.runasp.net/scalar/scalar.js` (280KB stylesheet) and extracted Scalar's compact control radii (4px), hairline borders (0.5px), pill badge shapes (`rounded-pill`), and technical shadows (`--shadow-scalar-1`, `--shadow-scalar-2`).
+- 2026-11-17: Updated `tokens.css`, `tailwind.preset.js`, `globals.css`, `App.tsx`, and `reference.html` with the hybrid visual architecture.
 - 2026-11-17: Ran verification loop: `check-tokens.mjs`, `pnpm type-check`, `pnpm test`, and `pnpm build`. All green.
 
 ---
