@@ -90,3 +90,5 @@ desktop.ini
 *.temp
 *.bak
 *.log
+
+*firebase*.json

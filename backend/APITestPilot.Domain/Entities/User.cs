@@ -7,6 +7,7 @@ public class User
     public string DisplayName { get; set; } = null!;
     public string? PasswordHash { get; set; }
     public string AuthProvider { get; set; } = "Local";
+    public string? FirebaseUid { get; set; }
     public DateTime CreatedAt { get; set; }
     public DateTime? UpdatedAt { get; set; }
     public bool IsActive { get; set; } = true;
@@ -14,4 +15,5 @@ public class User
     public ICollection<Project> OwnedProjects { get; set; } = new List<Project>();
     public ICollection<TestSuite> CreatedTestSuites { get; set; } = new List<TestSuite>();
     public ICollection<TestRun> StartedTestRuns { get; set; } = new List<TestRun>();
+    public ICollection<RefreshToken> RefreshTokens { get; set; } = new List<RefreshToken>();
 }
