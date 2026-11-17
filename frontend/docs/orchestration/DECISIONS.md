@@ -147,3 +147,16 @@ This document is the chronological log of all architectural, library, schema, an
 - **Decision**: Option 1, explicitly requested and approved by Memo (2026-10-25).
 - **Rationale**: Combines maximum type safety, accessibility, headless token integration, OpenAPI contract synchronization, and data visualization without reinventing established developer tool utilities.
 - **Consequences**: Installed strictly under `frontend/package.json` with `pnpm`. Zero dependencies at the root. All UI primitives must enforce the 36px control metric and design tokens.
+
+---
+
+### DEC-012: Landing Page Visual Identity Alignment
+- **Date**: 2026-11-17
+- **Related Task**: TASK-003
+- **Question**: How should the frontend design system reflect the official landing page brand identity (`https://api-test-pilot-landing.lovable.app/`)?
+- **Options Considered**:
+  1. Scrape and extract exact design tokens (Obsidian canvas `#07080d`, Electric Azure `#518eff`, Electric Violet `#8d5ef9`, Space Grotesk display typography, glows, and card elevations) into `design/reference/tokens.css` and `tailwind.preset.js` (Approved).
+  2. Maintain generic Tailwind blue palette.
+- **Decision**: Option 1, requested by Memo (2026-11-17).
+- **Rationale**: Establishes seamless visual unity between marketing landing page and the web application platform. Gives API Test Pilot its distinctive modern developer-tool aesthetic with dark obsidian surfaces and neon accents.
+- **Consequences**: All application pages, base primitives, and prototypes inherit the electric azure/violet glow, Space Grotesk display headings, and high-contrast status colors while adhering to WCAG AA contrast rules.

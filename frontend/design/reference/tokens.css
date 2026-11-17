@@ -1,105 +1,110 @@
 /**
  * API Test Pilot — Design System Tokens
  * Source of Truth: design/reference/tokens.css
+ * Visual Identity: Synchronized with the Official Landing Page (Lovable Brand)
  * Theme: Dual Theme (Dark Default, Light via [data-theme="light"])
  * AA Contrast Ratio compliant (WCAG 2.1 AA)
  */
 
 :root {
   /* =========================================================================
-   * 1. Surfaces & Canvas (Dark Default)
+   * 1. Brand Palette & Accents (Synchronized with Landing Page)
    * ========================================================================= */
-  --color-surface: #0e1117;              /* App workspace canvas */
-  --color-surface-raised: #161b22;       /* Cards, elevated panels, modal backgrounds */
-  --color-surface-subtle: #21262d;       /* Hover states, active table rows, chip backgrounds */
-  --color-surface-overlay: rgba(14, 17, 23, 0.85); /* Modal backdrops with blur */
+  --color-primary: #518eff;              /* Electric Azure / Cobalt Primary */
+  --color-primary-hover: #3d7ef8;
+  --color-primary-active: #2a6ee8;
+  --color-primary-subtle: rgba(81, 142, 255, 0.12); /* Subtle glow tint */
+  --color-primary-glow: #8d5ef9;         /* Electric Violet / Purple Accent */
+  --color-primary-glow-subtle: rgba(141, 94, 249, 0.12);
 
   /* =========================================================================
-   * 2. Borders & Dividers
+   * 2. Surfaces & Canvas (Dark Obsidian Palette)
    * ========================================================================= */
-  --color-line: #30363d;                 /* Structural dividers & card borders (1px) */
-  --color-line-strong: #484f58;          /* Control borders (inputs, selects, buttons) */
-  --color-line-focus: #3b82f6;           /* Focus border indicator */
+  --color-surface: #07080d;              /* Deep Canvas Workspace (oklch 12.4% 0.011 271.4) */
+  --color-surface-raised: #0d1017;       /* Elevated Cards & Panels (oklch 16.2% 0.015 272.2) */
+  --color-surface-subtle: #141722;       /* Active Rows, Chips, Muted (oklch 20% 0.018 272) */
+  --color-surface-overlay: rgba(7, 8, 13, 0.85); /* Modal Backdrop blur */
+  --color-surface-accent: #1c2237;       /* Card borders & hover highlights */
 
   /* =========================================================================
-   * 3. Typography & Text Hierarchy
+   * 3. Borders & Dividers
    * ========================================================================= */
-  --color-text-primary: #f0f6fc;         /* Main headings, active labels, body copy */
-  --color-text-secondary: #8b949e;       /* Secondary metadata, subtitles, labels */
-  --color-text-muted: #6e7681;           /* Disabled text, placeholder text */
-  --color-text-inverse: #0e1117;         /* High-contrast text on bright backgrounds */
+  --color-line: rgba(255, 255, 255, 0.08); /* 8% Subtle White Divider (oklch 100% 0 0 / .08) */
+  --color-line-strong: rgba(255, 255, 255, 0.16); /* 16% Control Border (inputs/buttons) */
+  --color-line-focus: #518eff;           /* Primary Focus Indicator */
 
   /* =========================================================================
-   * 4. Brand & Action Accent
+   * 4. Typography & Text Hierarchy
    * ========================================================================= */
-  --color-primary: #3b82f6;              /* Primary action blue (contrast > 4.5:1) */
-  --color-primary-hover: #2563eb;
-  --color-primary-active: #1d4ed8;
-  --color-primary-subtle: rgba(59, 130, 246, 0.15); /* Accent tint badge */
+  --color-text-primary: #f7f9fe;         /* Crisp Ice White (oklch 98.1% 0.007 268.5) */
+  --color-text-secondary: #9ca5ba;       /* Slate Silver Muted (oklch 72.1% 0.032 267.1) */
+  --color-text-muted: #6b7388;           /* Placeholders & Inactive */
+  --color-text-inverse: #07080d;         /* High-contrast Text on light surface */
 
   /* =========================================================================
-   * 5. General Semantic Status Colors
+   * 5. General Semantic Status Colors (Landing Brand Aligned)
    * ========================================================================= */
-  --color-success: #10b981;
-  --color-warning: #f59e0b;
-  --color-danger: #ef4444;
-  --color-info: #06b6d4;
+  --color-success: #26e78d;              /* Neon Emerald (oklch 81.9% 0.192 155.8) */
+  --color-warning: #ffba4f;              /* Warm Amber (oklch 83.6% 0.145 74.2) */
+  --color-danger: #ff4f6b;               /* Electric Crimson (oklch 68.3% 0.213 15.8) */
+  --color-info: #518eff;                 /* Brand Primary */
 
   /* =========================================================================
-   * 6. Domain Test Execution States (First-Class Invariants)
+   * 6. Domain Test Execution States (First-Class Visual Language)
    * ========================================================================= */
   /* Queued: Waiting in worker queue */
-  --color-state-queued-bg: #1e293b;
-  --color-state-queued-fg: #94a3b8;
-  --color-state-queued-border: #334155;
+  --color-state-queued-bg: #141722;
+  --color-state-queued-fg: #9ca5ba;
+  --color-state-queued-border: #282e44;
 
-  /* Running: Active execution */
-  --color-state-running-bg: #0c4a6e;
-  --color-state-running-fg: #38bdf8;
-  --color-state-running-border: #0284c7;
+  /* Running: Active HTTP execution */
+  --color-state-running-bg: #0d2042;
+  --color-state-running-fg: #518eff;
+  --color-state-running-border: #1c4794;
 
   /* Passed: Deterministic assertion verified */
-  --color-state-passed-bg: #064e3b;
-  --color-state-passed-fg: #34d399;
-  --color-state-passed-border: #059669;
+  --color-state-passed-bg: #052e1b;
+  --color-state-passed-fg: #26e78d;
+  --color-state-passed-border: #0f7644;
 
   /* Failed: Deterministic assertion failed (target bug) */
-  --color-state-failed-bg: #4c0519;
-  --color-state-failed-fg: #fb7185;
-  --color-state-failed-border: #e11d48;
+  --color-state-failed-bg: #380611;
+  --color-state-failed-fg: #ff4f6b;
+  --color-state-failed-border: #8f122c;
 
-  /* Error: Infrastructure/worker runtime failure */
-  --color-state-error-bg: #451a03;
+  /* Error: Infrastructure/runtime worker crash */
+  --color-state-error-bg: #381604;
   --color-state-error-fg: #fb923c;
-  --color-state-error-border: #d97706;
+  --color-state-error-border: #8c3a07;
 
   /* Retrying: Bounded retry in flight */
-  --color-state-retrying-bg: #422006;
-  --color-state-retrying-fg: #facc15;
-  --color-state-retrying-border: #ca8a04;
+  --color-state-retrying-bg: #331f05;
+  --color-state-retrying-fg: #ffba4f;
+  --color-state-retrying-border: #8c520a;
 
-  /* Recovered: Safely recovered from crash */
-  --color-state-recovered-bg: #3b0764;
-  --color-state-recovered-fg: #c084fc;
-  --color-state-recovered-border: #9333ea;
+  /* Recovered: Safely resumed from interruption */
+  --color-state-recovered-bg: #231245;
+  --color-state-recovered-fg: #8d5ef9;
+  --color-state-recovered-border: #552bb8;
 
   /* Uncertain: Worker interrupted; request reached target unconfirmed */
-  --color-state-uncertain-bg: #500724;
+  --color-state-uncertain-bg: #330c24;
   --color-state-uncertain-fg: #f472b6;
-  --color-state-uncertain-border: #db2777;
+  --color-state-uncertain-border: #7a1753;
 
   /* =========================================================================
    * 7. AI Visual Segregation Tokens
    * ========================================================================= */
-  --color-ai-badge-bg: #1e1b4b;
-  --color-ai-badge-fg: #a5b4fc;
-  --color-ai-badge-border: #4338ca;
-  --color-ai-card-bg: rgba(30, 27, 75, 0.35);
+  --color-ai-badge-bg: rgba(141, 94, 249, 0.15);
+  --color-ai-badge-fg: #c4b5fd;
+  --color-ai-badge-border: rgba(141, 94, 249, 0.4);
+  --color-ai-card-bg: rgba(141, 94, 249, 0.06);
 
   /* =========================================================================
-   * 8. Typography Scale
+   * 8. Typography Scale & Font Families
    * ========================================================================= */
-  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-display: 'Space Grotesk', 'Inter', system-ui, sans-serif;
+  --font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
   --font-arabic: 'Tajawal', var(--font-sans);
 
@@ -111,6 +116,8 @@
   --text-lg: 16px;
   --text-xl: 18px;
   --text-2xl: 22px;
+  --text-3xl: 28px;
+  --text-4xl: 36px;
 
   --leading-none: 1;
   --leading-tight: 1.25;
@@ -132,7 +139,7 @@
   --space-8: 32px;
   --space-10: 40px;
 
-  /* Element Dimensions */
+  /* Control Metrics */
   --control-height: 36px;       /* Mandatory 36px control metric */
   --control-height-sm: 28px;
   --control-height-lg: 44px;
@@ -148,7 +155,7 @@
 
   --sidebar-width: 260px;
   --sidebar-collapsed-width: 64px;
-  --topbar-height: 52px;
+  --topbar-height: 56px;
   --drawer-width: 440px;
 
   /* =========================================================================
@@ -160,12 +167,18 @@
   --radius-pill: 9999px;
 
   /* =========================================================================
-   * 11. Shadows & Depth
+   * 11. Shadows & Depth (Landing Page Glows & Elevations)
    * ========================================================================= */
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
   --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.5), 0 2px 4px -2px rgba(0, 0, 0, 0.5);
   --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.6), 0 4px 6px -4px rgba(0, 0, 0, 0.6);
   --shadow-panel: 0 20px 25px -5px rgba(0, 0, 0, 0.7);
+
+  /* Landing Brand Glows */
+  --shadow-card: inset 0 1px rgba(255, 255, 255, 0.07), 0 24px 60px -32px rgba(0, 0, 0, 0.7);
+  --shadow-hero: 0 12px 40px -10px var(--color-primary);
+  --shadow-glow: 0 0 24px -6px var(--color-primary);
+  --shadow-glow-purple: 0 0 24px -6px var(--color-primary-glow);
 
   /* =========================================================================
    * 12. Transitions & Motion
@@ -192,32 +205,35 @@
 }
 
 /* ===========================================================================
- * LIGHT THEME OVERRIDES
+ * LIGHT THEME OVERRIDES (High-Contrast Counterpart)
  * =========================================================================== */
 [data-theme="light"] {
-  --color-surface: #f8fafc;
+  --color-surface: #f7f9fd;
   --color-surface-raised: #ffffff;
-  --color-surface-subtle: #f1f5f9;
-  --color-surface-overlay: rgba(248, 250, 252, 0.85);
+  --color-surface-subtle: #edf2f9;
+  --color-surface-overlay: rgba(247, 249, 253, 0.85);
+  --color-surface-accent: #e2e8f5;
 
-  --color-line: #e2e8f0;
-  --color-line-strong: #cbd5e1;
+  --color-line: rgba(0, 0, 0, 0.08);
+  --color-line-strong: rgba(0, 0, 0, 0.18);
   --color-line-focus: #2563eb;
 
-  --color-text-primary: #0f172a;
-  --color-text-secondary: #475569;
-  --color-text-muted: #94a3b8;
+  --color-text-primary: #0a0d14;
+  --color-text-secondary: #4a5568;
+  --color-text-muted: #8c97aa;
   --color-text-inverse: #ffffff;
 
   --color-primary: #2563eb;
   --color-primary-hover: #1d4ed8;
   --color-primary-active: #1e40af;
-  --color-primary-subtle: #eff6ff;
+  --color-primary-subtle: rgba(37, 99, 235, 0.1);
+  --color-primary-glow: #7c3aed;
+  --color-primary-glow-subtle: rgba(124, 58, 237, 0.1);
 
   --color-success: #059669;
   --color-warning: #d97706;
   --color-danger: #dc2626;
-  --color-info: #0891b2;
+  --color-info: #0284c7;
 
   /* Domain Test States (Light Mode) */
   --color-state-queued-bg: #f1f5f9;
@@ -253,13 +269,37 @@
   --color-state-uncertain-border: #fbcfe8;
 
   /* AI Segregation (Light Mode) */
-  --color-ai-badge-bg: #eef2ff;
-  --color-ai-badge-fg: #4338ca;
-  --color-ai-badge-border: #c7d2fe;
-  --color-ai-card-bg: #f5f7ff;
+  --color-ai-badge-bg: #f3e8ff;
+  --color-ai-badge-fg: #6b21a8;
+  --color-ai-badge-border: #d8b4fe;
+  --color-ai-card-bg: rgba(107, 33, 168, 0.04);
 
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -2px rgba(0, 0, 0, 0.08);
   --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
   --shadow-panel: 0 20px 25px -5px rgba(0, 0, 0, 0.15);
+  --shadow-card: 0 1px 3px 0 rgba(0, 0, 0, 0.06), 0 1px 2px -1px rgba(0, 0, 0, 0.06);
+  --shadow-hero: 0 12px 30px -10px rgba(37, 99, 235, 0.3);
+  --shadow-glow: 0 0 20px -5px rgba(37, 99, 235, 0.3);
+  --shadow-glow-purple: 0 0 20px -5px rgba(124, 58, 237, 0.3);
+}
+
+/* ===========================================================================
+ * 15. Shared Visual Identity Utility Classes
+ * =========================================================================== */
+.gradient-text {
+  background-image: linear-gradient(100deg, var(--color-primary), var(--color-primary-glow));
+  color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+.hero-glow {
+  box-shadow: var(--shadow-hero);
+}
+
+.bg-grid {
+  background-image: linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+                    linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+  background-size: 56px 56px;
 }

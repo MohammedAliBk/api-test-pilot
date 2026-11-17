@@ -1,7 +1,7 @@
 /**
  * API Test Pilot — Shared Tailwind Preset
  * Maps Tailwind utilities to CSS custom properties defined in tokens.css
- * Usable both in HTML prototypes via Tailwind CDN and in Vite tailwind.config.ts
+ * Aligned with the official landing page visual identity (Lovable brand)
  */
 
 const preset = {
@@ -17,6 +17,7 @@ const preset = {
           raised: 'var(--color-surface-raised)',
           subtle: 'var(--color-surface-subtle)',
           overlay: 'var(--color-surface-overlay)',
+          accent: 'var(--color-surface-accent)',
         },
         line: {
           DEFAULT: 'var(--color-line)',
@@ -34,6 +35,8 @@ const preset = {
           hover: 'var(--color-primary-hover)',
           active: 'var(--color-primary-active)',
           subtle: 'var(--color-primary-subtle)',
+          glow: 'var(--color-primary-glow)',
+          'glow-subtle': 'var(--color-primary-glow-subtle)',
         },
         semantic: {
           success: 'var(--color-success)',
@@ -97,6 +100,7 @@ const preset = {
         pill: 'var(--radius-pill)',
       },
       fontFamily: {
+        display: ['var(--font-display)'],
         sans: ['var(--font-sans)'],
         mono: ['var(--font-mono)'],
         arabic: ['var(--font-arabic)'],
@@ -110,6 +114,8 @@ const preset = {
         lg: ['var(--text-lg)', { lineHeight: 'var(--leading-tight)' }],
         xl: ['var(--text-xl)', { lineHeight: 'var(--leading-tight)' }],
         '2xl': ['var(--text-2xl)', { lineHeight: 'var(--leading-none)' }],
+        '3xl': ['var(--text-3xl)', { lineHeight: 'var(--leading-none)' }],
+        '4xl': ['var(--text-4xl)', { lineHeight: 'var(--leading-none)' }],
       },
       spacing: {
         'control': 'var(--control-height)',
@@ -125,6 +131,10 @@ const preset = {
         md: 'var(--shadow-md)',
         lg: 'var(--shadow-lg)',
         panel: 'var(--shadow-panel)',
+        card: 'var(--shadow-card)',
+        hero: 'var(--shadow-hero)',
+        glow: 'var(--shadow-glow)',
+        'glow-purple': 'var(--shadow-glow-purple)',
       },
       transitionDuration: {
         fast: 'var(--duration-fast)',

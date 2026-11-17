@@ -4,6 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>API Test Pilot — Design System Token & Component Reference</title>
+  <!-- Google Fonts: Space Grotesk (display), Inter (sans), JetBrains Mono (mono) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="./tokens.css">
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="./tailwind.preset.js"></script>
@@ -30,16 +34,37 @@
     }
   </style>
 </head>
-<body class="min-h-screen p-6 max-w-7xl mx-auto">
+<body class="min-h-screen p-6 max-w-7xl mx-auto relative overflow-x-hidden">
 
   <!-- Header & Theme Switcher -->
   <header class="flex flex-wrap items-center justify-between pb-6 mb-8 border-b border-[var(--color-line)] gap-4">
     <div>
       <div class="flex items-center gap-3">
-        <h1 class="text-2xl font-bold tracking-tight">API Test Pilot — Design Reference</h1>
-        <span class="px-2 py-0.5 rounded-[var(--radius-control)] bg-[var(--color-primary-subtle)] text-[var(--color-primary)] text-xs font-bold uppercase tracking-wider">v1.0 Baseline</span>
+        <!-- SVG Brand Logo from Landing Page -->
+        <div class="w-8 h-8 rounded-[var(--radius-control)] bg-[var(--color-surface-subtle)] border border-[var(--color-line-strong)] flex items-center justify-center p-1">
+          <svg viewBox="0 0 64 64" role="img" aria-label="ApiTestPilot" class="w-full h-full">
+            <defs>
+              <linearGradient id="ref-logo-grad" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="var(--color-primary)"></stop>
+                <stop offset="100%" stop-color="var(--color-primary-glow)"></stop>
+              </linearGradient>
+            </defs>
+            <path d="M14 32 L50 16 L36 50 L30 36 Z" fill="url(#ref-logo-grad)" opacity="0.95"></path>
+            <circle cx="14" cy="32" r="3.2" fill="var(--color-surface)" stroke="url(#ref-logo-grad)" stroke-width="2"></circle>
+            <circle cx="50" cy="16" r="3.2" fill="var(--color-surface)" stroke="url(#ref-logo-grad)" stroke-width="2"></circle>
+            <circle cx="36" cy="50" r="3.2" fill="var(--color-surface)" stroke="url(#ref-logo-grad)" stroke-width="2"></circle>
+          </svg>
+        </div>
+        <h1 class="font-['Space_Grotesk'] text-2xl font-bold tracking-tight">
+          ApiTest<span class="gradient-text">Pilot</span>
+        </h1>
+        <span class="px-2 py-0.5 rounded-[var(--radius-control)] bg-[var(--color-primary-subtle)] text-[var(--color-primary)] text-[11px] font-bold uppercase tracking-wider border border-[var(--color-primary)]/20">
+          Landing Brand Sync v1.1
+        </span>
       </div>
-      <p class="text-[var(--color-text-secondary)] text-sm mt-1">Single source of truth for visual tokens, UI metrics, and domain test states.</p>
+      <p class="text-[var(--color-text-secondary)] text-sm mt-1">
+        Official design system tokens, obsidian surface colors, electric glows, and domain test states.
+      </p>
     </div>
     <div class="flex items-center gap-3">
       <button id="themeToggle" class="min-h-[36px] px-3.5 py-1.5 rounded-[var(--radius-control)] border border-[var(--color-line-strong)] bg-[var(--color-surface-raised)] text-[var(--color-text-primary)] text-[13px] font-bold btn-press flex items-center gap-2 cursor-pointer transition-all duration-150">
@@ -48,37 +73,70 @@
     </div>
   </header>
 
-  <!-- Section 1: Surface & Structure Tokens -->
+  <!-- Section 1: Brand Colors & Glow Accents -->
   <section class="mb-10">
-    <h2 class="text-lg font-bold mb-4 flex items-center gap-2">
+    <h2 class="font-['Space_Grotesk'] text-lg font-bold mb-4 flex items-center gap-2">
       <span class="w-2.5 h-2.5 rounded-full bg-[var(--color-primary)]"></span>
-      1. Surfaces & Structural Borders
+      1. Brand Identity & Electric Glow Accents
     </h2>
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
-      <div class="p-4 rounded-[var(--radius-card)] border border-[var(--color-line)] bg-[var(--color-surface)]">
-        <span class="text-xs text-[var(--color-text-secondary)] block">--color-surface</span>
-        <span class="text-sm font-semibold mt-1 block">Canvas Background</span>
+      <div class="p-4 rounded-[var(--radius-card)] border border-[var(--color-line)] bg-[var(--color-surface-raised)] shadow-[var(--shadow-card)]">
+        <div class="w-full h-12 rounded-[var(--radius-control)] bg-[var(--color-primary)] mb-3 shadow-[var(--shadow-hero)]"></div>
+        <span class="text-xs text-[var(--color-text-secondary)] block">--color-primary</span>
+        <span class="text-sm font-semibold mt-1 block">Electric Azure</span>
       </div>
-      <div class="p-4 rounded-[var(--radius-card)] border border-[var(--color-line)] bg-[var(--color-surface-raised)] shadow-sm">
-        <span class="text-xs text-[var(--color-text-secondary)] block">--color-surface-raised</span>
-        <span class="text-sm font-semibold mt-1 block">Elevated Card / Modal</span>
+
+      <div class="p-4 rounded-[var(--radius-card)] border border-[var(--color-line)] bg-[var(--color-surface-raised)] shadow-[var(--shadow-card)]">
+        <div class="w-full h-12 rounded-[var(--radius-control)] bg-[var(--color-primary-glow)] mb-3 shadow-[var(--shadow-glow-purple)]"></div>
+        <span class="text-xs text-[var(--color-text-secondary)] block">--color-primary-glow</span>
+        <span class="text-sm font-semibold mt-1 block">Electric Violet</span>
       </div>
-      <div class="p-4 rounded-[var(--radius-card)] border border-[var(--color-line)] bg-[var(--color-surface-subtle)]">
-        <span class="text-xs text-[var(--color-text-secondary)] block">--color-surface-subtle</span>
-        <span class="text-sm font-semibold mt-1 block">Subtle Row / Hover</span>
+
+      <div class="p-4 rounded-[var(--radius-card)] border border-[var(--color-line)] bg-[var(--color-surface-raised)] shadow-[var(--shadow-card)]">
+        <div class="w-full h-12 rounded-[var(--radius-control)] bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-primary-glow)] mb-3"></div>
+        <span class="text-xs text-[var(--color-text-secondary)] block">.gradient-text</span>
+        <span class="text-sm font-semibold mt-1 block gradient-text">Linear Brand Gradient</span>
       </div>
-      <div class="p-4 rounded-[var(--radius-card)] border border-[var(--color-line-strong)] bg-[var(--color-surface-raised)]">
-        <span class="text-xs text-[var(--color-text-secondary)] block">--color-line-strong</span>
-        <span class="text-sm font-semibold mt-1 block">Control Border</span>
+
+      <div class="p-4 rounded-[var(--radius-card)] border border-[var(--color-line-strong)] bg-[var(--color-surface-raised)] shadow-[var(--shadow-card)]">
+        <div class="w-full h-12 rounded-[var(--radius-control)] bg-[var(--color-surface-accent)] mb-3 flex items-center justify-center text-xs font-mono text-[var(--color-text-secondary)]">Accent</div>
+        <span class="text-xs text-[var(--color-text-secondary)] block">--color-surface-accent</span>
+        <span class="text-sm font-semibold mt-1 block">Card Accent Surface</span>
       </div>
     </div>
   </section>
 
-  <!-- Section 2: Domain Test Execution States -->
+  <!-- Section 2: Obsidian Surfaces & Typography -->
   <section class="mb-10">
-    <h2 class="text-lg font-bold mb-2 flex items-center gap-2">
+    <h2 class="font-['Space_Grotesk'] text-lg font-bold mb-4 flex items-center gap-2">
+      <span class="w-2.5 h-2.5 rounded-full bg-[var(--color-primary-glow)]"></span>
+      2. Obsidian Surfaces & Contrast Typography
+    </h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+      <div class="p-4 rounded-[var(--radius-card)] border border-[var(--color-line)] bg-[var(--color-surface)]">
+        <span class="text-xs text-[var(--color-text-secondary)] block">--color-surface</span>
+        <span class="text-sm font-semibold mt-1 block">Obsidian Black</span>
+      </div>
+      <div class="p-4 rounded-[var(--radius-card)] border border-[var(--color-line)] bg-[var(--color-surface-raised)] shadow-[var(--shadow-card)]">
+        <span class="text-xs text-[var(--color-text-secondary)] block">--color-surface-raised</span>
+        <span class="text-sm font-semibold mt-1 block">Elevated Card</span>
+      </div>
+      <div class="p-4 rounded-[var(--radius-card)] border border-[var(--color-line)] bg-[var(--color-surface-subtle)]">
+        <span class="text-xs text-[var(--color-text-secondary)] block">--color-surface-subtle</span>
+        <span class="text-sm font-semibold mt-1 block">Active Row / Chip</span>
+      </div>
+      <div class="p-4 rounded-[var(--radius-card)] border border-[var(--color-line-strong)] bg-[var(--color-surface-raised)]">
+        <span class="text-xs text-[var(--color-text-secondary)] block">--color-line-strong</span>
+        <span class="text-sm font-semibold mt-1 block">16% Control Border</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 3: Domain Test Execution States -->
+  <section class="mb-10">
+    <h2 class="font-['Space_Grotesk'] text-lg font-bold mb-2 flex items-center gap-2">
       <span class="w-2.5 h-2.5 rounded-full bg-[var(--color-primary)]"></span>
-      2. Domain Test Execution States (First-Class Visual Language)
+      3. Domain Test Execution States (Vibrant First-Class Language)
     </h2>
     <p class="text-sm text-[var(--color-text-secondary)] mb-4">Every test execution state has dedicated semantic foreground, background, and border tokens with AA contrast.</p>
 
@@ -116,7 +174,7 @@
           <span class="text-xs uppercase tracking-wider font-bold">Failed</span>
           <span class="text-xs font-bold">✕</span>
         </div>
-        <p class="text-xs mt-2 opacity-80">Assertion failure (API bug)</p>
+        <p class="text-xs mt-2 opacity-80">Assertion failure</p>
       </div>
 
       <!-- Error -->
@@ -125,7 +183,7 @@
           <span class="text-xs uppercase tracking-wider font-bold">Error</span>
           <span class="text-xs font-bold">⚠</span>
         </div>
-        <p class="text-xs mt-2 opacity-80">Infrastructure / network failure</p>
+        <p class="text-xs mt-2 opacity-80">Infrastructure / network crash</p>
       </div>
 
       <!-- Retrying -->
@@ -157,14 +215,14 @@
     </div>
   </section>
 
-  <!-- Section 3: AI Segregation vs Deterministic Evidence -->
+  <!-- Section 4: AI Segregation Card -->
   <section class="mb-10">
-    <h2 class="text-lg font-bold mb-2 flex items-center gap-2">
+    <h2 class="font-['Space_Grotesk'] text-lg font-bold mb-2 flex items-center gap-2">
       <span class="w-2.5 h-2.5 rounded-full bg-[var(--color-primary)]"></span>
-      3. AI Segregation vs. Deterministic Results
+      4. AI Segregation vs. Deterministic Results
     </h2>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-      <div class="p-4 rounded-[var(--radius-card)] border border-[var(--color-line)] bg-[var(--color-surface-raised)]">
+      <div class="p-4 rounded-[var(--radius-card)] border border-[var(--color-line)] bg-[var(--color-surface-raised)] shadow-[var(--shadow-card)]">
         <div class="flex items-center gap-2 mb-2">
           <span class="px-2 py-0.5 rounded-[var(--radius-control)] border border-[var(--color-state-failed-border)] bg-[var(--color-state-failed-bg)] text-[var(--color-state-failed-fg)] text-[11px] font-bold">DETERMINISTIC ASSERTION</span>
           <span class="text-xs text-[var(--color-text-secondary)] font-mono">Status: 500 ≠ 200</span>
@@ -172,7 +230,7 @@
         <p class="text-[13px] text-[var(--color-text-primary)]">Deterministic validation failed: Expected HTTP 200 OK, received 500 Internal Server Error in <bdi class="tabular-nums font-mono">142ms</bdi>.</p>
       </div>
 
-      <div class="p-4 rounded-[var(--radius-card)] border border-[var(--color-ai-badge-border)] bg-[var(--color-ai-card-bg)]">
+      <div class="p-4 rounded-[var(--radius-card)] border border-[var(--color-ai-badge-border)] bg-[var(--color-ai-card-bg)] shadow-[var(--shadow-glow-purple)]">
         <div class="flex items-center gap-2 mb-2">
           <span class="px-2 py-0.5 rounded-[var(--radius-control)] border border-[var(--color-ai-badge-border)] bg-[var(--color-ai-badge-bg)] text-[var(--color-ai-badge-fg)] text-[11px] font-bold flex items-center gap-1">✨ AI EXPLANATION</span>
           <span class="text-xs text-[var(--color-text-secondary)]">Non-proof interpretation</span>
@@ -182,16 +240,16 @@
     </div>
   </section>
 
-  <!-- Section 4: The 36px Control Metric -->
+  <!-- Section 5: The 36px Control Metric -->
   <section class="mb-10">
-    <h2 class="text-lg font-bold mb-2 flex items-center gap-2">
+    <h2 class="font-['Space_Grotesk'] text-lg font-bold mb-2 flex items-center gap-2">
       <span class="w-2.5 h-2.5 rounded-full bg-[var(--color-primary)]"></span>
-      4. The 36px Control Metric (Strictly Standardized)
+      5. The 36px Control Metric (Strictly Standardized)
     </h2>
     <p class="text-sm text-[var(--color-text-secondary)] mb-4">All buttons, inputs, selects, search bars, and segmented controls are strictly 36px tall, 13px bold, with 6px radius.</p>
 
-    <div class="p-5 rounded-[var(--radius-card)] border border-[var(--color-line)] bg-[var(--color-surface-raised)] flex flex-wrap items-center gap-4">
-      <button class="min-h-[36px] px-3.5 py-1.5 rounded-[var(--radius-control)] bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover)] text-white text-[13px] font-bold btn-press cursor-pointer transition-all duration-150">
+    <div class="p-5 rounded-[var(--radius-card)] border border-[var(--color-line)] bg-[var(--color-surface-raised)] shadow-[var(--shadow-card)] flex flex-wrap items-center gap-4">
+      <button class="min-h-[36px] px-3.5 py-1.5 rounded-[var(--radius-control)] bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover)] text-white text-[13px] font-bold btn-press cursor-pointer transition-all duration-150 shadow-[var(--shadow-hero)]">
         Primary Action
       </button>
 
@@ -200,7 +258,7 @@
       </button>
 
       <button class="min-h-[36px] px-3.5 py-1.5 rounded-[var(--radius-control)] border border-[var(--color-state-failed-border)] bg-[var(--color-state-failed-bg)] text-[var(--color-state-failed-fg)] text-[13px] font-bold btn-press cursor-pointer transition-all duration-150">
-        Danger Button
+        Danger Action
       </button>
 
       <button disabled class="min-h-[36px] px-3.5 py-1.5 rounded-[var(--radius-control)] border border-[var(--color-line)] bg-[var(--color-surface-subtle)] text-[var(--color-text-muted)] text-[13px] font-bold opacity-60 cursor-not-allowed">
@@ -217,43 +275,16 @@
     </div>
   </section>
 
-  <!-- Section 5: Data Table Specimen -->
+  <!-- Section 6: Background Grid & Noise Demonstration -->
   <section class="mb-10">
-    <h2 class="text-lg font-bold mb-4 flex items-center gap-2">
+    <h2 class="font-['Space_Grotesk'] text-lg font-bold mb-4 flex items-center gap-2">
       <span class="w-2.5 h-2.5 rounded-full bg-[var(--color-primary)]"></span>
-      5. Data Table Row & Density Specimen
+      6. Background Ambient Grid
     </h2>
-    <div class="rounded-[var(--radius-card)] border border-[var(--color-line)] bg-[var(--color-surface-raised)] overflow-hidden">
-      <table class="w-full text-start border-collapse text-[13px]">
-        <thead>
-          <tr class="border-b border-[var(--color-line)] bg-[var(--color-surface-subtle)] text-[var(--color-text-secondary)] text-[11px] uppercase font-bold tracking-wider">
-            <th class="text-start px-3.5 py-2.5">Method & Path</th>
-            <th class="text-start px-3.5 py-2.5">State</th>
-            <th class="text-start px-3.5 py-2.5">Duration</th>
-            <th class="text-start px-3.5 py-2.5">Category</th>
-          </tr>
-        </thead>
-        <tbody class="divide-y divide-[var(--color-line)]">
-          <tr class="hover:bg-[var(--color-surface-subtle)] transition-colors duration-150 cursor-pointer">
-            <td class="px-3.5 py-2.5 font-mono"><span class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 mr-2">GET</span>/api/v1/projects</td>
-            <td class="px-3.5 py-2.5"><span class="px-2 py-0.5 rounded-[var(--radius-control)] border border-[var(--color-state-passed-border)] bg-[var(--color-state-passed-bg)] text-[var(--color-state-passed-fg)] text-[11px] font-bold">PASSED</span></td>
-            <td class="px-3.5 py-2.5 font-mono"><bdi class="tabular-nums">48 ms</bdi></td>
-            <td class="px-3.5 py-2.5 text-[var(--color-text-secondary)]">Functional</td>
-          </tr>
-          <tr class="hover:bg-[var(--color-surface-subtle)] transition-colors duration-150 cursor-pointer">
-            <td class="px-3.5 py-2.5 font-mono"><span class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-blue-500/10 text-blue-500 border border-blue-500/20 mr-2">POST</span>/api/v1/test-runs</td>
-            <td class="px-3.5 py-2.5"><span class="px-2 py-0.5 rounded-[var(--radius-control)] border border-[var(--color-state-failed-border)] bg-[var(--color-state-failed-bg)] text-[var(--color-state-failed-fg)] text-[11px] font-bold">FAILED</span></td>
-            <td class="px-3.5 py-2.5 font-mono"><bdi class="tabular-nums">215 ms</bdi></td>
-            <td class="px-3.5 py-2.5 text-[var(--color-text-secondary)]">Validation</td>
-          </tr>
-          <tr class="hover:bg-[var(--color-surface-subtle)] transition-colors duration-150 cursor-pointer">
-            <td class="px-3.5 py-2.5 font-mono"><span class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-amber-500/10 text-amber-500 border border-amber-500/20 mr-2">DELETE</span>/api/v1/targets/89</td>
-            <td class="px-3.5 py-2.5"><span class="px-2 py-0.5 rounded-[var(--radius-control)] border border-[var(--color-state-uncertain-border)] bg-[var(--color-state-uncertain-bg)] text-[var(--color-state-uncertain-fg)] text-[11px] font-bold">UNCERTAIN</span></td>
-            <td class="px-3.5 py-2.5 font-mono"><bdi class="tabular-nums">—</bdi></td>
-            <td class="px-3.5 py-2.5 text-[var(--color-text-secondary)]">Recovery Required</td>
-          </tr>
-        </tbody>
-      </table>
+    <div class="h-32 w-full rounded-[var(--radius-card)] border border-[var(--color-line)] bg-[var(--color-surface)] bg-grid flex items-center justify-center">
+      <span class="font-['Space_Grotesk'] text-sm font-semibold tracking-wider text-[var(--color-text-secondary)] uppercase">
+        56px × 56px Subtle Grid Layer
+      </span>
     </div>
   </section>
 

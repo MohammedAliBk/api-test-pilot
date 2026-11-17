@@ -10,6 +10,7 @@ This registry tracks all engineering tasks for the API Test Pilot frontend.
 |---|---|---|---|---|---|---|---|
 | TASK-001 | Frontend Agent Operating System Setup | DONE | chore/frontend-agent-setup | 0.0.1-alpha | 2026-10-24 | 2026-10-25 | None |
 | TASK-002 | Base Tooling & Vite Application Bootstrap | DONE | chore/fe-tooling-vite-bootstrap | 0.0.1-alpha | 2026-10-25 | 2026-10-25 | TASK-001 |
+| TASK-003 | Brand Identity & Design Tokens Alignment with Landing Page | READY_FOR_REVIEW | chore/fe-brand-tokens-sync | 0.0.1-alpha | 2026-11-17 | 2026-11-17 | TASK-002 |
 
 ---
 
@@ -17,9 +18,9 @@ This registry tracks all engineering tasks for the API Test Pilot frontend.
 
 These items are proposals awaiting Memo's formal promotion into tracked tasks:
 
-1. **TASK-003: Design Reference Page & Component Primitives**  
+1. **TASK-007: Design Reference Page & Component Primitives**  
    *Scope*: Implement interactive `reference.html` and headless base components (`Button`, `Input`, `Select`, `Dialog`, `StatusBadge`) in `src/components/ui/` adhering to the 36px control metric.  
-   *Depends on*: TASK-002.
+   *Depends on*: TASK-003.
 
 3. **TASK-004: Page Pipeline — Import Spec View**  
    *Scope*: Spec, research, 4 prototypes, Gate GD, and React implementation for OpenAPI specification input (URL / File upload) with server-side validation UX.  

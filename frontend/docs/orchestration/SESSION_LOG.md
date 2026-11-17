@@ -72,3 +72,37 @@ This log tracks every engineering session on the API Test Pilot frontend.
   - Committed on `chore/fe-tooling-vite-bootstrap` under `chore: bootstrap vite react typescript tooling, tailwind, tanstack query, and vitest`.
   - Set TASK-002 status to `DONE`.
 - **Resume here**: Start TASK-004: Page Pipeline — Import Spec View (`/new-page import-spec`).
+
+---
+
+## Session 2026-11-17: TASK-003 Brand Identity & Design Tokens Alignment with Landing Page
+
+- **Timestamp**: 2026-11-17T13:56:47+02:00
+- **Operator**: Frontend Agent Orchestrator & Memo (Frontend Developer)
+- **Active Branch**: `chore/fe-brand-tokens-sync`
+- **Starting State**: Main merged with PR #1 and PR #2. User requested scraping the official landing page (`https://api-test-pilot-landing.lovable.app/#top`) to extract brand identity (colors, glows, shadows, typography) and align all design tokens.
+- **Approved Scope (Gate G1)**:
+  - Scrape landing page HTML and CSS bundle (`/assets/styles-DXBUoOZB.css`).
+  - Convert OKLCH landing colors to dual-theme tokens in `tokens.css`.
+  - Update `tailwind.preset.js` with Space Grotesk, electric azure/violet primary and glow, and glow box-shadows.
+  - Update `reference.html` and `index.html` to load Google Fonts (`Space Grotesk`, `Inter`, `JetBrains Mono`).
+  - Align `UI_CONVENTIONS.md` sections 1 and 8.
+  - Record decision `DEC-012` in `DECISIONS.md`.
+  - Execute full test loop with 0 violations.
+- **Decisions Recorded**: `DEC-012` added to `DECISIONS.md`.
+- **Task Registered**: `TASK-003` created in `TASKS.md` with status `READY_FOR_REVIEW`.
+- **Execution Completed**:
+  - Scraped live landing page, extracted color definitions, typography, shadows, gradients, and subtle noise/grid patterns.
+  - Updated `design/reference/tokens.css` with obsidian dark canvas (`#07080d`), raised cards (`#0d1017`), subtle rows (`#141722`), electric azure (`#518eff`), and electric violet glow (`#8d5ef9`).
+  - Added 8 first-class domain test state tokens with dual-theme hex values.
+  - Updated `design/reference/tailwind.preset.js` and `design/reference/CHANGELOG.md` (v1.1.0 release).
+  - Cleaned literal `#hex` strings from `reference.html` labels to satisfy `check-tokens.mjs`.
+  - Added Space Grotesk font links to `index.html` and `reference.html`.
+  - Synchronized `UI_CONVENTIONS.md`.
+- **What Was Verified**:
+  - `node design/tools/check-tokens.mjs`: PASSED (7 files scanned, 0 token violations).
+  - `pnpm type-check`: PASSED (0 errors).
+  - `pnpm test`: PASSED (1 test file, 4 tests passed, 0 failed).
+  - `pnpm build`: PASSED (production build completed in 6.09s).
+  - Scope Lock Audit: `git status` confirmed 100% of untracked/modified files are under `frontend/`. Zero files touched outside `frontend/`.
+- **Resume here**: Memo to review Gate G3 and approve commit / PR merge into `main`. Once merged, proceed to TASK-004: Page Pipeline — Import Spec View.
