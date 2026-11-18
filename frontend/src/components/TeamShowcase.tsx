@@ -23,6 +23,7 @@ import {
   Layers,
   Palette,
   Sliders,
+  LogOut,
 } from 'lucide-react';
 import {
   ResponsiveContainer,
@@ -55,7 +56,11 @@ const mockLatencyData = [
   { endpoint: 'Recover', duration: 145 },
 ];
 
-export const TeamShowcase: React.FC = () => {
+export interface TeamShowcaseProps {
+  onSignOut?: () => void;
+}
+
+export const TeamShowcase: React.FC<TeamShowcaseProps> = ({ onSignOut }) => {
   const [theme, setTheme] = useState<'dark' | 'light'>('dark');
   const [copied, setCopied] = useState(false);
   const [submittedUrl, setSubmittedUrl] = useState<string | null>(null);
@@ -98,9 +103,6 @@ export const TeamShowcase: React.FC = () => {
       <header className="flex flex-wrap items-center justify-between pb-6 border-b border-line gap-4">
         <div className="flex items-center gap-3">
           <Logo size={32} />
-          <span className="px-2 py-0.5 rounded-pill bg-primary-subtle text-primary font-mono text-[11px] font-bold uppercase tracking-wider border border-primary/20">
-            v0.0.1-alpha
-          </span>
           <span className="hidden sm:inline-block px-2.5 py-0.5 rounded-control bg-surface-subtle text-text-secondary text-xs font-medium border border-line">
             Team Design & Component Reference
           </span>
@@ -124,6 +126,16 @@ export const TeamShowcase: React.FC = () => {
               </>
             )}
           </button>
+
+          {onSignOut && (
+            <button
+              onClick={onSignOut}
+              className="min-h-[36px] px-3.5 py-1.5 rounded-control border border-line-strong bg-surface-raised hover:bg-surface-subtle text-danger text-[13px] font-medium btn-press flex items-center gap-2 cursor-pointer transition-all duration-150 shadow-scalar-1"
+            >
+              <LogOut className="w-4 h-4" />
+              <span>Sign Out & Open Auth Page</span>
+            </button>
+          )}
         </div>
       </header>
 

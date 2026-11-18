@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>API Test Pilot — Authentication</title>
+  <link rel="icon" type="image/svg+xml" href="../../../public/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../reference/tokens.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="../../reference/tailwind.preset.js"></script>
+  <script>
+    if (typeof preset !== 'undefined') {
+      tailwind.config = preset;
+    }
+  </script>
+  <style>
+    body {
+      background-color: var(--color-surface);
+      color: var(--color-text-primary);
+      font-family: var(--font-sans);
+      margin: 0;
+      overflow-x: hidden;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Full-viewport atmospheric canvas background (Spans 100% of page, zero cut-off) */
+    .viewport-canvas-stack {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      pointer-events: none;
+      z-index: 0;
+      background-color: black;
+    }
+
+    /* Wave texture overlay with seamless left-to-right fade */
+    .wave-texture-overlay {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.42;
+      mix-blend-mode: screen;
+      pointer-events: none;
+      -webkit-mask-image: linear-gradient(to right, black 0%, black 28%, transparent 85%);
+      mask-image: linear-gradient(to right, black 0%, black 28%, transparent 85%);
+    }
+
+    /* Soft continuous transition gradient across the right half */
+    .right-side-blend {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: linear-gradient(to right, transparent 0%, transparent 40%, var(--color-surface) 90%);
+    }
+
+    .auth-card {
+      background-color: var(--color-surface-raised);
+      border: 1px solid var(--color-line-strong);
+      border-radius: var(--radius-panel);
+      box-shadow: var(--shadow-hero);
+    }
+
+    .input-scalar {
+      width: 100%;
+      height: 36px;
+      min-height: 36px;
+      padding: 0 12px;
+      border-radius: var(--radius-control);
+      background-color: var(--color-surface-subtle);
+      border: 1px solid var(--color-line-strong);
+      color: var(--color-text-primary);
+      font-size: 13px;
+      transition: all 0.15s ease;
+    }
+    .input-scalar:focus {
+      outline: none;
+      border-color: var(--color-primary);
+      box-shadow: 0 0 0 1px var(--color-primary);
+    }
+    .btn-press:active {
+      transform: scale(0.98);
+    }
+    .strength-bar {
+      height: 3px;
+      border-radius: 9999px;
+      transition: all 0.25s ease;
+    }
+    .gradient-text {
+      background-image: linear-gradient(135deg, var(--color-primary), var(--color-primary-glow));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+  </style>
+</head>
+<body class="min-h-screen relative selection:bg-primary-subtle selection:text-primary">
+
+  <!-- UNIFIED BACKGROUND STACK (SPANS ENTIRE VIEWPORT ACROSS 100% OF SCREEN) -->
+  <div class="viewport-canvas-stack">
+    <!-- WebGL Laser Matrix Canvas: Spans 100% of screen under the blend layer -->
+    <canvas id="glcanvas" class="absolute inset-0 w-full h-full block pointer-events-auto z-10"></canvas>
+
+    <!-- Iridescent Ribbon Wave Image: Spans 100% of screen with left-to-right fade -->
+    <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/fa51902b-c2a4-4c33-a96e-a8f1ef67edc6_1600w.jpg" 
+         alt="" 
+         class="wave-texture-overlay z-20" />
+
+    <!-- Continuous gradient overlay fusing the animation seamlessly into the auth area -->
+    <div class="right-side-blend z-30 hidden min-[901px]:block"></div>
+  </div>
+
+  <!-- MAIN DUAL-PANE CONTENT CONTAINER (TRANSPARENT, UNIFIED) -->
+  <main class="relative z-10 w-full min-h-screen flex flex-col min-[901px]:flex-row">
+
+    <!-- LEFT HALF: BRANDING & ATMOSPHERIC SHOWCASE (NO DIVIDER BORDER) -->
+    <div class="hidden min-[901px]:flex w-1/2 flex-col justify-between p-12 md:p-16 select-none pointer-events-none">
+
+      <!-- TOP-LEFT: PROMINENT BRAND LOGO (EXACT SVG FROM FAVICON & PRODUCTION LOGO) -->
+      <div class="flex items-center gap-3.5 pointer-events-auto">
+        <div class="w-11 h-11 rounded-xl bg-surface-subtle border border-line-strong flex items-center justify-center p-2 shadow-scalar-2 backdrop-blur-md">
+          <svg viewBox="0 0 64 64" class="w-full h-full shrink-0">
+            <defs>
+              <linearGradient id="v1-brand-grad" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="var(--color-primary)"></stop>
+                <stop offset="100%" stop-color="var(--color-primary-glow)"></stop>
+              </linearGradient>
+            </defs>
+            <!-- Trajectory flight paths -->
+            <g stroke="url(#v1-brand-grad)" stroke-width="1.8" opacity="0.6">
+              <line x1="14" y1="32" x2="50" y2="16"></line>
+              <line x1="50" y1="16" x2="36" y2="50"></line>
+              <line x1="36" y1="50" x2="14" y2="32"></line>
+            </g>
+            <!-- Arrow vector flight body -->
+            <path d="M14 32 L50 16 L36 50 L30 36 Z" fill="url(#v1-brand-grad)" opacity="0.95"></path>
+            <!-- Apex waypoint nodes -->
+            <g fill="var(--color-surface)" stroke="url(#v1-brand-grad)" stroke-width="2.2">
+              <circle cx="14" cy="32" r="3.4"></circle>
+              <circle cx="50" cy="16" r="3.4"></circle>
+              <circle cx="36" cy="50" r="3.4"></circle>
+            </g>
+          </svg>
+        </div>
+        <div>
+          <span class="font-display font-bold tracking-tight text-white text-xl select-none">
+            ApiTest<span class="gradient-text">Pilot</span>
+          </span>
+          <span class="text-[10px] font-mono ml-2 px-1.5 py-0.5 rounded bg-surface-subtle border border-line text-text-muted">v0.0.1</span>
+        </div>
+      </div>
+
+      <!-- BOTTOM-LEFT: VALUE PROPOSITION (API TESTING IS FASTER THAN EVER) -->
+      <div class="max-w-md pointer-events-auto">
+        <h2 class="text-3xl md:text-4xl font-display font-bold text-white tracking-tight leading-tight drop-shadow-sm flex items-center flex-wrap gap-x-2">
+          <span>API testing is</span>
+          <span class="inline-block px-2.5 py-0.5 rounded bg-white text-black font-black text-2xl md:text-3xl tracking-tight shadow-md select-none border border-white">
+            faster
+          </span>
+          <span>than ever.</span>
+        </h2>
+        <p class="text-xs text-text-secondary mt-2.5 font-mono">
+          Autonomous OpenAPI test generation &amp; recovery.
+        </p>
+      </div>
+
+    </div>
+
+    <!-- RIGHT HALF: AUTH CARD CONTAINER -->
+    <div class="w-full min-[901px]:w-1/2 flex items-center justify-center p-6 min-[901px]:p-12 relative">
+      <div class="w-full max-w-md auth-card p-8">
+
+        <!-- Mobile Header (Visible only <= 900px) -->
+        <div class="min-[901px]:hidden flex items-center gap-3 mb-6">
+          <div class="w-9 h-9 rounded-xl bg-surface-subtle border border-line-strong flex items-center justify-center p-1.5 shadow-scalar-1">
+            <svg viewBox="0 0 64 64" class="w-full h-full">
+              <defs>
+                <linearGradient id="v1-mob-grad" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%" stop-color="var(--color-primary)"></stop>
+                  <stop offset="100%" stop-color="var(--color-primary-glow)"></stop>
+                </linearGradient>
+              </defs>
+              <g stroke="url(#v1-mob-grad)" stroke-width="1.8" opacity="0.6">
+                <line x1="14" y1="32" x2="50" y2="16"></line>
+                <line x1="50" y1="16" x2="36" y2="50"></line>
+                <line x1="36" y1="50" x2="14" y2="32"></line>
+              </g>
+              <path d="M14 32 L50 16 L36 50 L30 36 Z" fill="url(#v1-mob-grad)" opacity="0.95"></path>
+              <g fill="var(--color-surface)" stroke="url(#v1-mob-grad)" stroke-width="2.2">
+                <circle cx="14" cy="32" r="3.4"></circle>
+                <circle cx="50" cy="16" r="3.4"></circle>
+                <circle cx="36" cy="50" r="3.4"></circle>
+              </g>
+            </svg>
+          </div>
+          <span class="font-display font-bold tracking-tight text-text-primary text-base">
+            ApiTest<span class="gradient-text">Pilot</span>
+          </span>
+        </div>
+
+        <!-- Heading with Clean Inline Switcher (No top tab bar!) -->
+        <div class="mb-6">
+          <h2 id="v1-form-title" class="text-2xl font-display font-bold text-text-primary tracking-tight">Welcome back</h2>
+          <p class="text-text-secondary text-xs mt-1.5 flex items-center gap-1.5">
+            <span id="v1-form-subtitle">Don't have an account yet?</span>
+            <button type="button" id="v1-header-toggle-btn" onclick="toggleMode()" class="text-primary hover:underline font-semibold transition-colors focus:outline-none">
+              Sign up for free
+            </button>
+          </p>
+        </div>
+
+        <!-- Dynamic Feedback Banner (RFC 7807 ProblemDetails / Status / SSO) -->
+        <div id="v1-alert-banner" class="hidden mb-5 p-3 rounded-control border text-xs flex items-start gap-2.5 transition-all">
+          <svg id="v1-alert-icon" class="w-4 h-4 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <div class="flex-1">
+            <span id="v1-alert-title" class="font-semibold block"></span>
+            <span id="v1-alert-desc" class="text-[11px] block mt-0.5"></span>
+          </div>
+        </div>
+
+        <!-- Social SSO: Google Button -->
+        <button id="v1-btn-google" onclick="triggerGoogleSSO()" class="w-full h-9 min-h-[36px] px-3.5 rounded-control bg-surface-subtle hover:bg-surface-raised border border-line-strong text-text-primary text-xs font-medium flex items-center justify-center gap-2.5 transition-all shadow-scalar-1 btn-press mb-4">
+          <!-- Google G Icon -->
+          <svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24">
+            <path fill="var(--color-danger)" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
+            <path fill="var(--color-success)" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
+            <path fill="var(--color-warning)" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" />
+            <path fill="var(--color-primary)" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" />
+          </svg>
+          <span id="v1-google-label">Continue with Google</span>
+        </button>
+
+        <!-- Divider -->
+        <div class="flex items-center gap-3 my-4">
+          <div class="flex-1 h-px bg-line"></div>
+          <span class="text-[11px] text-text-muted uppercase font-mono">or continue with email</span>
+          <div class="flex-1 h-px bg-line"></div>
+        </div>
+
+        <!-- Auth Form -->
+        <form id="v1-auth-form" onsubmit="handleSubmit(event)" class="space-y-4">
+          
+          <!-- Registration Only: Full Name -->
+          <div id="v1-field-name" class="hidden">
+            <label for="v1-input-name" class="block text-xs font-medium text-text-secondary mb-1.5">Full Name</label>
+            <input type="text" id="v1-input-name" placeholder="Ahmed Mohamed" class="input-scalar" />
+            <span id="v1-error-name" class="hidden text-semantic-danger text-[11px] mt-1 block"></span>
+          </div>
+
+          <!-- Email Field -->
+          <div>
+            <label for="v1-input-email" class="block text-xs font-medium text-text-secondary mb-1.5">Email address</label>
+            <input type="email" id="v1-input-email" placeholder="developer@example.com" class="input-scalar" />
+            <span id="v1-error-email" class="hidden text-semantic-danger text-[11px] mt-1 block"></span>
+          </div>
+
+          <!-- Password Field -->
+          <div>
+            <div class="flex items-center justify-between mb-1.5">
+              <label for="v1-input-password" class="text-xs font-medium text-text-secondary">Password</label>
+              <a href="javascript:void(0)" id="v1-link-forgot" class="text-[11px] text-primary hover:underline">Forgot password?</a>
+            </div>
+            <div class="relative">
+              <input type="password" id="v1-input-password" placeholder="••••••••••••" oninput="handlePasswordInput(this.value)" class="input-scalar pr-10" />
+              <button type="button" onclick="togglePasswordVisibility('v1-input-password', this)" class="absolute right-2.5 top-2 text-text-muted hover:text-text-primary focus:outline-none">
+                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                </svg>
+              </button>
+            </div>
+            <span id="v1-error-password" class="hidden text-semantic-danger text-[11px] mt-1 block"></span>
+          </div>
+
+          <!-- Registration Only: Password Strength Indicator -->
+          <div id="v1-strength-container" class="hidden space-y-1.5 pt-1">
+            <div class="flex items-center justify-between text-[11px]">
+              <span class="text-text-secondary">Password Strength</span>
+              <span id="v1-strength-label" class="font-semibold text-text-muted">None</span>
+            </div>
+            <div class="grid grid-cols-3 gap-1.5">
+              <div id="v1-bar-1" class="h-1 rounded-full bg-line transition-all duration-300"></div>
+              <div id="v1-bar-2" class="h-1 rounded-full bg-line transition-all duration-300"></div>
+              <div id="v1-bar-3" class="h-1 rounded-full bg-line transition-all duration-300"></div>
+            </div>
+          </div>
+
+          <!-- Remember Me / Terms Checkbox -->
+          <div class="flex items-center gap-2 pt-1">
+            <input type="checkbox" id="v1-checkbox-terms" class="w-4 h-4 rounded-control border-line bg-surface-subtle text-primary focus:ring-primary focus:ring-offset-0" />
+            <label for="v1-checkbox-terms" id="v1-checkbox-label" class="text-xs text-text-secondary select-none">
+              Keep me signed in for 30 days
+            </label>
+          </div>
+
+          <!-- Submit Button -->
+          <button type="submit" id="v1-btn-submit" class="w-full h-9 min-h-[36px] px-3.5 rounded-control bg-primary hover:bg-primary-hover text-white text-xs font-semibold flex items-center justify-center gap-2 transition-all shadow-scalar-1 btn-press">
+            <svg id="v1-submit-spinner" class="hidden animate-spin w-4 h-4 text-white" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+            </svg>
+            <span id="v1-submit-label">Sign In to Test Pilot</span>
+          </button>
+
+        </form>
+
+        <!-- Terms Footer -->
+        <p class="text-[11px] text-text-muted text-center mt-6">
+          By continuing, you agree to the <a href="javascript:void(0)" class="text-text-secondary hover:underline">Terms of Service</a> and <a href="javascript:void(0)" class="text-text-secondary hover:underline">Privacy Policy</a>.
+        </p>
+
+      </div>
+    </div>
+
+  </main>
+
+  <!-- FLOATING PROTOTYPE STATE CONTROLLER -->
+  <aside class="fixed bottom-4 right-4 z-50 bg-surface-overlay border border-line-strong rounded-card p-3 shadow-hero backdrop-blur-md text-xs w-72">
+    <div class="flex items-center justify-between pb-2 mb-2 border-b border-line text-[11px] font-mono">
+      <span class="flex items-center gap-1.5 text-primary font-semibold">
+        <span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+        DIRECTION 1 &bull; DUAL PANE
+      </span>
+      <button onclick="toggleTheme()" class="px-2 py-0.5 rounded-control bg-surface-subtle hover:bg-surface-raised border border-line text-text-secondary text-[11px]">
+        Theme
+      </button>
+    </div>
+
+    <div class="grid grid-cols-2 gap-1.5 font-mono text-[11px]">
+      <button onclick="applyState('default')" class="p-1.5 rounded-control bg-surface-subtle hover:bg-surface-raised text-left border border-line">
+        1. Default
+      </button>
+      <button onclick="applyState('loading')" class="p-1.5 rounded-control bg-surface-subtle hover:bg-surface-raised text-left border border-line">
+        2. Loading
+      </button>
+      <button onclick="applyState('validation')" class="p-1.5 rounded-control bg-surface-subtle hover:bg-surface-raised text-left border border-line">
+        3. Validation Error
+      </button>
+      <button onclick="applyState('error401')" class="p-1.5 rounded-control bg-surface-subtle hover:bg-surface-raised text-left border border-line">
+        4. Error 401 (Auth)
+      </button>
+      <button onclick="applyState('error409')" class="p-1.5 rounded-control bg-surface-subtle hover:bg-surface-raised text-left border border-line">
+        5. Error 409 (Email)
+      </button>
+      <button onclick="applyState('sso_pending')" class="p-1.5 rounded-control bg-surface-subtle hover:bg-surface-raised text-left border border-line">
+        6. SSO Pending
+      </button>
+    </div>
+
+    <div class="mt-2.5 pt-2 border-t border-line flex items-center justify-between text-[10px] text-text-muted font-mono">
+      <span>Mode: <strong id="v1-current-mode" class="text-text-primary">Sign In</strong></span>
+      <span>State: <strong id="v1-current-state" class="text-semantic-success">Default</strong></span>
+    </div>
+  </aside>
+
+  <!-- WEBGL MATRIX JUNCTION SHADER LOGIC (FULL-SCREEN RESPONSIVE CANVAS) -->
+  <script>
+    (function initMatrixJunction() {
+      const canvas = document.getElementById('glcanvas');
+      if (!canvas) return;
+      const gl = canvas.getContext('webgl', { alpha: true });
+      if (!gl) return;
+
+      let mouseX = -1000, mouseY = -1000;
+      let lastMouseMove = 0;
+      let currentMouseActive = 0.0;
+
+      window.addEventListener('mousemove', (e) => {
+        const rect = canvas.getBoundingClientRect();
+        mouseX = (e.clientX - rect.left) * (canvas.width / rect.width);
+        mouseY = (rect.bottom - e.clientY) * (canvas.height / rect.height);
+        lastMouseMove = Date.now();
+      });
+
+      const vsSource = `
+        attribute vec4 aVertexPosition;
+        void main() {
+          gl_Position = aVertexPosition;
+        }
+      `;
+
+      const fsSource = `
+        precision highp float;
+        uniform vec2 u_resolution;
+        uniform float u_time;
+        uniform vec2 u_mouse;
+        uniform float u_mouseActive;
+
+        float hash(float n) { return fract(sin(n) * 753.5453123); }
+        float noise(float x) {
+          float i = floor(x);
+          float f = fract(x);
+          f = f * f * (3.0 - 2.0 * f);
+          return mix(hash(i), hash(i + 1.0), f);
+        }
+
+        vec2 sdLine(vec2 p, vec2 a, vec2 b) {
+          vec2 pa = p - a, ba = b - a;
+          float h = clamp(dot(pa, ba) / dot(ba, ba), 0.0, 1.0);
+          return vec2(length(pa - ba * h), h);
+        }
+
+        float lightning(vec2 uv, vec2 a, vec2 b, float t) {
+          vec2 ab = b - a;
+          float len = length(ab);
+          if (len < 0.01) return 0.0;
+          vec2 dir = ab / len;
+          
+          vec2 pa = uv - a;
+          float h = clamp(dot(pa, dir) / len, 0.0, 1.0);
+          float dist = length(pa - dir * (h * len));
+          
+          float env = sin(h * 3.14159265);
+          
+          float offset = (noise(h * 25.0 - t * 35.0) - 0.5) * 0.08 * env;
+          offset += (noise(h * 70.0 + t * 50.0) - 0.5) * 0.02 * env;
+          
+          float d = abs(dist + offset);
+          return (0.00035 / (d + 0.0002) + 0.000018 / (d * d + 0.00001)) * env;
+        }
+
+        void main() {
+          vec2 uv = gl_FragCoord.xy / u_resolution.xy;
+          uv = uv * 2.0 - 1.0;
+          uv.x *= u_resolution.x / u_resolution.y;
+
+          vec2 mouseUV = u_mouse / u_resolution.xy;
+          mouseUV = mouseUV * 2.0 - 1.0;
+          mouseUV.x *= u_resolution.x / u_resolution.y;
+
+          // Junction center point placed in the left half, projecting beams across the entire screen
+          vec2 center = vec2(-0.75, -0.2);
+          center.x += sin(u_time * 0.4) * 0.03;
+          center.y += cos(u_time * 0.3) * 0.03;
+
+          vec2 dirUp = normalize(vec2(0.18, 1.0));
+          vec2 dirRight = normalize(vec2(1.0, -0.22));
+          vec2 dirDownLeft = normalize(vec2(-0.8, -0.6));
+
+          // Beams project across the entire screen with length 6.0
+          vec2 l1 = sdLine(uv, center, center + dirUp * 6.0);
+          vec2 l2 = sdLine(uv, center, center + dirRight * 6.0);
+          vec2 l3 = sdLine(uv, center, center + dirDownLeft * 6.0);
+
+          float intensity = 0.012;
+          float glow = intensity / (l1.x + 0.001) +
+                       intensity / (l2.x + 0.001) +
+                       (intensity * 0.6) / (l3.x + 0.001);
+
+          float pulse1 = smoothstep(0.12, 0.0, abs(l1.y - fract(u_time * 0.4))) * 0.06 / (l1.x + 0.001);
+          float pulse2 = smoothstep(0.12, 0.0, abs(l2.y - fract(u_time * 0.5 + 0.3))) * 0.06 / (l2.x + 0.001);
+          float pulse3 = smoothstep(0.12, 0.0, abs(l3.y - fract(u_time * 0.3 + 0.7))) * 0.03 / (l3.x + 0.001);
+          glow += pulse1 + pulse2 + pulse3;
+
+          vec2 p1 = center + dirUp * clamp(dot(mouseUV - center, dirUp), 0.0, 6.0);
+          vec2 p2 = center + dirRight * clamp(dot(mouseUV - center, dirRight), 0.0, 6.0);
+          vec2 p3 = center + dirDownLeft * clamp(dot(mouseUV - center, dirDownLeft), 0.0, 6.0);
+          
+          float lgt1 = lightning(uv, p1, mouseUV, u_time);
+          float lgt2 = lightning(uv, p2, mouseUV, u_time + 10.0);
+          float lgt3 = lightning(uv, p3, mouseUV, u_time + 20.0);
+          
+          float flicker = step(0.1, noise(u_time * 60.0)) * (noise(u_time * 150.0) * 0.8 + 0.2);
+          
+          float d1 = length(mouseUV - p1);
+          float d2 = length(mouseUV - p2);
+          float d3 = length(mouseUV - p3);
+          
+          glow += lgt1 * smoothstep(2.5, 0.0, d1) * u_mouseActive * flicker;
+          glow += lgt2 * smoothstep(2.5, 0.0, d2) * u_mouseActive * flicker;
+          glow += lgt3 * smoothstep(2.5, 0.0, d3) * u_mouseActive * flicker;
+
+          float distToCenter = length(uv - center);
+          glow += 0.08 / (distToCenter + 0.015);
+
+          vec3 baseColor = vec3(0.55, 0.8, 1.0);
+          vec3 finalColor = baseColor * glow;
+
+          finalColor *= 0.85 + 0.15 * sin(u_time * 2.0 - distToCenter * 8.0);
+
+          float vignette = 1.0 - smoothstep(1.0, 2.5, length(uv));
+          finalColor *= vignette;
+
+          float n = fract(sin(dot(gl_FragCoord.xy, vec2(12.9898, 78.233))) * 43758.5453);
+          finalColor += n * 0.02;
+
+          gl_FragColor = vec4(finalColor, 1.0);
+        }
+      `;
+
+      function createShader(glCtx, type, source) {
+        const shader = glCtx.createShader(type);
+        glCtx.shaderSource(shader, source);
+        glCtx.compileShader(shader);
+        if (!glCtx.getShaderParameter(shader, glCtx.COMPILE_STATUS)) {
+          console.error(glCtx.getShaderInfoLog(shader));
+          return null;
+        }
+        return shader;
+      }
+
+      const shaderProgram = gl.createProgram();
+      gl.attachShader(shaderProgram, createShader(gl, gl.VERTEX_SHADER, vsSource));
+      gl.attachShader(shaderProgram, createShader(gl, gl.FRAGMENT_SHADER, fsSource));
+      gl.linkProgram(shaderProgram);
+
+      const programInfo = {
+        program: shaderProgram,
+        attribLocations: { vertexPosition: gl.getAttribLocation(shaderProgram, 'aVertexPosition') },
+        uniformLocations: {
+          resolution: gl.getUniformLocation(shaderProgram, 'u_resolution'),
+          time: gl.getUniformLocation(shaderProgram, 'u_time'),
+          mouse: gl.getUniformLocation(shaderProgram, 'u_mouse'),
+          mouseActive: gl.getUniformLocation(shaderProgram, 'u_mouseActive'),
+        },
+      };
+
+      const positionBuffer = gl.createBuffer();
+      gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([1.0, 1.0, -1.0, 1.0, 1.0, -1.0, -1.0, -1.0]), gl.STATIC_DRAW);
+
+      const startTime = Date.now();
+
+      function resize() {
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+        const w = window.innerWidth;
+        const h = window.innerHeight;
+        if (canvas.width !== Math.round(w * dpr) || canvas.height !== Math.round(h * dpr)) {
+          canvas.width = Math.round(w * dpr);
+          canvas.height = Math.round(h * dpr);
+          gl.viewport(0, 0, canvas.width, canvas.height);
+        }
+      }
+      window.addEventListener('resize', resize);
+      resize();
+
+      function render() {
+        resize();
+        gl.useProgram(programInfo.program);
+
+        gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+        gl.vertexAttribPointer(programInfo.attribLocations.vertexPosition, 2, gl.FLOAT, false, 0, 0);
+        gl.enableVertexAttribArray(programInfo.attribLocations.vertexPosition);
+
+        let activeX = mouseX;
+        let activeY = mouseY;
+        const nowSec = (Date.now() - startTime) * 0.001;
+
+        if (lastMouseMove === 0) {
+          activeX = canvas.width * 0.35 + Math.cos(nowSec * 0.75) * (canvas.width * 0.15);
+          activeY = canvas.height * 0.48 + Math.sin(nowSec * 0.95) * (canvas.height * 0.2);
+          currentMouseActive = 0.85 + 0.15 * Math.sin(nowSec * 2.2);
+        } else {
+          const timeSinceMove = Date.now() - lastMouseMove;
+          const targetActive = timeSinceMove < 250 ? 1.0 : Math.max(0.35, 1.0 - (timeSinceMove - 250) / 450.0);
+          currentMouseActive += (targetActive - currentMouseActive) * 0.12;
+        }
+
+        gl.uniform2f(programInfo.uniformLocations.resolution, canvas.width, canvas.height);
+        gl.uniform1f(programInfo.uniformLocations.time, nowSec);
+        gl.uniform2f(programInfo.uniformLocations.mouse, activeX, activeY);
+        gl.uniform1f(programInfo.uniformLocations.mouseActive, currentMouseActive);
+
+        gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+        requestAnimationFrame(render);
+      }
+      requestAnimationFrame(render);
+    })();
+  </script>
+
+  <!-- INTERACTIVE FORM LOGIC & STATE SWITCHER -->
+  <script>
+    let currentMode = 'signin';
+    let currentState = 'default';
+
+    function toggleMode() {
+      switchMode(currentMode === 'signin' ? 'signup' : 'signin');
+    }
+
+    function switchMode(mode) {
+      currentMode = mode;
+      document.getElementById('v1-current-mode').textContent = mode === 'signin' ? 'Sign In' : 'Create Account';
+
+      const fieldName = document.getElementById('v1-field-name');
+      const title = document.getElementById('v1-form-title');
+      const subtitle = document.getElementById('v1-form-subtitle');
+      const headerToggleBtn = document.getElementById('v1-header-toggle-btn');
+      const submitLabel = document.getElementById('v1-submit-label');
+      const strengthContainer = document.getElementById('v1-strength-container');
+      const checkboxLabel = document.getElementById('v1-checkbox-label');
+      const linkForgot = document.getElementById('v1-link-forgot');
+
+      hideAlert();
+
+      if (mode === 'signin') {
+        fieldName.classList.add('hidden');
+        strengthContainer.classList.add('hidden');
+        title.textContent = 'Welcome back';
+        subtitle.textContent = "Don't have an account yet?";
+        headerToggleBtn.textContent = 'Sign up for free';
+        submitLabel.textContent = 'Sign In to Test Pilot';
+        checkboxLabel.textContent = 'Keep me signed in for 30 days';
+        linkForgot.classList.remove('hidden');
+      } else {
+        fieldName.classList.remove('hidden');
+        strengthContainer.classList.remove('hidden');
+        title.textContent = 'Create your account';
+        subtitle.textContent = 'Already have an account?';
+        headerToggleBtn.textContent = 'Sign in';
+        submitLabel.textContent = 'Create Account';
+        checkboxLabel.textContent = 'I agree to the Terms of Service and Privacy Policy';
+        linkForgot.classList.add('hidden');
+      }
+    }
+
+    function handlePasswordInput(val) {
+      if (currentMode !== 'signup') return;
+      const bar1 = document.getElementById('v1-bar-1');
+      const bar2 = document.getElementById('v1-bar-2');
+      const bar3 = document.getElementById('v1-bar-3');
+      const label = document.getElementById('v1-strength-label');
+      if (!bar1 || !bar2 || !bar3 || !label) return;
+
+      let score = 0;
+      if (val.length >= 8) score++;
+      if (/[A-Z]/.test(val)) score++;
+      if (/[0-9!@#$%^&*]/.test(val)) score++;
+
+      // Reset
+      bar1.style.backgroundColor = 'var(--color-line)';
+      bar2.style.backgroundColor = 'var(--color-line)';
+      bar3.style.backgroundColor = 'var(--color-line)';
+
+      if (!val) {
+        label.textContent = 'None';
+        label.style.color = 'var(--color-text-muted)';
+      } else if (score === 1) {
+        bar1.style.backgroundColor = 'var(--color-danger)';
+        label.textContent = 'Weak';
+        label.style.color = 'var(--color-danger)';
+      } else if (score === 2) {
+        bar1.style.backgroundColor = 'var(--color-warning)';
+        bar2.style.backgroundColor = 'var(--color-warning)';
+        label.textContent = 'Medium';
+        label.style.color = 'var(--color-warning)';
+      } else if (score === 3) {
+        bar1.style.backgroundColor = 'var(--color-success)';
+        bar2.style.backgroundColor = 'var(--color-success)';
+        bar3.style.backgroundColor = 'var(--color-success)';
+        label.textContent = 'Strong';
+        label.style.color = 'var(--color-success)';
+      }
+    }
+        label.textContent = 'None';
+        label.className = 'font-semibold text-text-muted';
+      }
+    }
+
+    function togglePasswordVisibility(inputId, btn) {
+      const input = document.getElementById(inputId);
+      input.type = input.type === 'password' ? 'text' : 'password';
+    }
+
+    function showAlert(type, title, desc) {
+      const banner = document.getElementById('v1-alert-banner');
+      const bannerTitle = document.getElementById('v1-alert-title');
+      const bannerDesc = document.getElementById('v1-alert-desc');
+
+      banner.classList.remove('hidden', 'bg-semantic-danger/10', 'border-semantic-danger/30', 'text-semantic-danger', 'bg-semantic-warning/10', 'border-semantic-warning/30', 'text-semantic-warning', 'bg-primary-subtle', 'border-line', 'text-primary');
+
+      if (type === 'danger') {
+        banner.classList.add('bg-semantic-danger/10', 'border-semantic-danger/30', 'text-semantic-danger');
+      } else if (type === 'warning') {
+        banner.classList.add('bg-semantic-warning/10', 'border-semantic-warning/30', 'text-semantic-warning');
+      } else {
+        banner.classList.add('bg-primary-subtle', 'border-line', 'text-primary');
+      }
+
+      bannerTitle.textContent = title;
+      bannerDesc.textContent = desc;
+    }
+
+    function hideAlert() {
+      document.getElementById('v1-alert-banner').classList.add('hidden');
+      clearFieldErrors();
+    }
+
+    function clearFieldErrors() {
+      ['name', 'email', 'password'].forEach(f => {
+        const el = document.getElementById('v1-error-' + f);
+        if (el) { el.textContent = ''; el.classList.add('hidden'); }
+        const input = document.getElementById('v1-input-' + f);
+        if (input) input.classList.remove('border-semantic-danger');
+      });
+    }
+
+    function setFieldError(field, msg) {
+      const el = document.getElementById('v1-error-' + field);
+      if (el) { el.textContent = msg; el.classList.remove('hidden'); }
+      const input = document.getElementById('v1-input-' + field);
+      if (input) input.classList.add('border-semantic-danger');
+    }
+
+    function applyState(state) {
+      currentState = state;
+      document.getElementById('v1-current-state').textContent = state;
+      hideAlert();
+
+      const submitSpinner = document.getElementById('v1-submit-spinner');
+      const submitBtn = document.getElementById('v1-btn-submit');
+      const emailInput = document.getElementById('v1-input-email');
+      const passInput = document.getElementById('v1-input-password');
+
+      submitSpinner.classList.add('hidden');
+      submitBtn.disabled = false;
+
+      switch(state) {
+        case 'default':
+          emailInput.value = '';
+          passInput.value = '';
+          break;
+        case 'loading':
+          submitSpinner.classList.remove('hidden');
+          submitBtn.disabled = true;
+          break;
+        case 'validation':
+          setFieldError('email', 'The Email field is required and must be valid.');
+          setFieldError('password', 'Password must be at least 8 characters long.');
+          showAlert('danger', 'Validation Error (RFC 7807)', 'Please inspect the highlighted fields below.');
+          break;
+        case 'error401':
+          emailInput.value = 'developer@domain.com';
+          passInput.value = 'wrongPassword!';
+          showAlert('danger', 'Authentication Failed (401 Unauthorized)', 'Invalid credentials provided. Please verify email and password.');
+          break;
+        case 'error409':
+          if (currentMode !== 'signup') toggleMode();
+          emailInput.value = 'existing.user@domain.com';
+          showAlert('danger', 'Conflict (409 Conflict)', 'An account with this email address already exists. Please sign in instead.');
+          break;
+        case 'sso_pending':
+          showAlert('primary', 'Redirecting to Google SSO...', 'Handshaking OAuth2 provider. You will be redirected shortly.');
+          break;
+      }
+    }
+
+    function handleSubmit(e) {
+      e.preventDefault();
+      applyState('loading');
+      setTimeout(() => {
+        const email = document.getElementById('v1-input-email').value;
+        if (!email) {
+          applyState('validation');
+        } else {
+          applyState('error401');
+        }
+      }, 700);
+    }
+
+    function triggerGoogleSSO() {
+      applyState('sso_pending');
+    }
+
+    function toggleTheme() {
+      const html = document.documentElement;
+      const current = html.getAttribute('data-theme') || 'dark';
+      const next = current === 'dark' ? 'light' : 'dark';
+      html.setAttribute('data-theme', next);
+    }
+  </script>
+</body>
+</html>

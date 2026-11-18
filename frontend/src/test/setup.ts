@@ -8,3 +8,6 @@ class ResizeObserverMock {
 }
 
 globalThis.ResizeObserver = ResizeObserverMock as unknown as typeof ResizeObserver;
+
+// Mock HTMLCanvasElement.prototype.getContext for jsdom
+HTMLCanvasElement.prototype.getContext = () => null;

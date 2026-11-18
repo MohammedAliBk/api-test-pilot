@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>API Test Pilot — Auth Direction 2 (Obsidian Centered Glass Card)</title>
+  <link rel="icon" type="image/svg+xml" href="../../../public/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../reference/tokens.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="../../reference/tailwind.preset.js"></script>
+  <script>
+    if (typeof preset !== 'undefined') {
+      tailwind.config = preset;
+    }
+  </script>
+  <style>
+    body {
+      background-color: var(--color-surface);
+      color: var(--color-text-primary);
+      font-family: var(--font-sans);
+      margin: 0;
+      padding: 0;
+      -webkit-font-smoothing: antialiased;
+    }
+    .input-scalar {
+      height: 36px;
+      min-height: 36px;
+      border-radius: var(--radius-control);
+      border: 1px solid var(--color-line-strong);
+      background-color: var(--color-surface-subtle);
+      color: var(--color-text-primary);
+      padding: 0 12px;
+      font-size: 13px;
+      outline: none;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease;
+      width: 100%;
+    }
+    .input-scalar:focus {
+      border-color: var(--color-primary);
+      box-shadow: 0 0 0 1px var(--color-primary);
+    }
+    .input-scalar.input-error {
+      border-color: var(--color-danger);
+    }
+    .btn-press:active {
+      transform: scale(0.98);
+    }
+    .glass-card {
+      background: var(--color-surface-raised);
+      border: 1px solid var(--color-line-strong);
+      box-shadow: 0 20px 40px -15px var(--color-surface-overlay), 0 0 0 1px var(--color-line);
+    }
+  </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4 min-[901px]:p-8 relative selection:bg-[var(--color-primary)] selection:text-white overflow-x-hidden">
+
+  <!-- Ambient Radial Glow Behind Center Card -->
+  <div class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 rounded-full bg-[var(--color-primary-subtle)] blur-3xl opacity-60 pointer-events-none"></div>
+
+  <!-- Main Centered Container -->
+  <main class="w-full max-w-md relative z-10">
+
+    <!-- Top Brand Header -->
+    <div class="text-center mb-6">
+      <div class="inline-flex items-center justify-center w-12 h-12 rounded-panel bg-surface-subtle border border-line-strong p-2 shadow-hero mb-3">
+        <svg viewBox="0 0 64 64" role="img" aria-label="ApiTestPilot" class="w-full h-full">
+          <defs>
+            <linearGradient id="v2-logo-grad" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="var(--color-primary)"></stop>
+              <stop offset="100%" stop-color="var(--color-primary-glow)"></stop>
+            </linearGradient>
+          </defs>
+          <circle cx="32" cy="32" r="30" fill="none" stroke="var(--color-line-strong)" stroke-width="2"></circle>
+          <path d="M16 32 L28 44 L48 20" fill="none" stroke="url(#v2-logo-grad)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"></path>
+        </svg>
+      </div>
+      <h1 class="text-xl font-display font-bold text-text-primary tracking-tight">API Test Pilot</h1>
+      <p class="text-text-secondary text-xs mt-1">Autonomous API Testing Platform &bull; .NET 10</p>
+    </div>
+
+    <!-- Glass Card Wrapper -->
+    <div class="glass-card rounded-panel p-6 min-[901px]:p-8">
+
+      <!-- Pill Segmented Switcher -->
+      <div class="flex p-1 rounded-control bg-surface-subtle border border-line mb-6">
+        <button id="v2-tab-signin" onclick="switchMode('signin')" class="flex-1 py-1.5 text-xs font-semibold rounded-control transition-all bg-surface-raised text-text-primary shadow-scalar-1">
+          Sign In
+        </button>
+        <button id="v2-tab-signup" onclick="switchMode('signup')" class="flex-1 py-1.5 text-xs font-semibold rounded-control transition-all text-text-secondary hover:text-text-primary">
+          Create Account
+        </button>
+      </div>
+
+      <!-- Card Title & Subtitle -->
+      <div class="mb-5">
+        <h2 id="v2-form-title" class="text-lg font-bold text-text-primary">Sign in to your account</h2>
+        <p id="v2-form-subtitle" class="text-text-secondary text-xs mt-0.5">Enter your email to resume autonomous test workflows</p>
+      </div>
+
+      <!-- Dynamic Alert Banner -->
+      <div id="v2-alert-banner" class="hidden mb-4 p-3 rounded-control border text-xs flex items-start gap-2.5 transition-all">
+        <svg id="v2-alert-icon" class="w-4 h-4 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+        </svg>
+        <div class="flex-1">
+          <span id="v2-alert-title" class="font-semibold block"></span>
+          <span id="v2-alert-desc" class="text-[11px] block mt-0.5"></span>
+        </div>
+      </div>
+
+      <!-- Google SSO Button -->
+      <button id="v2-btn-google" onclick="triggerGoogleSSO()" class="w-full h-9 min-h-[36px] px-3.5 rounded-control bg-surface-subtle hover:bg-surface border border-line-strong text-text-primary text-xs font-medium flex items-center justify-center gap-2.5 transition-all shadow-scalar-1 btn-press">
+        <svg class="w-4 h-4" viewBox="0 0 24 24">
+          <path fill="var(--color-danger)" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
+          <path fill="var(--color-success)" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
+          <path fill="var(--color-warning)" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" />
+          <path fill="var(--color-primary)" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" />
+        </svg>
+        <span>Continue with Google</span>
+      </button>
+
+      <!-- Separator -->
+      <div class="flex items-center gap-3 my-4">
+        <div class="flex-1 h-px bg-line"></div>
+        <span class="text-[10px] text-text-muted uppercase tracking-wider font-mono">or email credentials</span>
+        <div class="flex-1 h-px bg-line"></div>
+      </div>
+
+      <!-- Form -->
+      <form id="v2-auth-form" onsubmit="handleSubmit(event)" class="space-y-3.5">
+
+        <!-- Display Name (Register only) -->
+        <div id="v2-field-name" class="hidden">
+          <label for="v2-input-name" class="block text-xs font-medium text-text-secondary mb-1">Full Name</label>
+          <input type="text" id="v2-input-name" placeholder="Ahmed Mohamed" class="input-scalar" />
+          <span id="v2-error-name" class="hidden text-semantic-danger text-[11px] mt-1 block"></span>
+        </div>
+
+        <!-- Email -->
+        <div>
+          <label for="v2-input-email" class="block text-xs font-medium text-text-secondary mb-1">Email address</label>
+          <input type="email" id="v2-input-email" placeholder="name@company.com" class="input-scalar" />
+          <span id="v2-error-email" class="hidden text-semantic-danger text-[11px] mt-1 block"></span>
+        </div>
+
+        <!-- Password -->
+        <div>
+          <div class="flex items-center justify-between mb-1">
+            <label for="v2-input-password" class="text-xs font-medium text-text-secondary">Password</label>
+            <a href="javascript:void(0)" id="v2-link-forgot" class="text-[11px] text-primary hover:underline">Forgot?</a>
+          </div>
+          <div class="relative">
+            <input type="password" id="v2-input-password" placeholder="••••••••••••" oninput="handlePasswordInput(this.value)" class="input-scalar pr-10" />
+            <button type="button" onclick="togglePasswordVisibility('v2-input-password', this)" class="absolute right-2.5 top-2 text-text-muted hover:text-text-primary focus:outline-none">
+              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+              </svg>
+            </button>
+          </div>
+          <span id="v2-error-password" class="hidden text-semantic-danger text-[11px] mt-1 block"></span>
+
+          <!-- Password Requirement Badges (Register mode) -->
+          <div id="v2-strength-wrapper" class="hidden mt-2 pt-1 border-t border-line text-[11px] space-y-1">
+            <div class="flex items-center justify-between text-text-muted">
+              <span>Security Strength:</span>
+              <span id="v2-strength-text" class="font-semibold text-text-muted">None</span>
+            </div>
+            <div class="flex gap-1">
+              <div id="v2-seg-1" class="flex-1 h-1 rounded-pill bg-line transition-all"></div>
+              <div id="v2-seg-2" class="flex-1 h-1 rounded-pill bg-line transition-all"></div>
+              <div id="v2-seg-3" class="flex-1 h-1 rounded-pill bg-line transition-all"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Options -->
+        <div class="flex items-center justify-between pt-1">
+          <label class="flex items-center gap-2 text-xs text-text-secondary cursor-pointer">
+            <input type="checkbox" id="v2-checkbox-opt" class="w-3.5 h-3.5 rounded bg-surface-subtle border-line-strong text-primary focus:ring-0" />
+            <span id="v2-checkbox-label">Remember this device for 30 days</span>
+          </label>
+        </div>
+
+        <!-- Submit CTA -->
+        <button type="submit" id="v2-btn-submit" class="w-full h-9 min-h-[36px] px-4 rounded-control bg-primary hover:bg-primary-hover text-text-primary text-xs font-semibold flex items-center justify-center gap-2 transition-all shadow-scalar-1 btn-press mt-2">
+          <svg id="v2-submit-spinner" class="hidden w-4 h-4 animate-spin text-white" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+          </svg>
+          <span id="v2-submit-label">Sign In</span>
+        </button>
+
+      </form>
+    </div>
+
+    <!-- Backend Link Indicator -->
+    <div class="mt-4 text-center">
+      <span class="text-[11px] text-text-muted font-mono inline-flex items-center gap-1.5 px-3 py-1 rounded-pill bg-surface-subtle border border-line">
+        <span class="w-1.5 h-1.5 rounded-full bg-semantic-success"></span>
+        API: https://mohamed1551.runasp.net
+      </span>
+    </div>
+
+  </main>
+
+  <!-- FLOATING STATE SWITCHER CONTROLLER -->
+  <aside class="fixed bottom-4 right-4 z-50 bg-surface-raised/95 backdrop-blur border border-line-strong rounded-panel p-3 shadow-hero text-xs max-w-xs">
+    <div class="flex items-center justify-between pb-2 mb-2 border-b border-line">
+      <span class="font-mono text-[10px] text-primary uppercase font-bold tracking-wider flex items-center gap-1.5">
+        <span class="w-1.5 h-1.5 rounded-full bg-primary animate-ping"></span>
+        Direction 2 &bull; State Switcher
+      </span>
+      <button onclick="toggleTheme()" class="text-[10px] px-2 py-0.5 rounded-control bg-surface-subtle border border-line text-text-secondary hover:text-text-primary">Theme</button>
+    </div>
+    <div class="grid grid-cols-2 gap-1.5">
+      <button onclick="applyState('default')" class="px-2 py-1 rounded-control bg-surface-subtle hover:bg-surface text-text-primary text-[11px] border border-line text-left">
+        1. Default
+      </button>
+      <button onclick="applyState('loading')" class="px-2 py-1 rounded-control bg-surface-subtle hover:bg-surface text-text-primary text-[11px] border border-line text-left">
+        2. Loading
+      </button>
+      <button onclick="applyState('validation')" class="px-2 py-1 rounded-control bg-surface-subtle hover:bg-surface text-text-primary text-[11px] border border-line text-left">
+        3. Validation Error
+      </button>
+      <button onclick="applyState('error401')" class="px-2 py-1 rounded-control bg-surface-subtle hover:bg-surface text-text-primary text-[11px] border border-line text-left">
+        4. Error 401 (Auth)
+      </button>
+      <button onclick="applyState('error409')" class="px-2 py-1 rounded-control bg-surface-subtle hover:bg-surface text-text-primary text-[11px] border border-line text-left">
+        5. Error 409 (Email)
+      </button>
+      <button onclick="applyState('sso_pending')" class="px-2 py-1 rounded-control bg-surface-subtle hover:bg-surface text-text-primary text-[11px] border border-line text-left">
+        6. SSO Pending
+      </button>
+    </div>
+    <div class="mt-2 pt-2 border-t border-line text-[10px] text-text-muted flex justify-between">
+      <span>Mode: <strong id="v2-current-mode" class="text-text-primary">Sign In</strong></span>
+      <span>State: <strong id="v2-current-state" class="text-semantic-success">Default</strong></span>
+    </div>
+  </aside>
+
+  <!-- Interactive Logic -->
+  <script>
+    let currentMode = 'signin';
+    let currentState = 'default';
+
+    function switchMode(mode) {
+      currentMode = mode;
+      document.getElementById('v2-current-mode').textContent = mode === 'signin' ? 'Sign In' : 'Create Account';
+
+      const tabSignIn = document.getElementById('v2-tab-signin');
+      const tabSignUp = document.getElementById('v2-tab-signup');
+      const fieldName = document.getElementById('v2-field-name');
+      const title = document.getElementById('v2-form-title');
+      const subtitle = document.getElementById('v2-form-subtitle');
+      const submitLabel = document.getElementById('v2-submit-label');
+      const strengthWrapper = document.getElementById('v2-strength-wrapper');
+      const checkboxLabel = document.getElementById('v2-checkbox-label');
+      const linkForgot = document.getElementById('v2-link-forgot');
+
+      hideAlert();
+
+      if (mode === 'signin') {
+        tabSignIn.className = 'flex-1 py-1.5 text-xs font-semibold rounded-control transition-all bg-surface-raised text-text-primary shadow-scalar-1';
+        tabSignUp.className = 'flex-1 py-1.5 text-xs font-semibold rounded-control transition-all text-text-secondary hover:text-text-primary';
+        fieldName.classList.add('hidden');
+        strengthWrapper.classList.add('hidden');
+        title.textContent = 'Sign in to your account';
+        subtitle.textContent = 'Enter your email to resume autonomous test workflows';
+        submitLabel.textContent = 'Sign In';
+        checkboxLabel.textContent = 'Remember this device for 30 days';
+        linkForgot.classList.remove('hidden');
+      } else {
+        tabSignUp.className = 'flex-1 py-1.5 text-xs font-semibold rounded-control transition-all bg-surface-raised text-text-primary shadow-scalar-1';
+        tabSignIn.className = 'flex-1 py-1.5 text-xs font-semibold rounded-control transition-all text-text-secondary hover:text-text-primary';
+        fieldName.classList.remove('hidden');
+        strengthWrapper.classList.remove('hidden');
+        title.textContent = 'Create your account';
+        subtitle.textContent = 'Join and run deterministic API test suites';
+        submitLabel.textContent = 'Create Account';
+        checkboxLabel.textContent = 'I accept the Terms and Privacy Policy';
+        linkForgot.classList.add('hidden');
+      }
+    }
+
+    function handlePasswordInput(val) {
+      if (currentMode !== 'signup') return;
+      const seg1 = document.getElementById('v2-seg-1');
+      const seg2 = document.getElementById('v2-seg-2');
+      const seg3 = document.getElementById('v2-seg-3');
+      const text = document.getElementById('v2-strength-text');
+
+      let score = 0;
+      if (val.length >= 8) score++;
+      if (/[A-Z]/.test(val)) score++;
+      if (/[0-9!@#$%^&*]/.test(val)) score++;
+
+      seg1.className = 'flex-1 h-1 rounded-pill bg-line transition-all';
+      seg2.className = 'flex-1 h-1 rounded-pill bg-line transition-all';
+      seg3.className = 'flex-1 h-1 rounded-pill bg-line transition-all';
+
+      if (score === 1) {
+        seg1.className = 'flex-1 h-1 rounded-pill bg-semantic-danger transition-all';
+        text.textContent = 'Weak';
+        text.className = 'font-semibold text-semantic-danger';
+      } else if (score === 2) {
+        seg1.className = 'flex-1 h-1 rounded-pill bg-semantic-warning transition-all';
+        seg2.className = 'flex-1 h-1 rounded-pill bg-semantic-warning transition-all';
+        text.textContent = 'Medium';
+        text.className = 'font-semibold text-semantic-warning';
+      } else if (score === 3) {
+        seg1.className = 'flex-1 h-1 rounded-pill bg-semantic-success transition-all';
+        seg2.className = 'flex-1 h-1 rounded-pill bg-semantic-success transition-all';
+        seg3.className = 'flex-1 h-1 rounded-pill bg-semantic-success transition-all';
+        text.textContent = 'Strong';
+        text.className = 'font-semibold text-semantic-success';
+      } else {
+        text.textContent = 'None';
+        text.className = 'font-semibold text-text-muted';
+      }
+    }
+
+    function togglePasswordVisibility(inputId, btn) {
+      const input = document.getElementById(inputId);
+      input.type = input.type === 'password' ? 'text' : 'password';
+    }
+
+    function showAlert(type, title, desc) {
+      const banner = document.getElementById('v2-alert-banner');
+      const bannerTitle = document.getElementById('v2-alert-title');
+      const bannerDesc = document.getElementById('v2-alert-desc');
+
+      banner.classList.remove('hidden');
+      bannerTitle.textContent = title;
+      bannerDesc.textContent = desc;
+
+      if (type === 'danger') {
+        banner.className = 'mb-4 p-3 rounded-control border bg-semantic-danger/10 border-semantic-danger/30 text-semantic-danger flex items-start gap-2.5 transition-all';
+      } else if (type === 'warning') {
+        banner.className = 'mb-4 p-3 rounded-control border bg-semantic-warning/10 border-semantic-warning/30 text-semantic-warning flex items-start gap-2.5 transition-all';
+      } else {
+        banner.className = 'mb-4 p-3 rounded-control border bg-primary/10 border-primary/30 text-primary flex items-start gap-2.5 transition-all';
+      }
+    }
+
+    function hideAlert() {
+      document.getElementById('v2-alert-banner').classList.add('hidden');
+    }
+
+    function applyState(state) {
+      currentState = state;
+      document.getElementById('v2-current-state').textContent = state;
+
+      const submitBtn = document.getElementById('v2-btn-submit');
+      const submitSpinner = document.getElementById('v2-submit-spinner');
+      const emailInput = document.getElementById('v2-input-email');
+      const passInput = document.getElementById('v2-input-password');
+      const errEmail = document.getElementById('v2-error-email');
+      const errPass = document.getElementById('v2-error-password');
+
+      submitBtn.disabled = false;
+      submitSpinner.classList.add('hidden');
+      emailInput.classList.remove('input-error');
+      passInput.classList.remove('input-error');
+      errEmail.classList.add('hidden');
+      errPass.classList.add('hidden');
+      hideAlert();
+
+      if (state === 'default') {
+        emailInput.value = 'developer@domain.com';
+        passInput.value = 'Password123!';
+      } else if (state === 'loading') {
+        submitBtn.disabled = true;
+        submitSpinner.classList.remove('hidden');
+        showAlert('info', 'Verifying Credentials...', 'Calling backend endpoint...');
+      } else if (state === 'validation') {
+        emailInput.value = '';
+        passInput.value = '';
+        emailInput.classList.add('input-error');
+        passInput.classList.add('input-error');
+        errEmail.textContent = 'Email is required';
+        errEmail.classList.remove('hidden');
+        errPass.textContent = 'Password must be at least 8 characters';
+        errPass.classList.remove('hidden');
+        showAlert('danger', 'Validation Errors', 'Please correct the highlighted fields.');
+      } else if (state === 'error401') {
+        showAlert('danger', '401 Unauthorized', 'Invalid credentials. Password or email is incorrect.');
+      } else if (state === 'error409') {
+        showAlert('warning', '409 Conflict', 'Email address is already registered. Sign in instead.');
+      } else if (state === 'sso_pending') {
+        submitBtn.disabled = true;
+        showAlert('info', 'Firebase SSO in Progress', 'Connecting to Google Firebase Auth...');
+      }
+    }
+
+    function triggerGoogleSSO() {
+      applyState('sso_pending');
+      setTimeout(() => {
+        showAlert('info', 'Google SSO Verified', 'Redirecting to workspace...');
+        setTimeout(() => applyState('default'), 2000);
+      }, 1500);
+    }
+
+    function handleSubmit(e) {
+      e.preventDefault();
+      applyState('loading');
+      setTimeout(() => {
+        applyState('default');
+        showAlert('info', 'Success', 'Signed in successfully.');
+      }, 1200);
+    }
+
+    function toggleTheme() {
+      const html = document.documentElement;
+      if (html.getAttribute('data-theme') === 'light') {
+        html.removeAttribute('data-theme');
+      } else {
+        html.setAttribute('data-theme', 'light');
+      }
+    }
+
+    applyState('default');
+  </script>
+</body>
+</html>

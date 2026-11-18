@@ -11,6 +11,7 @@ This registry tracks all engineering tasks for the API Test Pilot frontend.
 | TASK-001 | Frontend Agent Operating System Setup | DONE | chore/frontend-agent-setup | 0.0.1-alpha | 2026-10-24 | 2026-10-25 | None |
 | TASK-002 | Base Tooling & Vite Application Bootstrap | DONE | chore/fe-tooling-vite-bootstrap | 0.0.1-alpha | 2026-10-25 | 2026-10-25 | TASK-001 |
 | TASK-003 | Brand Identity, Scalar Control Shapes & Design Tokens Alignment | READY_FOR_REVIEW | chore/fe-brand-tokens-sync | 0.0.1-alpha | 2026-11-17 | 2026-11-17 | TASK-002 |
+| TASK-008 | Auth Page — Login & Registration Pipeline | REVIEW | feat/fe-auth-page | 0.0.1-alpha | 2026-11-17 | 2026-11-17 | TASK-003 |
 
 ---
 
@@ -44,3 +45,4 @@ Requests for shared contracts or infrastructure outside `frontend/`:
 |---|---|---|---|---|
 | 2026-10-24 | Backend (Ahmed Mohamed) | API Contracts | Export generated OpenAPI v3 JSON spec from .NET backend (`Scalar`/`SwaggerGen`) to verify DTO schemas for TestRun, TestCase, and TestResult. | PENDING |
 | 2026-10-25 | DevOps (Mohamed Ali, Mohamed Samir) | CI/CD & Docker | Handover guide provided for frontend Dockerfile multi-stage build, Nginx SPA routing, and GitHub Actions CI workflow (see `docs/summaries/DEVOPS_INTEGRATION_HANDOVER.md`). | PENDING |
+| 2026-11-18 | Backend (Ahmed Mohamed) | Auth / MediatR & CORS | Fix MediatR DI assembly scanning for `RegisterCommand` and enable CORS preflight (`OPTIONS`) on auth endpoints (Issue [#6](https://github.com/MohammedAliBk/api-test-pilot/issues/6)). | OPEN |

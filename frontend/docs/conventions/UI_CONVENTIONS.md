@@ -94,3 +94,12 @@ All interactive form controls, action buttons, segmented filter tabs, and search
   - Compact: `py-1.5 text-[12px]`.
   - Comfortable (default): `py-2.5 text-[13px]`.
 - **State Indicators**: Every row displays a dedicated Status Badge using domain test state tokens.
+
+---
+
+## 10. Component Library Standard (shadcn/ui via TanStack)
+
+- **Official Source**: All production React UI primitives must be sourced from **shadcn/ui** ([https://ui.shadcn.com/docs/installation/tanstack](https://ui.shadcn.com/docs/installation/tanstack)).
+- **Component Directory**: Primitives reside under `src/components/ui/` (`button.tsx`, `card.tsx`, `input.tsx`, `label.tsx`, `checkbox.tsx`, `tabs.tsx`).
+- **CLI Management**: Add components via `pnpm dlx shadcn@latest add <component>`.
+- **Integration**: Primitives strictly adhere to the project's design tokens in `design/reference/tokens.css` and the 36px control metric (`min-h-[36px]` / `h-9`).

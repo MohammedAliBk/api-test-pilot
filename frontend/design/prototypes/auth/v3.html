@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>API Test Pilot — Auth Direction 3 (Interactive Dual-Pane Sliding Deck)</title>
+  <link rel="icon" type="image/svg+xml" href="../../../public/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../reference/tokens.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="../../reference/tailwind.preset.js"></script>
+  <script>
+    if (typeof preset !== 'undefined') {
+      tailwind.config = preset;
+    }
+  </script>
+  <style>
+    body {
+      background-color: var(--color-surface);
+      color: var(--color-text-primary);
+      font-family: var(--font-sans);
+      margin: 0;
+      padding: 0;
+      -webkit-font-smoothing: antialiased;
+    }
+    .input-scalar {
+      height: 36px;
+      min-height: 36px;
+      border-radius: var(--radius-control);
+      border: 1px solid var(--color-line-strong);
+      background-color: var(--color-surface-subtle);
+      color: var(--color-text-primary);
+      padding: 0 12px;
+      font-size: 13px;
+      outline: none;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease;
+      width: 100%;
+    }
+    .input-scalar:focus {
+      border-color: var(--color-primary);
+      box-shadow: 0 0 0 1px var(--color-primary);
+    }
+    .input-scalar.input-error {
+      border-color: var(--color-danger);
+    }
+    .btn-press:active {
+      transform: scale(0.98);
+    }
+    .overlay-panel {
+      transition: transform 0.6s cubic-bezier(0.65, 0, 0.35, 1);
+    }
+    .form-panel {
+      transition: opacity 0.4s ease, transform 0.5s ease;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4 min-[901px]:p-8 relative selection:bg-[var(--color-primary)] selection:text-white overflow-x-hidden">
+
+  <!-- Ambient Glow Behind Deck -->
+  <div class="fixed top-1/4 left-1/4 w-96 h-96 rounded-full bg-[var(--color-primary-subtle)] blur-3xl opacity-50 pointer-events-none"></div>
+  <div class="fixed bottom-1/4 right-1/4 w-96 h-96 rounded-full bg-[var(--color-primary-glow-subtle)] blur-3xl opacity-50 pointer-events-none"></div>
+
+  <!-- Deck Shell Container -->
+  <main style="min-height: 580px;" class="w-full max-w-4xl bg-surface-raised border border-line-strong rounded-panel shadow-hero overflow-hidden relative z-10 flex flex-col min-[901px]:flex-row">
+
+    <!-- DESKTOP SLIDING OVERLAY (Left or Right position controlled via JS) -->
+    <div id="v3-sliding-panel" class="hidden min-[901px]:flex flex-col justify-between w-5/12 p-10 bg-surface-subtle border-r border-line relative z-20 overlay-panel">
+      <!-- Background Graphic inside Overlay -->
+      <div class="absolute inset-0 bg-gradient-to-br from-primary-subtle to-transparent opacity-40 pointer-events-none"></div>
+
+      <!-- Header & Brand -->
+      <div class="relative z-10">
+        <div class="flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded-control bg-surface border border-line-strong flex items-center justify-center p-1">
+            <svg viewBox="0 0 64 64" class="w-full h-full">
+              <circle cx="32" cy="32" r="30" fill="none" stroke="var(--color-line-strong)" stroke-width="2"></circle>
+              <path d="M16 32 L28 44 L48 20" fill="none" stroke="var(--color-primary)" stroke-width="6" stroke-linecap="round"></path>
+            </svg>
+          </div>
+          <span class="font-bold tracking-tight text-text-primary text-sm">API Test Pilot</span>
+        </div>
+
+        <div class="mt-16">
+          <span id="v3-overlay-kicker" class="text-[11px] font-mono text-primary uppercase tracking-wider font-semibold">Ready for Automation?</span>
+          <h2 id="v3-overlay-title" class="text-2xl font-display font-bold text-text-primary mt-2 leading-snug">
+            Autonomous API Test Coverage
+          </h2>
+          <p id="v3-overlay-desc" class="text-text-secondary text-xs mt-3 leading-relaxed">
+            Import your OpenAPI spec and let background workers generate deterministic suites with 100% assertions.
+          </p>
+        </div>
+      </div>
+
+      <!-- Action Button inside Overlay -->
+      <div class="relative z-10 pt-8 border-t border-line">
+        <p id="v3-overlay-prompt" class="text-xs text-text-muted mb-3">Don't have an account yet?</p>
+        <button id="v3-overlay-cta" onclick="toggleDeckMode()" class="h-9 min-h-[36px] px-4 rounded-control bg-surface hover:bg-surface-accent border border-line-strong text-text-primary text-xs font-semibold flex items-center gap-2 transition-all btn-press shadow-scalar-1">
+          <span id="v3-overlay-btn-text">Create an Account</span>
+          <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- MAIN FORM AREA (7/12 width on Desktop) -->
+    <div class="w-full min-[901px]:w-7/12 p-6 min-[901px]:p-10 flex flex-col justify-center relative z-10">
+
+      <!-- Mobile Segmented Switcher (Visible only <= 900px) -->
+      <div class="min-[901px]:hidden flex p-1 rounded-control bg-surface-subtle border border-line mb-6">
+        <button id="v3-mob-signin" onclick="setMode('signin')" class="flex-1 py-1.5 text-xs font-medium rounded-control transition-all bg-surface-raised text-text-primary shadow-scalar-1">
+          Sign In
+        </button>
+        <button id="v3-mob-signup" onclick="setMode('signup')" class="flex-1 py-1.5 text-xs font-medium rounded-control transition-all text-text-secondary hover:text-text-primary">
+          Create Account
+        </button>
+      </div>
+
+      <!-- Title Area -->
+      <div class="mb-6">
+        <h1 id="v3-main-title" class="text-2xl font-display font-bold text-text-primary tracking-tight">Sign In</h1>
+        <p id="v3-main-subtitle" class="text-text-secondary text-xs mt-1">Access your API Test Pilot dashboard and test run history</p>
+      </div>
+
+      <!-- Dynamic Alert Banner -->
+      <div id="v3-alert-banner" class="hidden mb-4 p-3 rounded-control border text-xs flex items-start gap-2.5 transition-all">
+        <svg id="v3-alert-icon" class="w-4 h-4 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        <div class="flex-1">
+          <span id="v3-alert-title" class="font-semibold block"></span>
+          <span id="v3-alert-desc" class="text-[11px] block mt-0.5"></span>
+        </div>
+      </div>
+
+      <!-- Google SSO Button -->
+      <button id="v3-btn-google" onclick="triggerGoogleSSO()" class="w-full h-9 min-h-[36px] px-3.5 rounded-control bg-surface-subtle hover:bg-surface border border-line-strong text-text-primary text-xs font-medium flex items-center justify-center gap-2.5 transition-all shadow-scalar-1 btn-press">
+        <svg class="w-4 h-4" viewBox="0 0 24 24">
+          <path fill="var(--color-danger)" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
+          <path fill="var(--color-success)" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
+          <path fill="var(--color-warning)" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" />
+          <path fill="var(--color-primary)" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" />
+        </svg>
+        <span>Sign in with Google</span>
+      </button>
+
+      <!-- Divider -->
+      <div class="flex items-center gap-3 my-4">
+        <div class="flex-1 h-px bg-line"></div>
+        <span class="text-[10px] text-text-muted uppercase tracking-wider font-mono">or email credentials</span>
+        <div class="flex-1 h-px bg-line"></div>
+      </div>
+
+      <!-- Auth Form -->
+      <form id="v3-form" onsubmit="handleSubmit(event)" class="space-y-3.5">
+
+        <!-- Display Name (Signup mode) -->
+        <div id="v3-field-name" class="hidden">
+          <label for="v3-input-name" class="block text-xs font-medium text-text-secondary mb-1">Display Name</label>
+          <input type="text" id="v3-input-name" placeholder="Ahmed Mohamed" class="input-scalar" />
+          <span id="v3-error-name" class="hidden text-semantic-danger text-[11px] mt-1 block"></span>
+        </div>
+
+        <!-- Email -->
+        <div>
+          <label for="v3-input-email" class="block text-xs font-medium text-text-secondary mb-1">Email address</label>
+          <input type="email" id="v3-input-email" placeholder="dev@domain.com" class="input-scalar" />
+          <span id="v3-error-email" class="hidden text-semantic-danger text-[11px] mt-1 block"></span>
+        </div>
+
+        <!-- Password -->
+        <div>
+          <div class="flex items-center justify-between mb-1">
+            <label for="v3-input-password" class="text-xs font-medium text-text-secondary">Password</label>
+            <a href="javascript:void(0)" id="v3-link-forgot" class="text-[11px] text-primary hover:underline">Forgot password?</a>
+          </div>
+          <div class="relative">
+            <input type="password" id="v3-input-password" placeholder="••••••••••••" oninput="handlePasswordInput(this.value)" class="input-scalar pr-10" />
+            <button type="button" onclick="togglePasswordVisibility('v3-input-password', this)" class="absolute right-2.5 top-2 text-text-muted hover:text-text-primary focus:outline-none">
+              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+              </svg>
+            </button>
+          </div>
+          <span id="v3-error-password" class="hidden text-semantic-danger text-[11px] mt-1 block"></span>
+
+          <!-- Password Strength (Register mode) -->
+          <div id="v3-strength-wrapper" class="hidden mt-2 pt-1 border-t border-line text-[11px] space-y-1">
+            <div class="flex items-center justify-between text-text-muted">
+              <span>Security Strength:</span>
+              <span id="v3-strength-text" class="font-semibold text-text-muted">None</span>
+            </div>
+            <div class="flex gap-1">
+              <div id="v3-seg-1" class="flex-1 h-1 rounded-pill bg-line transition-all"></div>
+              <div id="v3-seg-2" class="flex-1 h-1 rounded-pill bg-line transition-all"></div>
+              <div id="v3-seg-3" class="flex-1 h-1 rounded-pill bg-line transition-all"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Options Checkbox -->
+        <div class="flex items-center justify-between pt-1">
+          <label class="flex items-center gap-2 text-xs text-text-secondary cursor-pointer">
+            <input type="checkbox" id="v3-checkbox-opt" class="w-3.5 h-3.5 rounded bg-surface-subtle border-line-strong text-primary focus:ring-0" />
+            <span id="v3-checkbox-label">Keep me logged in on this computer</span>
+          </label>
+        </div>
+
+        <!-- Submit CTA -->
+        <button type="submit" id="v3-btn-submit" class="w-full h-9 min-h-[36px] px-4 rounded-control bg-primary hover:bg-primary-hover text-text-primary text-xs font-semibold flex items-center justify-center gap-2 transition-all shadow-scalar-1 btn-press mt-2">
+          <svg id="v3-submit-spinner" class="hidden w-4 h-4 animate-spin text-white" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+          </svg>
+          <span id="v3-submit-label">Sign In</span>
+        </button>
+
+      </form>
+
+    </div>
+  </main>
+
+  <!-- FLOATING STATE SWITCHER CONTROLLER -->
+  <aside class="fixed bottom-4 right-4 z-50 bg-surface-raised/95 backdrop-blur border border-line-strong rounded-panel p-3 shadow-hero text-xs max-w-xs">
+    <div class="flex items-center justify-between pb-2 mb-2 border-b border-line">
+      <span class="font-mono text-[10px] text-primary uppercase font-bold tracking-wider flex items-center gap-1.5">
+        <span class="w-1.5 h-1.5 rounded-full bg-primary animate-ping"></span>
+        Direction 3 &bull; State Switcher
+      </span>
+      <button onclick="toggleTheme()" class="text-[10px] px-2 py-0.5 rounded-control bg-surface-subtle border border-line text-text-secondary hover:text-text-primary">Theme</button>
+    </div>
+    <div class="grid grid-cols-2 gap-1.5">
+      <button onclick="applyState('default')" class="px-2 py-1 rounded-control bg-surface-subtle hover:bg-surface text-text-primary text-[11px] border border-line text-left">
+        1. Default
+      </button>
+      <button onclick="applyState('loading')" class="px-2 py-1 rounded-control bg-surface-subtle hover:bg-surface text-text-primary text-[11px] border border-line text-left">
+        2. Loading
+      </button>
+      <button onclick="applyState('validation')" class="px-2 py-1 rounded-control bg-surface-subtle hover:bg-surface text-text-primary text-[11px] border border-line text-left">
+        3. Validation Error
+      </button>
+      <button onclick="applyState('error401')" class="px-2 py-1 rounded-control bg-surface-subtle hover:bg-surface text-text-primary text-[11px] border border-line text-left">
+        4. Error 401 (Auth)
+      </button>
+      <button onclick="applyState('error409')" class="px-2 py-1 rounded-control bg-surface-subtle hover:bg-surface text-text-primary text-[11px] border border-line text-left">
+        5. Error 409 (Email)
+      </button>
+      <button onclick="applyState('sso_pending')" class="px-2 py-1 rounded-control bg-surface-subtle hover:bg-surface text-text-primary text-[11px] border border-line text-left">
+        6. SSO Pending
+      </button>
+    </div>
+    <div class="mt-2 pt-2 border-t border-line text-[10px] text-text-muted flex justify-between">
+      <span>Mode: <strong id="v3-current-mode" class="text-text-primary">Sign In</strong></span>
+      <span>State: <strong id="v3-current-state" class="text-semantic-success">Default</strong></span>
+    </div>
+  </aside>
+
+  <!-- Interactive Logic -->
+  <script>
+    let currentMode = 'signin';
+    let currentState = 'default';
+
+    function toggleDeckMode() {
+      setMode(currentMode === 'signin' ? 'signup' : 'signin');
+    }
+
+    function setMode(mode) {
+      currentMode = mode;
+      document.getElementById('v3-current-mode').textContent = mode === 'signin' ? 'Sign In' : 'Create Account';
+
+      const overlayKicker = document.getElementById('v3-overlay-kicker');
+      const overlayTitle = document.getElementById('v3-overlay-title');
+      const overlayDesc = document.getElementById('v3-overlay-desc');
+      const overlayPrompt = document.getElementById('v3-overlay-prompt');
+      const overlayBtnText = document.getElementById('v3-overlay-btn-text');
+
+      const mainTitle = document.getElementById('v3-main-title');
+      const mainSubtitle = document.getElementById('v3-main-subtitle');
+      const submitLabel = document.getElementById('v3-submit-label');
+      const fieldName = document.getElementById('v3-field-name');
+      const strengthWrapper = document.getElementById('v3-strength-wrapper');
+      const checkboxLabel = document.getElementById('v3-checkbox-label');
+      const linkForgot = document.getElementById('v3-link-forgot');
+
+      const mobSignIn = document.getElementById('v3-mob-signin');
+      const mobSignUp = document.getElementById('v3-mob-signup');
+
+      hideAlert();
+
+      if (mode === 'signin') {
+        overlayKicker.textContent = 'Ready for Automation?';
+        overlayTitle.textContent = 'Autonomous API Test Coverage';
+        overlayDesc.textContent = 'Import your OpenAPI spec and let background workers generate deterministic suites with 100% assertions.';
+        overlayPrompt.textContent = "Don't have an account yet?";
+        overlayBtnText.textContent = 'Create an Account';
+
+        mainTitle.textContent = 'Sign In';
+        mainSubtitle.textContent = 'Access your API Test Pilot dashboard and test run history';
+        submitLabel.textContent = 'Sign In';
+        checkboxLabel.textContent = 'Keep me logged in on this computer';
+        fieldName.classList.add('hidden');
+        strengthWrapper.classList.add('hidden');
+        linkForgot.classList.remove('hidden');
+
+        if (mobSignIn) {
+          mobSignIn.className = 'flex-1 py-1.5 text-xs font-medium rounded-control transition-all bg-surface-raised text-text-primary shadow-scalar-1';
+          mobSignUp.className = 'flex-1 py-1.5 text-xs font-medium rounded-control transition-all text-text-secondary hover:text-text-primary';
+        }
+      } else {
+        overlayKicker.textContent = 'Existing Team Member?';
+        overlayTitle.textContent = 'Welcome Back to Test Pilot';
+        overlayDesc.textContent = 'Sign in to review worker queue status, inspect flaky API endpoints, and export test reports.';
+        overlayPrompt.textContent = 'Already have an active account?';
+        overlayBtnText.textContent = 'Sign In Instead';
+
+        mainTitle.textContent = 'Create Account';
+        mainSubtitle.textContent = 'Register a new developer account on .NET 10 backend';
+        submitLabel.textContent = 'Create Account';
+        checkboxLabel.textContent = 'I accept the Platform Terms and Privacy Policy';
+        fieldName.classList.remove('hidden');
+        strengthWrapper.classList.remove('hidden');
+        linkForgot.classList.add('hidden');
+
+        if (mobSignUp) {
+          mobSignUp.className = 'flex-1 py-1.5 text-xs font-medium rounded-control transition-all bg-surface-raised text-text-primary shadow-scalar-1';
+          mobSignIn.className = 'flex-1 py-1.5 text-xs font-medium rounded-control transition-all text-text-secondary hover:text-text-primary';
+        }
+      }
+    }
+
+    function handlePasswordInput(val) {
+      if (currentMode !== 'signup') return;
+      const seg1 = document.getElementById('v3-seg-1');
+      const seg2 = document.getElementById('v3-seg-2');
+      const seg3 = document.getElementById('v3-seg-3');
+      const text = document.getElementById('v3-strength-text');
+
+      let score = 0;
+      if (val.length >= 8) score++;
+      if (/[A-Z]/.test(val)) score++;
+      if (/[0-9!@#$%^&*]/.test(val)) score++;
+
+      seg1.className = 'flex-1 h-1 rounded-pill bg-line transition-all';
+      seg2.className = 'flex-1 h-1 rounded-pill bg-line transition-all';
+      seg3.className = 'flex-1 h-1 rounded-pill bg-line transition-all';
+
+      if (score === 1) {
+        seg1.className = 'flex-1 h-1 rounded-pill bg-semantic-danger transition-all';
+        text.textContent = 'Weak';
+        text.className = 'font-semibold text-semantic-danger';
+      } else if (score === 2) {
+        seg1.className = 'flex-1 h-1 rounded-pill bg-semantic-warning transition-all';
+        seg2.className = 'flex-1 h-1 rounded-pill bg-semantic-warning transition-all';
+        text.textContent = 'Medium';
+        text.className = 'font-semibold text-semantic-warning';
+      } else if (score === 3) {
+        seg1.className = 'flex-1 h-1 rounded-pill bg-semantic-success transition-all';
+        seg2.className = 'flex-1 h-1 rounded-pill bg-semantic-success transition-all';
+        seg3.className = 'flex-1 h-1 rounded-pill bg-semantic-success transition-all';
+        text.textContent = 'Strong';
+        text.className = 'font-semibold text-semantic-success';
+      } else {
+        text.textContent = 'None';
+        text.className = 'font-semibold text-text-muted';
+      }
+    }
+
+    function togglePasswordVisibility(inputId, btn) {
+      const input = document.getElementById(inputId);
+      input.type = input.type === 'password' ? 'text' : 'password';
+    }
+
+    function showAlert(type, title, desc) {
+      const banner = document.getElementById('v3-alert-banner');
+      const bannerTitle = document.getElementById('v3-alert-title');
+      const bannerDesc = document.getElementById('v3-alert-desc');
+
+      banner.classList.remove('hidden');
+      bannerTitle.textContent = title;
+      bannerDesc.textContent = desc;
+
+      if (type === 'danger') {
+        banner.className = 'mb-4 p-3 rounded-control border bg-semantic-danger/10 border-semantic-danger/30 text-semantic-danger flex items-start gap-2.5 transition-all';
+      } else if (type === 'warning') {
+        banner.className = 'mb-4 p-3 rounded-control border bg-semantic-warning/10 border-semantic-warning/30 text-semantic-warning flex items-start gap-2.5 transition-all';
+      } else {
+        banner.className = 'mb-4 p-3 rounded-control border bg-primary/10 border-primary/30 text-primary flex items-start gap-2.5 transition-all';
+      }
+    }
+
+    function hideAlert() {
+      document.getElementById('v3-alert-banner').classList.add('hidden');
+    }
+
+    function applyState(state) {
+      currentState = state;
+      document.getElementById('v3-current-state').textContent = state;
+
+      const submitBtn = document.getElementById('v3-btn-submit');
+      const submitSpinner = document.getElementById('v3-submit-spinner');
+      const emailInput = document.getElementById('v3-input-email');
+      const passInput = document.getElementById('v3-input-password');
+      const errEmail = document.getElementById('v3-error-email');
+      const errPass = document.getElementById('v3-error-password');
+
+      submitBtn.disabled = false;
+      submitSpinner.classList.add('hidden');
+      emailInput.classList.remove('input-error');
+      passInput.classList.remove('input-error');
+      errEmail.classList.add('hidden');
+      errPass.classList.add('hidden');
+      hideAlert();
+
+      if (state === 'default') {
+        emailInput.value = 'developer@domain.com';
+        passInput.value = 'Password123!';
+      } else if (state === 'loading') {
+        submitBtn.disabled = true;
+        submitSpinner.classList.remove('hidden');
+        showAlert('info', 'Submitting...', 'Authenticating against .NET 10 Auth service.');
+      } else if (state === 'validation') {
+        emailInput.value = '';
+        passInput.value = '';
+        emailInput.classList.add('input-error');
+        passInput.classList.add('input-error');
+        errEmail.textContent = 'Valid email is required';
+        errEmail.classList.remove('hidden');
+        errPass.textContent = 'Password must meet complexity rules';
+        errPass.classList.remove('hidden');
+        showAlert('danger', 'Validation Error', 'Correct highlighted errors.');
+      } else if (state === 'error401') {
+        showAlert('danger', '401 Unauthorized', 'Invalid username or password.');
+      } else if (state === 'error409') {
+        showAlert('warning', '409 Conflict', 'User with this email already exists.');
+      } else if (state === 'sso_pending') {
+        submitBtn.disabled = true;
+        showAlert('info', 'Firebase SSO', 'Waiting for Google ID token verification...');
+      }
+    }
+
+    function triggerGoogleSSO() {
+      applyState('sso_pending');
+      setTimeout(() => {
+        showAlert('info', 'SSO Verified', 'Firebase token accepted.');
+        setTimeout(() => applyState('default'), 2000);
+      }, 1500);
+    }
+
+    function handleSubmit(e) {
+      e.preventDefault();
+      applyState('loading');
+      setTimeout(() => {
+        applyState('default');
+        showAlert('info', 'Authenticated', 'Welcome back!');
+      }, 1200);
+    }
+
+    function toggleTheme() {
+      const html = document.documentElement;
+      if (html.getAttribute('data-theme') === 'light') {
+        html.removeAttribute('data-theme');
+      } else {
+        html.setAttribute('data-theme', 'light');
+      }
+    }
+
+    setMode('signin');
+    applyState('default');
+  </script>
+</body>
+</html>

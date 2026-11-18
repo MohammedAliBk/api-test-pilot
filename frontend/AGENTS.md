@@ -23,6 +23,10 @@ API Test Pilot is an AI-assisted API testing platform featuring intelligent Open
    - Conversations with Memo in chat: **Egyptian Arabic (عامية مصرية)**. Technical terms stay in English.
    - Everything written to disk: **English only** (code, docs, task files, commit messages, comments).
    - Exception: End-user visible UI copy follows project UI language decisions ([DEC-001](file:///Volumes/disk1/Projects/api-test-pilot/frontend/docs/orchestration/DECISIONS.md)).
+5. **Component Library & Primitives Standard (shadcn/ui via TanStack)**:
+   - All UI components, form controls, dialogs, and layout primitives must be sourced from **shadcn/ui** following the TanStack / React / Vite guidelines: [https://ui.shadcn.com/docs/installation/tanstack](https://ui.shadcn.com/docs/installation/tanstack).
+   - Components are configured via `components.json` and generated into `src/components/ui/` using `pnpm dlx shadcn@latest add <component>`.
+   - All shadcn primitives must strictly respect the project's design tokens in `tokens.css` and the 36px control metric in `UI_CONVENTIONS.md`.
 
 ---
 

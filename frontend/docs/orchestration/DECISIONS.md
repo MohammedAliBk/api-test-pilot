@@ -189,3 +189,38 @@ This document is the chronological log of all architectural, library, schema, an
 - **Decision**: Option 1, explicitly requested and codified by Memo (2026-11-17).
 - **Rationale**: Gives Memo complete control and inspection over the git history, code quality, commit staging, and pull request content before anything is sealed in git or pushed to remote pull requests.
 - **Consequences**: Codified in `AGENTS.md`, `.agents/rules/core-rules.md`, and `OPERATING_MANUAL.md`. Agent halts after every edit set and waits for Memo's review before committing. PR is only opened after explicit "اعمل بول ريكويست" instruction and passing final tests.
+
+
+---
+
+### DEC-015: Authentication & Account Management Architecture & Prototype Matrix
+- **Date**: 2026-11-17
+- **Related Task**: TASK-008
+- **Question**: How should the authentication and registration experience be structured, and what backend contracts govern the authentication flow?
+- **Options Considered**:
+  1. Multi-direction prototype exploration (4 interactive HTML prototypes covering split-screen showcase, obsidian centered glass card, sliding dual-pane deck, and developer bento terminal) interfacing directly with the .NET 10 ASP.NET Core API at `https://mohamed1551.runasp.net` (Approved).
+  2. Implement a single hardcoded login form without prototype exploration.
+- **Decision**: Option 1, explicitly requested by Memo (2026-11-17).
+- **Rationale**: Authentication is a foundational user touchpoint. Generating 4 distinct architectural prototypes allows side-by-side evaluation of layout density, brand storytelling, and ergonomics before committing to React production code. Interfacing directly with the live Scalar OpenAPI 3.1.1 spec (`/api/Auth/login`, `/api/Auth/register`, `/api/Auth/firebase-login`, `/api/Auth/me`) guarantees contract fidelity.
+- **Consequences**:
+  - `docs/page-specs/auth.md` defines functional requirements and the 5 UI states.
+  - `docs/research/auth.md` benchmarks Clerk, Supabase, Linear, Postman, and Vercel.
+  - `design/prototypes/auth/` contains `v1.html` through `v4.html`, `index.html`, and `NOTES.md`.
+  - Gate GD checkpoint presents directions to Memo in Egyptian Arabic. React implementation starts only after Memo selects the winning direction (`chosen.html`).
+
+---
+
+### DEC-016: Standardizing on shadcn/ui Component Library (TanStack / Vite Setup)
+- **Date**: 2026-11-17
+- **Related Task**: TASK-008
+- **Question**: What component library and primitives framework should the frontend standardize on for all UI building blocks?
+- **Options Considered**:
+  1. Standardize on shadcn/ui following the TanStack / React / Vite installation guide (`https://ui.shadcn.com/docs/installation/tanstack`), using `components.json` and `pnpm dlx shadcn@latest add <component>` under `src/components/ui/` while enforcing project design tokens (Approved).
+  2. Write completely custom hand-coded HTML/React primitives for every component.
+  3. Adopt an opinionated pre-bundled UI package like MUI or Mantine.
+- **Decision**: Option 1, explicitly requested and directed by Memo (2026-11-17).
+- **Rationale**: shadcn/ui provides unstyled, accessible, Radix-based copy-paste components that live directly in the codebase (`src/components/ui/`). This gives 100% control over customization and styling, ensuring seamless harmony with the project's Scalar-inspired design tokens, dark obsidian theme, and 36px control metrics without any external bundle lock-in.
+- **Consequences**:
+  - `components.json` is configured at the root of `frontend/`.
+  - Primitives (`button.tsx`, `card.tsx`, `input.tsx`, `label.tsx`, `checkbox.tsx`, `tabs.tsx`) are established under `src/components/ui/`.
+  - Codified in `AGENTS.md`, `.agents/rules/frontend-design.md`, and `UI_CONVENTIONS.md`.

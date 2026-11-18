@@ -130,3 +130,73 @@ This log tracks every engineering session on the API Test Pilot frontend.
   - Codified the Pre-Commit Review and Pre-PR Verification Protocol in `AGENTS.md`, `.agents/rules/core-rules.md`, and `OPERATING_MANUAL.md`.
   - Halted immediately without committing, per Memo's strict rule, waiting for Memo's review and adjustments.
 - **Resume here**: Waiting for Memo's review and edits on the modified files. Once Memo approves, proceed to commit.
+
+
+---
+
+## Session 2026-11-17 (Part 3): Authentication Pipeline & 4 Standalone HTML Prototypes (Gate GD)
+
+- **Timestamp**: 2026-11-17T15:10:00+02:00
+- **Operator**: Frontend Agent Orchestrator & Memo (Frontend Developer)
+- **Active Branch**: `feat/fe-auth-page`
+- **User Requests**:
+  1. Build login and registration (account creation) page.
+  2. Target backend: `https://mohamed1551.runasp.net/scalar/#description/introduction`.
+  3. First deliver prototypes for login and registration, review and choose direction together (Gate GD), then implement React code and integrate with backend.
+- **Decisions Recorded**:
+  - `DEC-015`: Authentication & Account Management Architecture & Prototype Matrix.
+- **Execution Completed**:
+  - Analyzed OpenAPI 3.1.1 spec at `https://mohamed1551.runasp.net/openapi/v1.json` for endpoints: `POST /api/Auth/register`, `POST /api/Auth/login`, `POST /api/Auth/firebase-login`, `GET /api/Auth/me`, and RFC 7807 `ProblemDetails`.
+  - Created task branch `feat/fe-auth-page`.
+  - Authored Page Specification: `docs/page-specs/auth.md`.
+  - Authored Design Research: `docs/research/auth.md` (benchmarking Clerk, Supabase, Linear, Postman, Vercel).
+  - Built 4 standalone HTML prototypes in `design/prototypes/auth/`:
+    - `v1.html`: Split-screen brand showcase with live test runner telemetry.
+    - `v2.html`: Obsidian centered glass card (minimalist & frictionless).
+    - `v3.html`: Interactive dual-pane sliding deck with kinetic transitions.
+    - `v4.html`: Terminal & bento developer workflow with live cURL previews.
+    - `index.html`: Multi-device comparison launcher and responsive preview frame.
+    - `NOTES.md`: Prototype hypotheses, trade-offs, and Gate GD recommendation.
+  - Registered `TASK-008` in `docs/orchestration/tasks/TASK-008-auth-page-login-register.md` and `TASKS.md`.
+  - Verified token compliance: `node design/tools/check-tokens.mjs` passed with 0 violations across 14 files.
+  - Installed verified skill `add-globe-study` (`.agents/skills/add-globe-study/SKILL.md`) for Canvas 2D Text Path Studies.
+  - Implemented exact authored source code for `FIG 07 Codex Outline Typeflow` (`D_OPENAI` multi-loop SVG geometry, `polylines` SVG sampling, `atLength` wrap, `qang` quantization, `speed` hover acceleration, `kick` click burst, pointer proximity illumination).
+  - The entire Codex logo is completely woven of flowing typography across all its 6 petals and central loops, scaled large (78% of viewport) with zero clutter on the left side, and added dynamic toggle between Codex and Arrow marks in `design/prototypes/auth/v1.html`.
+- **Resume here**: Prototypes presented to Memo; awaiting selection of Direction (Gate GD) before starting React production implementation.
+
+---
+
+## Session 2026-11-17 (Part 4): shadcn/ui Standardization, Laser Matrix WebGL & React Auth Implementation
+
+- **Timestamp**: 2026-11-17T22:58:00+02:00
+- **Operator**: Frontend Agent Orchestrator & Memo (Frontend Developer)
+- **Active Branch**: `feat/fe-auth-page`
+- **User Requests**:
+  1. Replace 3D animation with Laser Matrix WebGL canvas spanning 100% of viewport with smooth iridescent wave overlay and seamless right-side gradient blend under auth card.
+  2. Remove top segmented tabs; replace with clean inline toggle link under the form header.
+  3. Fix light mode animation washout by anchoring solid black base behind WebGL canvas.
+  4. Standardize on shadcn/ui following TanStack guidelines (`https://ui.shadcn.com/docs/installation/tanstack`) and record rule for all agents.
+  5. Convert approved prototype (`chosen.html`) into production React & TypeScript code under `src/features/auth/` using installed shadcn/ui primitives.
+- **Decisions Recorded**:
+  - `DEC-016`: shadcn/ui TanStack React Vite Component Standardization.
+- **Execution Completed**:
+  - Refined `design/prototypes/auth/v1.html` according to Memo's exact specifications and copied to `chosen.html` (Gate GD passed).
+  - Initialized `components.json` with TanStack guidelines and installed standard shadcn components: `button`, `card`, `checkbox`, `input`, `label`, `tabs` in `src/components/ui/`.
+  - Built complete `src/features/auth/` feature modules:
+    - `types.ts`: Domain models (`User`, `AuthResponse`, `LoginCredentials`, `RegisterCredentials`, `ProblemDetails`, `AuthMode`).
+    - `api/authApi.ts`: Client for .NET 10 endpoints (`login`, `register`, `firebase-login`, `me`) with RFC 7807 error parsing (`AuthApiError`).
+    - `hooks/useAuth.ts`: TanStack Query mutation hook with local session persistence.
+    - `components/MatrixJunctionCanvas.tsx`: Raw WebGL canvas spanning full viewport with resize and cleanup.
+    - `components/AuthAtmosphere.tsx`: Full-screen background stack with canvas, masked ribbon wave texture, and continuous right blend.
+    - `components/AuthCard.tsx`: Form card using shadcn UI primitives, inline mode switch, RFC 7807 problem details alert, password strength indicator, and Google SSO button.
+    - `components/AuthLayout.tsx`: Dual-pane layout with desktop left-side branding and top-right theme switcher (dark/light).
+    - `pages/AuthPage.tsx`: Top-level page coordinating `useAuth`, `AuthLayout`, and `AuthCard`.
+    - `index.ts`: Public feature exports.
+  - Updated `src/App.tsx` with view switcher supporting both `AuthPage` and `TeamShowcase`.
+  - Added comprehensive test suites: `AuthCard.test.tsx`, `authApi.test.ts`, `AuthPage.test.tsx`, and updated `App.test.tsx`.
+  - Full verification suite:
+    - `node design/tools/check-tokens.mjs`: 34/34 files compliant (0 violations, 100% green).
+    - `pnpm type-check`: 0 errors (100% green).
+    - `pnpm test`: 4/4 files passed, 19/19 tests passed (100% green).
+    - `pnpm build`: built production bundle in 10.52s (100% green).
+- **Resume here**: Waiting for Memo's review and edits on the modified files before committing (Memo's Strict Protocol).
