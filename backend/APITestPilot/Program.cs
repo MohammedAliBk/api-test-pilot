@@ -157,8 +157,6 @@ using (var scope = app.Services.CreateScope())
     }
 }
 
-app.Run();
-
 
 if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
 {
