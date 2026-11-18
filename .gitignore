@@ -100,3 +100,4 @@ deploy/.env
 deploy/*.local.yaml
 deploy/*.local.yml
 
+"backend/Firebase/*.json" 
