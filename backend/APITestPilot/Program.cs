@@ -1,13 +1,14 @@
-using System.Reflection;
-using System.Text;
 using APITestPilot.Application;
 using APITestPilot.Infrastructure.Persistence;
 using FirebaseAdmin;
 using Google.Apis.Auth.OAuth2;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
 using Scalar.AspNetCore;
+using System.Reflection;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -137,6 +138,27 @@ builder.Services.AddSwaggerGen(options =>
 
 // ─────────────────────────────────────────────────────────────────────────────
 var app = builder.Build();
+
+// Make sure your app is built first (var app = builder.Build();)
+
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    try
+    {
+        var dbContext = services.GetRequiredService<APITestPilotDbContext>();
+        // This command runs the migration and database update on startup
+        dbContext.Database.Migrate();
+    }
+    catch (Exception ex)
+    {
+        var logger = services.GetRequiredService<ILogger<Program>>();
+        logger.LogError(ex, "An error occurred while migrating the database.");
+    }
+}
+
+app.Run();
+
 
 if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
 {
