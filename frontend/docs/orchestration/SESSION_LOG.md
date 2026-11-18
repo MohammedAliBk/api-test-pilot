@@ -199,4 +199,33 @@ This log tracks every engineering session on the API Test Pilot frontend.
     - `pnpm type-check`: 0 errors (100% green).
     - `pnpm test`: 4/4 files passed, 19/19 tests passed (100% green).
     - `pnpm build`: built production bundle in 10.52s (100% green).
-- **Resume here**: Waiting for Memo's review and edits on the modified files before committing (Memo's Strict Protocol).
+- **Resume here**: Memo reviewed and approved commits and merging `origin/Init-service` into `feat/fe-auth-page`.
+
+---
+
+## Session 2026-11-18: Auth UX Refinements, Branch Synchronization & Backend Contract Integration
+
+- **Timestamp**: 2026-11-18T02:15:00+02:00
+- **Operator**: Frontend Agent Orchestrator & Memo (Frontend Developer)
+- **Active Branch**: `feat/fe-auth-page`
+- **User Requests & Approved Actions**:
+  1. Replace checklist text (`• 8+ chars`, `• Uppercase`, etc.) with visual 3-stage colored strength bars (Red = Weak, Yellow = Medium, Green = Strong).
+  2. Invert `"faster"` text in left branding into a high-contrast white-on-black capsule (`bg-white text-black font-black text-2xl md:text-3xl px-2.5 py-0.5 rounded border border-white`).
+  3. Remove bottom dev showcase tabs; make `AuthPage` the initial view when opening the project unauthenticated, smoothly transitioning to the dashboard upon login with header sign-out.
+  4. Setup Firebase & Google Single Sign-On (`src/lib/firebase.ts`, `.env.example`, `.env`) with backend handoff to `POST /api/Auth/firebase-login`.
+  5. Configure local development CORS via Vite reverse proxy (`/api` -> `https://mohamed1551.runasp.net` with `changeOrigin: true` and COOP header `same-origin-allow-popups`).
+  6. Commit all auth work safely to `feat/fe-auth-page` (`e43392b`).
+  7. Fetch and merge `origin/Init-service` into `feat/fe-auth-page` (`c58058c`) with zero merge conflicts.
+- **Execution & Integration Results**:
+  - `git commit` on `feat/fe-auth-page`: `e43392b` ("feat(auth): implement login and registration page with shadcn/ui, webgl matrix, and firebase sso").
+  - `git merge origin/Init-service`: `c58058c` (41 files merged cleanly).
+  - Verification suite post-merge:
+    - `node design/tools/check-tokens.mjs`: 35/35 files compliant (0 violations, 100% green).
+    - `pnpm type-check`: 0 errors (100% green).
+    - `pnpm test`: 4/4 files passed, 18/18 tests passed (100% green).
+    - `pnpm build`: Built production bundle in 8.03s (100% green).
+  - Live Backend Verification (`https://mohamed1551.runasp.net`):
+    - MediatR DI registration issue is 100% resolved by backend commit `de06686`.
+    - FluentValidation correctly returns HTTP 400 with property validation error messages, displayed cleanly in the frontend alert banner.
+    - Database persistence connection update (`appsettings.Production.json`) committed by Ahmed in `a50618e` on `origin/Init-service`.
+- **Resume here**: Waiting for Memo's review and further instructions. Ready to test live registration once the remote database deployment finishes.
