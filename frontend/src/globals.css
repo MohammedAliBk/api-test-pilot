@@ -1,21 +1,36 @@
+@import url("https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Oxanium:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap");
 @import '../design/reference/tokens.css';
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
-  * {
-    @apply border-line;
+@layer utilities {
+  @keyframes streak {
+    0% { transform: translateX(-30%); opacity: 0; }
+    40% { opacity: 1; }
+    100% { transform: translateX(0); opacity: 1; }
   }
 
+  .animate-streak {
+    animation: streak 1.2s ease-out infinite alternate;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html,
   body {
-    background-color: var(--color-surface);
-    color: var(--color-text-primary);
+    @apply bg-background text-foreground;
     font-family: var(--font-sans);
     min-height: 100vh;
+    min-height: 100dvh;
     margin: 0;
     padding: 0;
+    overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
   }
 }

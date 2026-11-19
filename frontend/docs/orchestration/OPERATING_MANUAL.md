@@ -23,7 +23,11 @@ This manual is the **single source of truth** for operating principles, governan
 
 ## 3. The Verification Gates
 
-- **Gate G1 — Plan Approval**: Before implementation begins. Review task scope, files, components, tests, risks, and rollback. Approval authorises branching and coding.
+- **Gate G1 — Task Ingestion & Plan Approval**: Before implementation begins:
+  1. Check git status for uncommitted/unfinished prior work.
+  2. Register task in `TASKS.md` with dedicated task tracking file and dedicated branch.
+  3. Formulate and present full plan to Memo in chat (actions, exact files to create/modify, and questions for any decisions needed).
+  4. Stop and wait for Memo's review and explicit instruction (*"نفذ"*) before executing.
 - **Gate GD — Design Choice (UI tasks)**: After research note and the 4 interactive HTML prototypes are built. Memo selects the direction; chosen version is copied to `chosen.html`. React coding starts only after GD.
 - **Gate G-Commit — Pre-Commit Review**: After modifying files on a branch, never commit immediately. Present changes in chat; wait for Memo to review and adjust. Commit only after explicit approval.
 - **Gate G-PR — Pre-PR Review & Final Verification**:

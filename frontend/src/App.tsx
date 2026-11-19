@@ -1,72 +1,69 @@
 import { useState, useEffect } from 'react';
-import { TeamShowcase } from './components/TeamShowcase';
-import { AuthPage } from './features/auth';
+import { AuthPage, TermsPage, PrivacyPage } from './features/auth';
 
-const TOKEN_KEY = 'api_test_pilot_token';
-
-export interface AppProps {
-  initialAuthenticated?: boolean;
-}
-
-export default function App({ initialAuthenticated }: AppProps = {}) {
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => {
-    if (typeof initialAuthenticated === 'boolean') {
-      return initialAuthenticated;
-    }
+export default function App() {
+  const [currentHash, setCurrentHash] = useState<string>(() => {
     if (typeof window !== 'undefined') {
-      return Boolean(localStorage.getItem(TOKEN_KEY));
+      return window.location.hash.toLowerCase();
     }
-    return false;
+    return '';
   });
 
-  // Sync authentication state across storage events (e.g. multi-tab login/logout)
+  // Root-level theme synchronization: dynamically listen to system prefers-color-scheme
   useEffect(() => {
-    const checkAuth = () => {
-      setIsAuthenticated(Boolean(localStorage.getItem(TOKEN_KEY)));
+    if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') return;
+
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: light)');
+    const applySystemTheme = (isLight: boolean) => {
+      if (isLight) {
+        document.documentElement.setAttribute('data-theme', 'light');
+      } else {
+        document.documentElement.removeAttribute('data-theme');
+      }
     };
 
-    window.addEventListener('storage', checkAuth);
-    return () => window.removeEventListener('storage', checkAuth);
+    // Apply on initial mount
+    applySystemTheme(mediaQuery.matches);
+
+    // Listen for dynamic system preference changes
+    const handleChange = (e: MediaQueryListEvent) => {
+      applySystemTheme(e.matches);
+    };
+
+    if (mediaQuery.addEventListener) {
+      mediaQuery.addEventListener('change', handleChange);
+      return () => mediaQuery.removeEventListener('change', handleChange);
+    } else if ('addListener' in mediaQuery) {
+      (mediaQuery as { addListener: (cb: (e: MediaQueryListEvent) => void) => void; removeListener: (cb: (e: MediaQueryListEvent) => void) => void }).addListener(handleChange);
+      return () => (mediaQuery as { addListener: (cb: (e: MediaQueryListEvent) => void) => void; removeListener: (cb: (e: MediaQueryListEvent) => void) => void }).removeListener(handleChange);
+    }
   }, []);
 
-  const handleSignOut = () => {
-    localStorage.removeItem(TOKEN_KEY);
-    localStorage.removeItem('api_test_pilot_user');
-    setIsAuthenticated(false);
+  useEffect(() => {
+    const handleHashChange = () => {
+      setCurrentHash(window.location.hash.toLowerCase());
+    };
+
+    window.addEventListener('hashchange', handleHashChange);
+    return () => window.removeEventListener('hashchange', handleHashChange);
+  }, []);
+
+  const handleBackToAuth = () => {
+    window.location.hash = '';
+    setCurrentHash('');
   };
 
-  const handleAuthSuccess = () => {
-    setIsAuthenticated(true);
-  };
+  if (currentHash === '#terms') {
+    return <TermsPage onBack={handleBackToAuth} />;
+  }
+
+  if (currentHash === '#privacy') {
+    return <PrivacyPage onBack={handleBackToAuth} />;
+  }
 
   return (
-    <div className="relative min-h-screen">
-      {isAuthenticated ? (
-        <div className="relative">
-          {/* Top Session Bar for Authenticated Users */}
-          <div
-            className="fixed top-3 right-3 z-50 flex items-center gap-2 p-1.5 px-3 rounded-control border text-xs font-mono shadow-scalar-2 backdrop-blur-md"
-            style={{
-              backgroundColor: 'var(--color-surface-subtle)',
-              borderColor: 'var(--color-line-strong)',
-            }}
-          >
-            <span className="w-2 h-2 rounded-full bg-success animate-pulse" />
-            <span className="text-text-secondary">Connected</span>
-            <button
-              type="button"
-              onClick={handleSignOut}
-              className="ml-2 text-danger hover:underline font-semibold"
-            >
-              Sign Out
-            </button>
-          </div>
-
-          <TeamShowcase onSignOut={handleSignOut} />
-        </div>
-      ) : (
-        <AuthPage onAuthSuccess={handleAuthSuccess} />
-      )}
+    <div className="relative min-h-screen w-full max-w-full overflow-x-hidden">
+      <AuthPage />
     </div>
   );
 }

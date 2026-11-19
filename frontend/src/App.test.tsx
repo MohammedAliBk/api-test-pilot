@@ -16,53 +16,51 @@ function renderWithProviders(ui: React.ReactElement) {
 describe('App Root Harness', () => {
   beforeEach(() => {
     localStorage.clear();
+    window.location.hash = '';
+    document.documentElement.removeAttribute('data-theme');
   });
 
-  it('renders AuthPage initially when user is not authenticated', () => {
+  it('renders AuthPage initially with login card and left branding', () => {
     renderWithProviders(<App />);
     expect(screen.getByRole('heading', { name: /welcome back/i })).toBeInTheDocument();
     expect(
-      screen.getByRole('heading', { name: /api testing is faster than ever/i })
+      screen.getByRole('heading', { name: /api testing (is )?faster than ever/i })
     ).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /sign in to test pilot/i })).toBeInTheDocument();
   });
 
-  it('renders application dashboard when user is authenticated', () => {
-    renderWithProviders(<App initialAuthenticated={true} />);
-    expect(screen.getByText('API Test Pilot')).toBeInTheDocument();
-    expect(screen.getByText(/^Queued$/i)).toBeInTheDocument();
-    expect(screen.getByText(/^Running$/i)).toBeInTheDocument();
-    expect(screen.getByText(/^Passed$/i)).toBeInTheDocument();
-    expect(screen.getByText(/^Failed$/i)).toBeInTheDocument();
-    expect(screen.getByText(/^Uncertain$/i)).toBeInTheDocument();
+  it('switches between sign in and sign up modes inside the AuthCard', () => {
+    renderWithProviders(<App />);
+    const toggleBtn = screen.getByRole('button', { name: /sign up for free/i });
+    fireEvent.click(toggleBtn);
+
+    expect(screen.getByRole('heading', { name: /create your account/i })).toBeInTheDocument();
+    expect(screen.getByLabelText(/full name/i)).toBeInTheDocument();
   });
 
-  it('renders OpenAPI URL form input with 36px control metric in dashboard', () => {
-    renderWithProviders(<App initialAuthenticated={true} />);
-    const input = screen.getByLabelText(/OpenAPI Specification URL/i);
-    expect(input).toBeInTheDocument();
-    expect(input).toHaveClass('min-h-[36px]');
-  });
+  it('renders separate Terms of Service page when hash is #terms', () => {
+    window.location.hash = '#terms';
+    renderWithProviders(<App />);
 
-  it('allows user to sign out from authenticated dashboard', () => {
-    renderWithProviders(<App initialAuthenticated={true} />);
-    expect(screen.getByText('Connected')).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /^Terms of Service$/i })).toBeInTheDocument();
+    expect(screen.getByText(/Explicit Authorization Required/i)).toBeInTheDocument();
 
-    const signOutBtn = screen.getAllByRole('button', { name: /sign out/i })[0];
-    fireEvent.click(signOutBtn);
+    const backBtn = screen.getAllByRole('button', { name: /back to sign in|return to sign in/i })[0];
+    fireEvent.click(backBtn);
 
     expect(screen.getByRole('heading', { name: /welcome back/i })).toBeInTheDocument();
   });
 
-  it('toggles theme between dark and light mode', () => {
-    renderWithProviders(<App initialAuthenticated={true} />);
-    const toggleBtn = screen.getByRole('button', { name: /toggle theme/i });
-    expect(toggleBtn).toBeInTheDocument();
+  it('renders separate Privacy Policy page when hash is #privacy', () => {
+    window.location.hash = '#privacy';
+    renderWithProviders(<App />);
 
-    fireEvent.click(toggleBtn);
-    expect(document.documentElement.getAttribute('data-theme')).toBe('light');
+    expect(screen.getByRole('heading', { name: /^Privacy Policy$/i })).toBeInTheDocument();
+    expect(screen.getByText(/Zero Client Plain-Text Secrets/i)).toBeInTheDocument();
 
-    fireEvent.click(toggleBtn);
-    expect(document.documentElement.getAttribute('data-theme')).toBeNull();
+    const backBtn = screen.getAllByRole('button', { name: /back to sign in|return to sign in/i })[0];
+    fireEvent.click(backBtn);
+
+    expect(screen.getByRole('heading', { name: /welcome back/i })).toBeInTheDocument();
   });
 });

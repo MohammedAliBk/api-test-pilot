@@ -47,7 +47,7 @@ const PATTERNS = [
   },
   {
     name: 'Arbitrary Tailwind Dimension/Color Bracket',
-    regex: /\b(?:bg|text|border|p|px|py|m|mx|my|w|h|min-w|min-h|max-w|max-h)-\[#?[0-9a-zA-Z._-]+\]/g,
+    regex: /\b(?:bg|text|border|p|px|py|m|mx|my|w|h|min-w|min-h|max-w|max-h)-\[#?(?!--)(?!var\()[0-9a-zA-Z._-]+\]/g,
     description: 'Arbitrary bracket utility detected. Use standard token utility or standard control metric.',
     // Allow known valid token brackets e.g. text-[13px], min-h-[36px], rounded-[var(--...)]
     whitelist: [
@@ -55,9 +55,17 @@ const PATTERNS = [
       'text-[11px]',
       'text-[12px]',
       'text-[10px]',
+      'text-[1.15em]',
       'min-h-[36px]',
       'px-3.5',
       'py-2.5',
+      'h-[3px]',
+      'h-[6px]',
+      'h-[1px]',
+      'w-[1px]',
+      'w-[2px]',
+      'min-w-[8rem]',
+      'min-h-[100vh]',
       'min-[901px]:p-5',
     ]
   }

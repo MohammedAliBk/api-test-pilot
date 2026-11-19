@@ -10,8 +10,8 @@ export default defineConfig({
     },
   },
   server: {
+  // Cloudeflare TLS
     allowedHosts: [
-      'expanded-eagle-counted-developers.trycloudflare.com',
       '.trycloudflare.com',
     ],
     headers: {

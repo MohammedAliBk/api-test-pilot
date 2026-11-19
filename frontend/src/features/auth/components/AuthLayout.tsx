@@ -1,44 +1,54 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { AuthAtmosphere } from './AuthAtmosphere';
 import { Logo } from '@/components/ui/Logo';
-import { Sun, Moon } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 
 export interface AuthLayoutProps {
   children: React.ReactNode;
 }
 
 export const AuthLayout: React.FC<AuthLayoutProps> = ({ children }) => {
-  const [theme, setTheme] = useState<'dark' | 'light'>(() => {
-    if (typeof window !== 'undefined') {
-      return document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
-    }
-    return 'dark';
-  });
-
+  // Automatically synchronize theme with device/system preference (prefers-color-scheme)
   useEffect(() => {
-    if (theme === 'light') {
-      document.documentElement.setAttribute('data-theme', 'light');
-    } else {
-      document.documentElement.removeAttribute('data-theme');
-    }
-  }, [theme]);
+    if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') return;
 
-  const toggleTheme = () => {
-    setTheme((prev) => (prev === 'dark' ? 'light' : 'dark'));
-  };
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: light)');
+    const applySystemTheme = (isLight: boolean) => {
+      if (isLight) {
+        document.documentElement.setAttribute('data-theme', 'light');
+      } else {
+        document.documentElement.removeAttribute('data-theme');
+      }
+    };
+
+    // Apply on initial mount
+    applySystemTheme(mediaQuery.matches);
+
+    // Listen for device/system preference changes dynamically
+    const handleChange = (e: MediaQueryListEvent) => {
+      applySystemTheme(e.matches);
+    };
+
+    if (mediaQuery.addEventListener) {
+      mediaQuery.addEventListener('change', handleChange);
+      return () => mediaQuery.removeEventListener('change', handleChange);
+    } else if ('addListener' in mediaQuery) {
+      // Compatibility fallback for older web engines
+      (mediaQuery as { addListener: (cb: (e: MediaQueryListEvent) => void) => void; removeListener: (cb: (e: MediaQueryListEvent) => void) => void }).addListener(handleChange);
+      return () => (mediaQuery as { addListener: (cb: (e: MediaQueryListEvent) => void) => void; removeListener: (cb: (e: MediaQueryListEvent) => void) => void }).removeListener(handleChange);
+    }
+  }, []);
 
   return (
-    <div className="relative min-h-screen w-full overflow-x-hidden selection:bg-primary-subtle selection:text-primary">
+    <div className="relative min-h-screen min-h-dvh h-dvh w-full overflow-hidden selection:bg-primary-subtle selection:text-primary flex flex-col">
       {/* Full-viewport atmospheric canvas background */}
       <AuthAtmosphere />
 
       {/* Main Dual-Pane Content Container */}
-      <main className="relative z-10 w-full min-h-screen flex flex-col min-[901px]:flex-row">
+      <main className="relative z-10 w-full h-full min-h-screen min-h-dvh flex flex-col min-[901px]:flex-row flex-1 overflow-hidden">
         {/* Left Half: Branding & Atmospheric Showcase */}
-        <div className="hidden min-[901px]:flex w-1/2 flex-col justify-between p-12 md:p-16 select-none pointer-events-none">
-          {/* Top-Left: Brand Logo & Wordmark */}
-          <div className="flex items-center gap-3.5 pointer-events-auto">
+        <div className="hidden min-[901px]:flex w-1/2 flex-col justify-center relative p-8 md:p-10 lg:p-12 select-none pointer-events-none">
+          {/* Top-Left: Brand Logo & Wordmark (Anchored Top-Left) */}
+          <div className="absolute top-8 md:top-10 lg:top-12 left-8 md:left-10 lg:left-12 flex items-center gap-3.5 pointer-events-auto">
             <div
               className="w-11 h-11 rounded-xl border flex items-center justify-center p-2 shadow-scalar-2 backdrop-blur-md"
               style={{
@@ -46,7 +56,7 @@ export const AuthLayout: React.FC<AuthLayoutProps> = ({ children }) => {
                 borderColor: 'var(--color-line-strong)',
               }}
             >
-              <Logo size={28} showWordmark={false} />
+              <Logo size={30} showWordmark={false} />
             </div>
             <div>
               <span className="font-display font-bold tracking-tight text-white text-xl select-none">
@@ -55,48 +65,20 @@ export const AuthLayout: React.FC<AuthLayoutProps> = ({ children }) => {
             </div>
           </div>
 
-          {/* Bottom-Left: Hero Value Proposition */}
-          <div className="max-w-md pointer-events-auto">
-            <h2 className="text-3xl md:text-4xl font-display font-bold text-white tracking-tight leading-tight drop-shadow-sm">
-              API testing is{' '}
-              <span
-                className="inline-block font-black text-white transition-all duration-150"
-                style={{
-                  mixBlendMode: 'difference',
-                }}
-              >
-                faster
-              </span>{' '}
-              than ever.
-            </h2>
+          {/* Center-Left: Hero Value Proposition (Vertically in the middle, flush to left edge) */}
+          <div className="w-full max-w-xl lg:max-w-2xl pointer-events-auto">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-display font-bold text-white tracking-tight leading-[1.08] drop-shadow-md text-left">
+              <span className="block">API testing is</span>
+              <span>
+              </span>
+              <span className="font-display italic">faster</span>
+              <span className="block">than ever</span>
+            </h1>
           </div>
         </div>
 
-        {/* Right Half: Form Container & Theme Switcher */}
-        <div className="w-full min-[901px]:w-1/2 min-h-screen flex flex-col justify-center items-center p-6 min-[901px]:p-12 relative z-20">
-          {/* Top-Right Utility Toolbar */}
-          <div className="absolute top-6 right-6 z-30 flex items-center gap-2">
-            <Button
-              type="button"
-              variant="outline"
-              size="icon"
-              onClick={toggleTheme}
-              aria-label="Toggle theme"
-              className="w-9 h-9 min-h-[36px] rounded-control shadow-scalar-1 btn-press"
-              style={{
-                backgroundColor: 'var(--color-surface-subtle)',
-                borderColor: 'var(--color-line-strong)',
-                color: 'var(--color-text-secondary)',
-              }}
-            >
-              {theme === 'dark' ? (
-                <Sun className="w-4 h-4 text-warning" />
-              ) : (
-                <Moon className="w-4 h-4 text-primary" />
-              )}
-            </Button>
-          </div>
-
+        {/* Right Half: Form Workspace Container */}
+        <div className="w-full min-[901px]:w-1/2 h-full flex flex-col justify-center items-center px-4 py-2 sm:px-6 sm:py-4 min-[901px]:p-12 relative z-20 overflow-y-auto min-[901px]:overflow-visible">
           {/* Centered Auth Card */}
           {children}
         </div>

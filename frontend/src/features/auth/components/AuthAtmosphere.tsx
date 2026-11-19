@@ -4,7 +4,7 @@ import { MatrixJunctionCanvas } from './MatrixJunctionCanvas';
 export const AuthAtmosphere: React.FC = () => {
   return (
     <div
-      className="fixed inset-0 w-screen h-screen overflow-hidden pointer-events-none z-0"
+      className="fixed inset-0 w-full h-full overflow-hidden pointer-events-none z-0"
       style={{ backgroundColor: 'black' }}
       aria-hidden="true"
     >
@@ -13,7 +13,7 @@ export const AuthAtmosphere: React.FC = () => {
 
       {/* Iridescent Ribbon Wave Image Texture with Left-to-Right Mask Fade */}
       <img
-        src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/fa51902b-c2a4-4c33-a96e-a8f1ef67edc6_1600w.jpg"
+        src="/login_background.jpg"
         alt=""
         className="absolute inset-0 w-full h-full object-cover mix-blend-screen pointer-events-none z-20"
         style={{

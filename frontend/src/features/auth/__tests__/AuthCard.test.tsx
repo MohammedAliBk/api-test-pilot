@@ -18,7 +18,7 @@ describe('AuthCard Component', () => {
     expect(screen.getByRole('heading', { name: /welcome back/i })).toBeInTheDocument();
     expect(screen.getByLabelText(/^email address$/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/^password$/i)).toBeInTheDocument();
-    expect(screen.getByText(/keep me signed in for 30 days/i)).toBeInTheDocument();
+    expect(screen.queryByText(/keep me signed in for 30 days/i)).not.toBeInTheDocument();
 
     const submitBtn = screen.getByRole('button', { name: /sign in to test pilot/i });
     expect(submitBtn).toBeInTheDocument();
@@ -40,10 +40,36 @@ describe('AuthCard Component', () => {
     expect(screen.getByRole('heading', { name: /create your account/i })).toBeInTheDocument();
     expect(screen.getByLabelText(/full name/i)).toBeInTheDocument();
     expect(screen.getByText(/password strength/i)).toBeInTheDocument();
-    expect(screen.getByText(/i agree to the terms of service/i)).toBeInTheDocument();
+    expect(screen.getByText(/i agree to the/i)).toBeInTheDocument();
 
     const submitBtn = screen.getByRole('button', { name: /create account/i });
     expect(submitBtn).toBeInTheDocument();
+    expect(submitBtn).toBeDisabled();
+  });
+
+  it('disables create account button until user agrees to terms and privacy policy', () => {
+    const onToggleMode = vi.fn();
+    const onSubmit = vi.fn();
+
+    render(
+      <AuthCard
+        mode="signup"
+        onToggleMode={onToggleMode}
+        onSubmit={onSubmit}
+      />
+    );
+
+    const submitBtn = screen.getByRole('button', { name: /create account/i });
+    expect(submitBtn).toBeDisabled();
+
+    const termsCheckbox = screen.getByRole('checkbox');
+    expect(termsCheckbox).not.toBeChecked();
+
+    fireEvent.click(termsCheckbox);
+    expect(submitBtn).not.toBeDisabled();
+
+    fireEvent.click(termsCheckbox);
+    expect(submitBtn).toBeDisabled();
   });
 
   it('triggers onToggleMode when clicking switch button', () => {

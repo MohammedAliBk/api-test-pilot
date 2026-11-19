@@ -19,6 +19,11 @@
 10. **No new dependency (npm package) without a DEC and explicit approval.** Check license, maintenance, bundle size, and security first.
 11. **Never fake evidence.** Nothing is "passing", "tested", or "working in the browser" unless actually run in this session.
 12. **Stay in scope.** Problems noticed elsewhere go to "Backlog / Proposed" in `TASKS.md`, never silently fixed.
+13. **Production-Grade Standard Only:** Never add dummy/demo UI, debug user-ID cards, or temporary sign-out boxes inside authentication cards or production pages. Everything built is enterprise production code.
+14. **Task Ingestion & Pre-Execution Plan Protocol (Strict Gate G1)**:
+    - When Memo assigns a new task: check `git status` for uncommitted/unfinished work from prior tasks, register the task in `TASKS.md`, and verify or create its dedicated task branch. One branch per task.
+    - Formulate and present a comprehensive plan in chat: specify exactly what will be modified/created, the list of affected files, and explicitly ask Memo any questions for decisions that need to be made.
+    - Stop and wait: Never touch code until Memo reviews the plan, makes decisions, and gives the explicit command: *"نفذ"*.
 
 ---
 

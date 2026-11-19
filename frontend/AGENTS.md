@@ -27,6 +27,20 @@ API Test Pilot is an AI-assisted API testing platform featuring intelligent Open
    - All UI components, form controls, dialogs, and layout primitives must be sourced from **shadcn/ui** following the TanStack / React / Vite guidelines: [https://ui.shadcn.com/docs/installation/tanstack](https://ui.shadcn.com/docs/installation/tanstack).
    - Components are configured via `components.json` and generated into `src/components/ui/` using `pnpm dlx shadcn@latest add <component>`.
    - All shadcn primitives must strictly respect the project's design tokens in `tokens.css` and the 36px control metric in `UI_CONVENTIONS.md`.
+6. **Production-Grade Standard (Zero Demo / Debug / Mock UI)**:
+   - We build strictly for **Production**. Never inject demo cards, debug profile displays, fake "Authenticated Successfully / Sign Out" placeholders inside auth cards, or playground showcases into production views. Every component and page must meet enterprise production quality.
+7. **Task Ingestion & Pre-Execution Plan Protocol (Memo's Strict Gate G1)**:
+   - **Task Registration & Unfinished Work Check**: Whenever Memo assigns a new task:
+     1. First check `git status` and previous tasks to verify if any uncommitted or unfinished work exists. Never mix tasks.
+     2. Immediately register the new task in `docs/orchestration/TASKS.md` with its dedicated tracking file.
+     3. Every task must have its own dedicated branch (`feat/fe-<slug>`, `fix/fe-<slug>`, `chore/fe-<slug>`).
+   - **Formulate & Present Full Plan**:
+     - Before writing, modifying, or creating any code, formulate a clear, detailed plan in chat (Egyptian Arabic) specifying:
+       - What will be modified and what will be created?
+       - The exact list of files to be changed or created.
+       - Any architectural, design, token, or behavior decisions that need to be made.
+   - **Decision Authority Belongs Strictly to Memo**: If there are decisions to be made, formulate questions and ask Memo explicitly. Never assume or make decisions unilaterally.
+   - **Stop and Wait for Memo's Review & "نفذ" (Execute) Command**: Stop completely and wait for Memo to review and adjust the plan. Do NOT start executing or modifying code until Memo explicitly reviews the plan and instructs: *"نفذ"* (or gives explicit approval).
 
 ---
 
