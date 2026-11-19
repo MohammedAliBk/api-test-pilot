@@ -14,6 +14,7 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Eye, EyeOff, Loader2, AlertCircle } from 'lucide-react';
+import { navigateTo } from '@/lib/navigation';
 import type { AuthMode, ProblemDetails } from '../types';
 import {
   signInSchema,
@@ -268,9 +269,12 @@ export const AuthCard: React.FC<AuthCardProps> = ({
                     <FormLabel className="text-[11px] sm:text-xs font-medium text-muted-foreground">
                       Password
                     </FormLabel>
-                    <a href="#forgot" className="text-[10px] sm:text-[11px] text-primary hover:underline">
+                    <button
+                      type="button"
+                      className="text-[10px] sm:text-[11px] text-primary hover:underline cursor-pointer"
+                    >
                       Forgot password?
-                    </a>
+                    </button>
                   </div>
                   <div className="relative">
                     <FormControl>
@@ -473,16 +477,24 @@ export const AuthCard: React.FC<AuthCardProps> = ({
                     <FormLabel className="text-[11px] sm:text-xs text-muted-foreground select-none font-normal cursor-pointer leading-tight block">
                       I agree to the{' '}
                       <a
-                        href="#terms"
-                        onClick={(e) => e.stopPropagation()}
+                        href="/terms"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          navigateTo('/terms');
+                        }}
                         className="text-card-foreground hover:underline font-medium"
                       >
                         Terms of Service
                       </a>{' '}
                       and{' '}
                       <a
-                        href="#privacy"
-                        onClick={(e) => e.stopPropagation()}
+                        href="/privacy"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          navigateTo('/privacy');
+                        }}
                         className="text-card-foreground hover:underline font-medium"
                       >
                         Privacy Policy
@@ -516,11 +528,25 @@ export const AuthCard: React.FC<AuthCardProps> = ({
       {mode === 'signin' && (
         <p className="text-[10px] sm:text-[11px] text-muted-foreground text-center mt-2.5 sm:mt-4 min-[901px]:mt-6 leading-tight">
           By continuing, you agree to the{' '}
-          <a href="#terms" className="text-card-foreground hover:underline">
+          <a
+            href="/terms"
+            onClick={(e) => {
+              e.preventDefault();
+              navigateTo('/terms');
+            }}
+            className="text-card-foreground hover:underline"
+          >
             Terms of Service
           </a>{' '}
           and{' '}
-          <a href="#privacy" className="text-card-foreground hover:underline">
+          <a
+            href="/privacy"
+            onClick={(e) => {
+              e.preventDefault();
+              navigateTo('/privacy');
+            }}
+            className="text-card-foreground hover:underline"
+          >
             Privacy Policy
           </a>
           .

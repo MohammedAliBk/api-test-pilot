@@ -9,8 +9,39 @@ class ResizeObserverMock {
 
 globalThis.ResizeObserver = ResizeObserverMock as unknown as typeof ResizeObserver;
 
-// Mock HTMLCanvasElement.prototype.getContext for jsdom
-HTMLCanvasElement.prototype.getContext = () => null;
+// Mock HTMLCanvasElement.prototype.getContext for jsdom (supports WebGL graceful fallback & Lottie 2D canvas checks)
+HTMLCanvasElement.prototype.getContext = ((contextId: string) => {
+  if (contextId === '2d') {
+    return {
+      fillStyle: '',
+      fillRect: () => {},
+      clearRect: () => {},
+      getImageData: () => ({ data: [] }),
+      putImageData: () => {},
+      createImageData: () => [],
+      setTransform: () => {},
+      drawImage: () => {},
+      save: () => {},
+      fillText: () => {},
+      restore: () => {},
+      beginPath: () => {},
+      moveTo: () => {},
+      lineTo: () => {},
+      closePath: () => {},
+      stroke: () => {},
+      translate: () => {},
+      scale: () => {},
+      rotate: () => {},
+      arc: () => {},
+      fill: () => {},
+      measureText: () => ({ width: 0 }),
+      transform: () => {},
+      rect: () => {},
+      clip: () => {},
+    };
+  }
+  return null;
+}) as unknown as typeof HTMLCanvasElement.prototype.getContext;
 
 // Mock window.matchMedia for jsdom
 if (typeof window !== 'undefined' && !window.matchMedia) {
@@ -29,8 +60,9 @@ if (typeof window !== 'undefined' && !window.matchMedia) {
   });
 }
 
-// Mock pointer capture and scroll for Radix UI in jsdom
+// Mock pointer capture and scroll for Radix UI & TanStack Router in jsdom
 if (typeof window !== 'undefined') {
+  window.scrollTo = () => {};
   window.HTMLElement.prototype.hasPointerCapture = () => false;
   window.HTMLElement.prototype.setPointerCapture = () => {};
   window.HTMLElement.prototype.releasePointerCapture = () => {};

@@ -1,9 +1,6 @@
 import React, { useState } from 'react';
-import { AuthLayout } from '../components/AuthLayout';
-import { AuthCard } from '../components/AuthCard';
-import { useAuth } from '../hooks/useAuth';
+import { AuthLayout, AuthCard, useAuth, type User } from '@/features/auth';
 import { signInWithGoogle, isFirebaseConfigured } from '@/lib/firebase';
-import type { User } from '../types';
 
 export interface AuthPageProps {
   onAuthSuccess?: (user: User) => void;
@@ -62,19 +59,18 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onAuthSuccess }) => {
           onAuthSuccess?.(res.user);
         }
       } else {
-        const res = await firebaseLogin('simulated-google-oauth-token');
-        if (res?.user) {
-          onAuthSuccess?.(res.user);
-        }
-      }
-    } catch (err: unknown) {
-      if (err instanceof Error && !problemDetails) {
         setProblemDetails({
-          title: 'Google Sign-In',
-          detail: err.message,
-          status: 400,
+          title: 'SSO Unavailable',
+          detail: 'Firebase configuration keys not found in current environment.',
+          status: 503,
         });
       }
+    } catch (err: unknown) {
+      setProblemDetails({
+        title: 'Single Sign-On Failed',
+        detail: err instanceof Error ? err.message : 'Google authentication could not be completed.',
+        status: 400,
+      });
     } finally {
       setSsoPending(false);
     }

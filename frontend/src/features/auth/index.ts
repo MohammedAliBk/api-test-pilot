@@ -5,7 +5,4 @@ export * from './components/MatrixJunctionCanvas';
 export * from './components/AuthAtmosphere';
 export * from './components/AuthCard';
 export * from './components/AuthLayout';
-export * from './pages/AuthPage';
-export * from './pages/TermsPage';
-export * from './pages/PrivacyPage';
 export * from './schemas/authSchemas';

@@ -2,17 +2,18 @@ import React from 'react';
 import { Logo } from '@/components/ui/Logo';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft, ExternalLink } from 'lucide-react';
+import { navigateTo } from '@/lib/navigation';
 
-export interface TermsPageProps {
+export interface PrivacyPageProps {
   onBack? : () => void;
 }
 
-export const TermsPage : React.FC<TermsPageProps> = ({ onBack }) => {
+export const PrivacyPage : React.FC<PrivacyPageProps> = ({ onBack }) => {
   const handleBack = () => {
     if (onBack) {
       onBack();
     } else {
-      window.location.hash = '';
+      navigateTo('/login');
     }
   };
 
@@ -35,15 +36,19 @@ export const TermsPage : React.FC<TermsPageProps> = ({ onBack }) => {
             </span>
           </button>
           <span className="text-muted-foreground text-xs hidden sm:inline">&bull;</span>
-          <span className="text-muted-foreground text-xs font-mono hidden sm:inline">Legal Terms</span>
+          <span className="text-muted-foreground text-xs font-mono hidden sm:inline">Privacy Center</span>
         </div>
 
         <div className="flex items-center gap-2 sm:gap-2.5">
           <a
-            href="#privacy"
+            href="/terms"
+            onClick={(e) => {
+              e.preventDefault();
+              navigateTo('/terms');
+            }}
             className="hidden sm:inline-flex text-xs text-muted-foreground hover:text-foreground font-medium px-2.5 py-1.5 rounded-control transition-colors"
           >
-            Privacy Policy
+            Terms of Service
           </a>
           <Button
             type="button"
@@ -62,41 +67,53 @@ export const TermsPage : React.FC<TermsPageProps> = ({ onBack }) => {
       <main className="flex-1 max-w-4xl w-full mx-auto px-4 sm:px-8 py-8 sm:py-12 overflow-x-hidden">
         {/* Page Hero Header */}
         <div className="mb-8 pb-6 border-b border-border">
-          <h1 className="text-2xl sm:text-3xl md :text-4xl font-display font-bold text-foreground tracking-tight leading-tight">
-            Terms of Service
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-display font-bold text-foreground tracking-tight leading-tight">
+            Privacy Policy
           </h1>
         </div>
+
         {/* Legal Sections */}
         <div className="space-y-8 text-xs sm:text-[13px] text-muted-foreground leading-relaxed">
           {/* Section 1 */}
           <section className="space-y-2.5">
             <h2 className="text-base font-display font-bold text-foreground flex items-center gap-2">
               <span className="font-mono text-primary text-xs">01.</span>
-              Acceptance of Terms
+              Information We Collect
             </h2>
             <p>
-              These Terms of Service represent a binding legal contract between you and API Test Pilot. Accessing our service, importing OpenAPI specifications, creating an account via email or Google SSO, or utilizing background execution workers establishes complete acceptance of these Terms.
+              To provide autonomous API testing, deterministic validation, and failure diagnosis, we collect the following categories of information :
             </p>
+            <ul className="list-disc list-inside space-y-1.5 pl-1.5">
+              <li>
+                <strong className="text-foreground">Authentication &amp; Profile Data :</strong> Email address, user name, and authentication tokens provided when signing in via email/password or single sign-on (SSO) through Google Firebase Auth.
+              </li>
+              <li>
+                <strong className="text-foreground">OpenAPI Specifications &amp; Schemas :</strong> JSON and YAML specification documents ingested to discover endpoints, schemas, headers, and parameter definitions.
+              </li>
+              <li>
+                <strong className="text-foreground">Test Execution Telemetry :</strong> HTTP response status codes, latency timings, assertion outputs (passed, failed, retried, uncertain), and diagnostic worker execution traces.
+              </li>
+            </ul>
           </section>
 
           {/* Section 2 */}
           <section className="space-y-2.5">
             <h2 className="text-base font-display font-bold text-foreground flex items-center gap-2">
               <span className="font-mono text-primary text-xs">02.</span>
-              Permitted Use &amp; Target Endpoint Authorization
+              Handling of Sensitive Credentials &amp; API Keys
             </h2>
             <p>
-              API Test Pilot issues synthetic HTTP requests and validation assertions against target URLs designated by you. Because test executions may generate load or simulate edge cases, you strictly agree to the following conditions :
+              API Test Pilot incorporates an engineering-grade secret management architecture :
             </p>
             <ul className="list-disc list-inside space-y-1.5 pl-1.5">
               <li>
-                <strong className="text-foreground">Explicit Authorization Required :</strong> You represent and warrant that you own or have obtained formal authorization from the infrastructure owner to test every endpoint configured in your workspace.
+                <strong className="text-foreground">Zero Client Plain-Text Secrets :</strong> Target API keys, Bearer tokens, and Basic Auth headers are never stored in client browser localStorage, index databases, or plain-text cookies.
               </li>
               <li>
-                <strong className="text-foreground">Restricted Ingress &amp; Loopback Prohibition :</strong> Automated workers are strictly prohibited from targeting private loopback addresses, local subnet ranges (RFC 1918), internal cloud metadata IP addresses , or non-public services without specialized zero-trust agent authorization.
+                <strong className="text-foreground">Redacted Logging :</strong> Worker execution traces automatically mask sensitive authentication headers prior to telemetry persistence.
               </li>
               <li>
-                <strong className="text-foreground">No Denial-of-Service or Exploitation :</strong> You may not use API Test Pilot to conduct denial-of-service (DDoS) attacks, unauthorized vulnerability fuzzing, credential stuffing, or destructive payloads intended to impair third-party services.
+                <strong className="text-foreground">Encryption in Transit :</strong> All communications between your browser, our background workers, and your target APIs utilize encrypted TLS 1.3 protocol.
               </li>
             </ul>
           </section>
@@ -105,54 +122,75 @@ export const TermsPage : React.FC<TermsPageProps> = ({ onBack }) => {
           <section className="space-y-2.5">
             <h2 className="text-base font-display font-bold text-foreground flex items-center gap-2">
               <span className="font-mono text-primary text-xs">03.</span>
-              Deterministic Validation Proof vs. AI Heuristic Analysis
+              AI Processing &amp; Model Governance
             </h2>
             <p>
-              API Test Pilot maintains strict technical and visual segregation between deterministic validation proof and AI-assisted analysis :
+              When utilizing AI-assisted features (such as automated failure analysis, test payload proposals, or assertion repair) :
             </p>
-
-            <ul className="list-disc list-inside space-y-1.5 pl-1.5">
-              <li>
-                <strong className="text-foreground">Deterministic Proof : </strong>  Status codes, schema contract mismatches, and assertion validations reflect concrete HTTP network responses received from your target service.
-              </li>
-              <li>
-                <strong className="text-foreground">AI Diagnostic Heuristics : </strong>  AI-generated failure explanations, recovery strategies, and test synthesis are automated advisory heuristics. You remain responsible for validating suggestions prior to production deployment.
-              </li>
-            </ul>
+              <p className="text-xs text-muted-foreground">
+                 <strong className="text-foreground">Isolated Ephemeral Processing  :</strong>  Payload schemas and error stack traces sent to the AI service are processed in isolated runtime sessions solely to produce diagnostic recommendations. Your data is not retained by AI model vendors for public training or foundational dataset enrichment.
+              </p>
           </section>
 
           {/* Section 4 */}
           <section className="space-y-2.5">
             <h2 className="text-base font-display font-bold text-foreground flex items-center gap-2">
               <span className="font-mono text-primary text-xs">04.</span>
-              Intellectual Property &amp; Customer Schemas
+              How We Use Collected Information
             </h2>
-            <p>
-              You retain all right, title, and interest in and to your OpenAPI specifications, endpoint definitions, payload schemas, and test results. API Test Pilot does not claim ownership over any customer-provided specifications. We do not sell, rent, or distribute your proprietary API schemas to third parties or use them to train public foundation models without explicit agreement.
-            </p>
+            <p>We process your data exclusively for legitimate operational purposes :</p>
+            <ul className="list-disc list-inside space-y-1 pl-1.5">
+              <li>Executing deterministic test runs against designated API targets.</li>
+              <li>Calculating endpoint performance and response latency percentiles.</li>
+              <li>Providing real-time worker execution logs and resilient workflow recovery.</li>
+              <li>Authenticating authorized team members and enforcing workspace permissions.</li>
+              <li>Preventing abuse, rate-limit violations, and malicious loopback targeting.</li>
+            </ul>
           </section>
 
           {/* Section 5 */}
           <section className="space-y-2.5">
             <h2 className="text-base font-display font-bold text-foreground flex items-center gap-2">
               <span className="font-mono text-primary text-xs">05.</span>
-              Security &amp; Secret Credential Management
+              Data Retention, Export &amp; Deletion Rights
             </h2>
             <p>
-              The platform implements zero plain-text secret retention architecture. Authentication tokens, Bearer keys, and environment variables are encrypted in transit and at rest. You are responsible for safeguarding your user account credentials and ensuring team members adhere to least-privilege API key permissions.
+              In accordance with global data protection standards (including GDPR and CCPA principles), you possess complete authority over your stored workspace assets :
             </p>
-          </section> 
-          
+            <ul className="list-disc list-inside space-y-1.5 pl-1.5">
+              <li>
+                <strong className="text-foreground">Workspace Purge :</strong> You may delete uploaded OpenAPI specifications and historical test run logs directly from your project settings.
+              </li>
+              <li>
+                <strong className="text-foreground">Account Deletion :</strong> You may request complete erasure of your account and associated team telemetry. Upon verification, all records are permanently excised from active storage within 30 days.
+              </li>
+              <li>
+                <strong className="text-foreground">Data Portability :</strong> Test execution matrices and assertion results may be exported in standard JSON and OpenAPI formats at any time.
+              </li>
+            </ul>
+          </section>
+
           {/* Section 6 */}
           <section className="space-y-2.5">
             <h2 className="text-base font-display font-bold text-foreground flex items-center gap-2">
               <span className="font-mono text-primary text-xs">06.</span>
-              Modifications &amp; Inquiries
+              Subprocessors &amp; Infrastructure
             </h2>
             <p>
-              We may revise these Terms periodically to reflect evolving platform capabilities or regulatory requirements. Continued use of the platform after updates constitutes acceptance. For inquiries regarding enterprise licensing, custom compliance, or terms, contact us at{' '}
-              <a href="mailto :legal@apitestpilot.com" className="text-primary hover:underline font-mono">
-                legal@apitestpilot.com
+              We partner with enterprise-grade cloud providers for authentication (Firebase Auth), containerized worker orchestration, and database persistence. Every subprocessor undergoes rigorous security review and is bound by data processing agreements (DPAs).
+            </p>
+          </section>
+
+          {/* Section 7 */}
+          <section className="space-y-2.5">
+            <h2 className="text-base font-display font-bold text-foreground flex items-center gap-2">
+              <span className="font-mono text-primary text-xs">07.</span>
+              Contact Privacy Engineering
+            </h2>
+            <p>
+              If you have inquiries regarding our data handling practices or wish to submit a formal data privacy or deletion request, please reach out directly to our privacy team at{' '}
+              <a href="mailto :privacy@apitestpilot.com" className="text-primary hover:underline font-mono">
+                privacy@apitestpilot.com
               </a>.
             </p>
           </section>
@@ -168,10 +206,14 @@ export const TermsPage : React.FC<TermsPageProps> = ({ onBack }) => {
 
           <div className="flex items-center gap-2.5 w-full sm:w-auto">
             <a
-              href="#privacy"
+              href="/terms"
+              onClick={(e) => {
+                e.preventDefault();
+                navigateTo('/terms');
+              }}
               className="flex-1 sm:flex-initial w-full sm:w-auto text-center h-9 min-h-[36px] px-3 sm:px-4 rounded-control border border-border/80 hover:border-foreground/30 bg-card hover:bg-accent text-foreground text-xs font-semibold flex items-center justify-center gap-1.5 shadow-scalar-1 btn-press transition-colors cursor-pointer"
             >
-              <span className="truncate">Privacy Policy</span>
+              <span className="truncate">Terms of Service</span>
               <ExternalLink className="w-3.5 h-3.5 shrink-0" />
             </a>
             <Button
