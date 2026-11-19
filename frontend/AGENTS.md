@@ -41,6 +41,10 @@ API Test Pilot is an AI-assisted API testing platform featuring intelligent Open
        - Any architectural, design, token, or behavior decisions that need to be made.
    - **Decision Authority Belongs Strictly to Memo**: If there are decisions to be made, formulate questions and ask Memo explicitly. Never assume or make decisions unilaterally.
    - **Stop and Wait for Memo's Review & "نفذ" (Execute) Command**: Stop completely and wait for Memo to review and adjust the plan. Do NOT start executing or modifying code until Memo explicitly reviews the plan and instructs: *"نفذ"* (or gives explicit approval).
+8. **Responsive Icon Sizing & Shrink-Proof Rule**:
+   - **Tokenized Standard Metrics**: All icons (Lucide React or SVG) must strictly follow design token metrics: `icon-sm: 14px` (`w-3.5 h-3.5`), `icon-md: 16px` (`w-4 h-4`), `icon-lg: 20px` (`w-5 h-5`).
+   - **Mandatory `shrink-0`**: Whenever an icon is placed inside a Flex container, Button, Input adornment, or Header, it MUST include `shrink-0` to guarantee it never gets squished, distorted, or crushed when screen space contracts.
+   - **Small Screen & Mobile Auditing (down to 320px)**: When designing or adapting any page, meticulously audit icon-and-label layouts on mobile viewports (320px - 375px). Ensure zero horizontal overflow (`overflow-x`). If horizontal space is constrained, responsively abbreviate or hide labels (`hidden sm:inline` with `sr-only` accessibility), while preserving the icon's dimensions and the 36px minimum control touch target.
 
 ---
 

@@ -24,6 +24,10 @@
     - When Memo assigns a new task: check `git status` for uncommitted/unfinished work from prior tasks, register the task in `TASKS.md`, and verify or create its dedicated task branch. One branch per task.
     - Formulate and present a comprehensive plan in chat: specify exactly what will be modified/created, the list of affected files, and explicitly ask Memo any questions for decisions that need to be made.
     - Stop and wait: Never touch code until Memo reviews the plan, makes decisions, and gives the explicit command: *"نفذ"*.
+  - **Responsive Icon Sizing & Shrink-Proof Rule**:
+    - All icons must follow token sizes (`icon-sm: 14px`, `icon-md: 16px`, `icon-lg: 20px`).
+    - Every icon inside flex layouts/buttons/inputs must include `shrink-0` to avoid squishing.
+    - Audit all layouts down to 320px mobile viewports to ensure zero horizontal scroll (`overflow-x`). Use responsive text truncation or hiding (`hidden sm:inline`) while keeping icons intact.
 
 ---
 

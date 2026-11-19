@@ -103,3 +103,17 @@ All interactive form controls, action buttons, segmented filter tabs, and search
 - **Component Directory**: Primitives reside under `src/components/ui/` (`button.tsx`, `card.tsx`, `input.tsx`, `label.tsx`, `checkbox.tsx`, `tabs.tsx`).
 - **CLI Management**: Add components via `pnpm dlx shadcn@latest add <component>`.
 - **Integration**: Primitives strictly adhere to the project's design tokens in `design/reference/tokens.css` and the 36px control metric (`min-h-[36px]` / `h-9`).
+
+---
+
+## 11. Icon Metrics & Responsive Shrink-Proof Standard
+
+- **Canonical Icon Sizes**:
+  - `icon-sm`: 14px (`w-3.5 h-3.5`) for secondary inline badges, small buttons, and table indicators.
+  - `icon-md`: 16px (`w-4 h-4`) standard for 36px inputs, buttons, and status icons.
+  - `icon-lg`: 20px (`w-5 h-5`) for card headers, banner alerts, and section titles.
+- **Mandatory `shrink-0`**:
+  - Every icon placed inside a flex row, button, or input adornment must declare `shrink-0` (`[&_svg]:shrink-0`) to prevent squishing or aspect-ratio distortion on compact viewports.
+- **Mobile Viewport Auditing (320px - 375px)**:
+  - Button text and adjacent icons must never induce horizontal scrolling (`overflow-x`).
+  - When viewport space is constrained, prefer responsive truncation or label hiding (`hidden sm:inline` with `sr-only` screen-reader text) rather than allowing elements to expand beyond viewport width. Minimum interactive touch target remains 36px.

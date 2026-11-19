@@ -166,4 +166,58 @@ describe('AuthCard Component', () => {
     const submitBtn = screen.getByRole('button', { name: /please wait/i });
     expect(submitBtn).toBeDisabled();
   });
+
+  it('validates email format with Zod on submit', async () => {
+    const onSubmit = vi.fn();
+
+    render(
+      <AuthCard
+        mode="signin"
+        onToggleMode={vi.fn()}
+        onSubmit={onSubmit}
+      />
+    );
+
+    const emailInput = screen.getByPlaceholderText('developer@example.com');
+    fireEvent.change(emailInput, { target: { value: 'invalid-email-address' } });
+
+    const submitBtn = screen.getByRole('button', { name: /sign in to test pilot/i });
+    fireEvent.click(submitBtn);
+
+    await waitFor(() => {
+      expect(screen.getByText('Please provide a valid email address.')).toBeInTheDocument();
+    });
+
+    expect(onSubmit).not.toHaveBeenCalled();
+  });
+
+  it('successfully submits valid credentials through React Hook Form', async () => {
+    const onSubmit = vi.fn().mockResolvedValue(undefined);
+
+    render(
+      <AuthCard
+        mode="signin"
+        onToggleMode={vi.fn()}
+        onSubmit={onSubmit}
+      />
+    );
+
+    const emailInput = screen.getByPlaceholderText('developer@example.com');
+    const passwordInput = screen.getByPlaceholderText('••••••••••••');
+
+    fireEvent.change(emailInput, { target: { value: 'tester@apitestpilot.com' } });
+    fireEvent.change(passwordInput, { target: { value: 'P@ssword123' } });
+
+    const submitBtn = screen.getByRole('button', { name: /sign in to test pilot/i });
+    fireEvent.click(submitBtn);
+
+    await waitFor(() => {
+      expect(onSubmit).toHaveBeenCalledTimes(1);
+      expect(onSubmit).toHaveBeenCalledWith({
+        email: 'tester@apitestpilot.com',
+        password: 'P@ssword123',
+        rememberMe: false,
+      });
+    });
+  });
 });

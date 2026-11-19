@@ -11,7 +11,8 @@ This registry tracks all engineering tasks for the API Test Pilot frontend.
 | TASK-001 | Frontend Agent Operating System Setup | DONE | chore/frontend-agent-setup | 0.0.1-alpha | 2026-10-24 | 2026-10-25 | None |
 | TASK-002 | Base Tooling & Vite Application Bootstrap | DONE | chore/fe-tooling-vite-bootstrap | 0.0.1-alpha | 2026-10-25 | 2026-10-25 | TASK-001 |
 | TASK-003 | Brand Identity, Scalar Control Shapes & Design Tokens Alignment | DONE | chore/fe-brand-tokens-sync | 0.0.1-alpha | 2026-11-17 | 2026-11-18 | TASK-002 |
-| TASK-008 | Auth Page — Login & Registration Pipeline | REVIEW | feat/fe-auth-page | 0.0.1-alpha | 2026-11-17 | 2026-11-18 | TASK-003 |
+| TASK-008 | Auth Page — Login & Registration Pipeline | DONE | feat/fe-auth-page | 0.0.1-alpha | 2026-11-17 | 2026-11-19 | TASK-003 |
+| TASK-009 | Auth Form Pipeline — React Hook Form, Zod & Icon Rules | DONE | feat/fe-auth-form-zod | 0.0.1-alpha | 2026-11-19 | 2026-11-19 | TASK-008 |
 
 ---
 

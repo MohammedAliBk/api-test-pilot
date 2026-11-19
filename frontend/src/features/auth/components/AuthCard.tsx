@@ -1,11 +1,26 @@
-import React, { useState, useId } from 'react';
+import React, { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Card } from '@/components/ui/card';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
 import { Eye, EyeOff, Loader2, AlertCircle } from 'lucide-react';
 import type { AuthMode, ProblemDetails } from '../types';
+import {
+  signInSchema,
+  signUpSchema,
+  type SignInFormValues,
+  type SignUpFormValues,
+} from '../schemas/authSchemas';
 
 export interface AuthCardProps {
   mode: AuthMode;
@@ -31,18 +46,36 @@ export const AuthCard: React.FC<AuthCardProps> = ({
   problemDetails,
   onClearProblem,
 }) => {
-  const [displayName, setDisplayName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const [agreeToTerms, setAgreeToTerms] = useState(false);
 
-  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
+  // Dedicated React Hook Form instances for Sign In & Sign Up with Zod validation
+  const signInForm = useForm<SignInFormValues>({
+    resolver: zodResolver(signInSchema),
+    mode: 'onSubmit',
+    defaultValues: {
+      email: '',
+      password: '',
+      rememberMe: false,
+    },
+  });
 
-  const nameId = useId();
-  const emailId = useId();
-  const passwordId = useId();
-  const termsId = useId();
+  const signUpForm = useForm<SignUpFormValues>({
+    resolver: zodResolver(signUpSchema),
+    mode: 'onSubmit',
+    defaultValues: {
+      displayName: '',
+      email: '',
+      password: '',
+      agreeToTerms: false as unknown as true,
+    },
+  });
+
+  const handleToggleMode = () => {
+    signInForm.reset();
+    signUpForm.reset();
+    onClearProblem?.();
+    onToggleMode();
+  };
 
   // Password strength calculation for sign up mode
   const getPasswordStrength = (pass: string) => {
@@ -58,46 +91,30 @@ export const AuthCard: React.FC<AuthCardProps> = ({
     return { score, hasLength, hasUpper, hasNumOrSym };
   };
 
-  const strength = getPasswordStrength(password);
+  const currentPassword = mode === 'signup' ? signUpForm.watch('password') || '' : '';
+  const strength = getPasswordStrength(currentPassword);
+  const agreeToTerms = signUpForm.watch('agreeToTerms');
 
-  const validate = () => {
-    const errors: Record<string, string> = {};
-
-    if (!email) {
-      errors.email = 'Email address is required.';
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      errors.email = 'Please provide a valid email address.';
-    }
-
-    if (!password) {
-      errors.password = 'Password is required.';
-    } else if (mode === 'signup' && password.length < 8) {
-      errors.password = 'Password must be at least 8 characters long.';
-    }
-
-    if (mode === 'signup' && !displayName.trim()) {
-      errors.displayName = 'Full name is required.';
-    }
-
-    if (mode === 'signup' && !agreeToTerms) {
-      errors.terms = 'You must agree to the Terms of Service and Privacy Policy.';
-    }
-
-    setFieldErrors(errors);
-    return Object.keys(errors).length === 0;
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const onSignInSubmit = async (values: SignInFormValues) => {
     onClearProblem?.();
-
-    if (!validate()) return;
-
     try {
       await onSubmit({
-        email,
-        password,
-        displayName: mode === 'signup' ? displayName : undefined,
+        email: values.email,
+        password: values.password,
+        rememberMe: values.rememberMe,
+      });
+    } catch {
+      // Error handled via problemDetails in hook
+    }
+  };
+
+  const onSignUpSubmit = async (values: SignUpFormValues) => {
+    onClearProblem?.();
+    try {
+      await onSubmit({
+        email: values.email,
+        password: values.password,
+        displayName: values.displayName,
       });
     } catch {
       // Error handled via problemDetails in hook
@@ -105,14 +122,10 @@ export const AuthCard: React.FC<AuthCardProps> = ({
   };
 
   return (
-    <Card
-      className="w-full max-w-md px-4 py-4 min-[420px]:px-5 min-[420px]:py-5 sm:p-6 min-[901px]:p-8 border border-border rounded-panel bg-card text-card-foreground shadow-hero transition-all my-auto"
-    >
+    <Card className="w-full max-w-md px-4 py-4 min-[420px]:px-5 min-[420px]:py-5 sm:p-6 min-[901px]:p-8 border border-border rounded-panel bg-card text-card-foreground shadow-hero transition-all my-auto">
       {/* Mobile Branding Header (Visible <= 900px) */}
       <div className="min-[901px]:hidden flex items-center gap-2.5 mb-2.5 sm:mb-4">
-        <div
-          className="w-7 h-7 sm:w-8 sm:h-8 rounded-control border border-input bg-secondary flex items-center justify-center p-1 shadow-scalar-1"
-        >
+        <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-control border border-input bg-secondary flex items-center justify-center p-1 shadow-scalar-1">
           <svg viewBox="0 0 64 64" className="w-full h-full" aria-hidden="true">
             <defs>
               <linearGradient id="auth-card-mob-grad" x1="0" y1="0" x2="1" y2="1">
@@ -149,7 +162,7 @@ export const AuthCard: React.FC<AuthCardProps> = ({
           </span>
           <button
             type="button"
-            onClick={onToggleMode}
+            onClick={handleToggleMode}
             className="text-primary hover:underline font-semibold transition-colors focus:outline-none cursor-pointer"
           >
             {mode === 'signin' ? 'Sign up for free' : 'Sign in'}
@@ -188,7 +201,6 @@ export const AuthCard: React.FC<AuthCardProps> = ({
         type="button"
         variant="outline"
         onClick={onGoogleSSO}
-        // disabled={isLoading}
         className="w-full h-9 min-h-[36px] px-3.5 rounded-control border-input bg-secondary hover:bg-accent text-secondary-foreground text-xs font-medium flex items-center justify-center gap-2.5 transition-all shadow-scalar-1 btn-press mb-2 sm:mb-3 min-[901px]:mb-4 cursor-pointer"
       >
         <svg className="w-4 h-4 shrink-0" viewBox="0 0 24 24" aria-hidden="true">
@@ -221,249 +233,284 @@ export const AuthCard: React.FC<AuthCardProps> = ({
         <div className="flex-1 h-px bg-border" />
       </div>
 
-      {/* Auth Form */}
-      <form onSubmit={handleSubmit} className="space-y-2.5 sm:space-y-3.5 min-[901px]:space-y-4" noValidate>
-        {/* Full Name Field (Sign Up Only) */}
-        {mode === 'signup' && (
-          <div>
-            <Label htmlFor={nameId} className="block text-[11px] sm:text-xs font-medium text-muted-foreground mb-1 sm:mb-1.5">
-              Full Name
-            </Label>
-            <Input
-              id={nameId}
-              type="text"
-              placeholder="Ahmed Mohamed"
-              value={displayName}
-              onChange={(e) => {
-                setDisplayName(e.target.value);
-                if (fieldErrors.displayName) {
-                  setFieldErrors((prev) => ({ ...prev, displayName: '' }));
-                }
-              }}
-              disabled={isLoading}
-              aria-invalid={Boolean(fieldErrors.displayName)}
-              className="h-9 min-h-[36px] text-[13px] rounded-control bg-secondary text-card-foreground border-input"
-              style={{
-                borderColor: fieldErrors.displayName ? 'var(--destructive)' : undefined,
-              }}
-            />
-            {fieldErrors.displayName && (
-              <span className="text-destructive text-[11px] mt-1 block">
-                {fieldErrors.displayName}
-              </span>
-            )}
-          </div>
-        )}
-
-        {/* Email Address */}
-        <div>
-          <Label htmlFor={emailId} className="block text-[11px] sm:text-xs font-medium text-muted-foreground mb-1 sm:mb-1.5">
-            Email address
-          </Label>
-          <Input
-            id={emailId}
-            type="email"
-            placeholder="developer@example.com"
-            value={email}
-            onChange={(e) => {
-              setEmail(e.target.value);
-              if (fieldErrors.email) {
-                setFieldErrors((prev) => ({ ...prev, email: '' }));
-              }
-            }}
-            disabled={isLoading}
-            aria-invalid={Boolean(fieldErrors.email)}
-            className="h-9 min-h-[36px] text-[13px] rounded-control bg-secondary text-card-foreground border-input"
-            style={{
-              borderColor: fieldErrors.email ? 'var(--destructive)' : undefined,
-            }}
-          />
-          {fieldErrors.email && (
-            <span className="text-destructive text-[11px] mt-1 block">
-              {fieldErrors.email}
-            </span>
-          )}
-        </div>
-
-        {/* Password */}
-        <div>
-          <div className="flex items-center justify-between mb-1 sm:mb-1.5">
-            <Label htmlFor={passwordId} className="text-[11px] sm:text-xs font-medium text-muted-foreground">
-              Password
-            </Label>
-            {mode === 'signin' && (
-              <a href="#forgot" className="text-[10px] sm:text-[11px] text-primary hover:underline">
-                Forgot password?
-              </a>
-            )}
-          </div>
-          <div className="relative">
-            <Input
-              id={passwordId}
-              type={showPassword ? 'text' : 'password'}
-              placeholder="••••••••••••"
-              value={password}
-              onChange={(e) => {
-                setPassword(e.target.value);
-                if (fieldErrors.password) {
-                  setFieldErrors((prev) => ({ ...prev, password: '' }));
-                }
-              }}
-              disabled={isLoading}
-              aria-invalid={Boolean(fieldErrors.password)}
-              className="h-9 min-h-[36px] text-[13px] rounded-control pr-10 bg-secondary text-card-foreground border-input"
-              style={{
-                borderColor: fieldErrors.password ? 'var(--destructive)' : undefined,
-              }}
-            />
-            <button
-              type="button"
-              onClick={() => setShowPassword(!showPassword)}
-              aria-label={showPassword ? 'Hide password' : 'Show password'}
-              className="absolute right-2.5 top-2.5 text-muted-foreground hover:text-card-foreground focus:outline-none cursor-pointer"
-            >
-              {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-            </button>
-          </div>
-          {fieldErrors.password && (
-            <span className="text-destructive text-[11px] mt-1 block">
-              {fieldErrors.password}
-            </span>
-          )}
-        </div>
-
-        {/* Password Strength Indicator (Sign Up Only) */}
-        {mode === 'signup' && (
-          <div className="space-y-1 pt-0.5 sm:pt-1">
-            <div className="flex items-center justify-between text-[11px]">
-              <span className="text-muted-foreground">Password Strength</span>
-              <span
-                className="font-semibold transition-colors duration-200"
-                style={{
-                  color:
-                    strength.score === 1
-                      ? 'var(--destructive)'
-                      : strength.score === 2
-                      ? 'var(--color-warning)'
-                      : strength.score === 3
-                      ? 'var(--color-success)'
-                      : 'var(--muted-foreground)',
-                }}
-              >
-                {strength.score === 1
-                  ? 'Weak'
-                  : strength.score === 2
-                  ? 'Medium'
-                  : strength.score === 3
-                  ? 'Strong'
-                  : 'None'}
-              </span>
-            </div>
-            <div className="grid grid-cols-3 gap-1.5" aria-hidden="true">
-              {/* Segment 1: Weak */}
-              <div
-                className="h-1 rounded-full transition-all duration-300"
-                style={{
-                  backgroundColor:
-                    strength.score === 1
-                      ? 'var(--destructive)'
-                      : strength.score === 2
-                      ? 'var(--color-warning)'
-                      : strength.score === 3
-                      ? 'var(--color-success)'
-                      : 'var(--border)',
-                }}
-              />
-              {/* Segment 2: Medium */}
-              <div
-                className="h-1 rounded-full transition-all duration-300"
-                style={{
-                  backgroundColor:
-                    strength.score === 2
-                      ? 'var(--color-warning)'
-                      : strength.score === 3
-                      ? 'var(--color-success)'
-                      : 'var(--border)',
-                }}
-              />
-              {/* Segment 3: Strong */}
-              <div
-                className="h-1 rounded-full transition-all duration-300"
-                style={{
-                  backgroundColor:
-                    strength.score === 3 ? 'var(--color-success)' : 'var(--border)',
-                }}
-              />
-            </div>
-          </div>
-        )}
-
-        {/* Checkbox: Terms Agreement (Sign Up Only) */}
-        {mode === 'signup' && (
-          <div className="flex items-start gap-2 pt-0.5 sm:pt-1">
-            <Checkbox
-              id={termsId}
-              checked={agreeToTerms}
-              onCheckedChange={(checked) => {
-                const val = Boolean(checked);
-                setAgreeToTerms(val);
-                if (val && fieldErrors.terms) {
-                  setFieldErrors((prev) => ({ ...prev, terms: '' }));
-                }
-              }}
-              disabled={isLoading}
-              className="rounded-control mt-0.5 cursor-pointer"
-              style={{
-                borderColor: fieldErrors.terms ? 'var(--destructive)' : undefined,
-              }}
-            />
-            <div className="flex-1">
-              <Label
-                htmlFor={termsId}
-                className="text-[11px] sm:text-xs text-muted-foreground select-none font-normal cursor-pointer leading-tight block"
-              >
-                I agree to the{' '}
-                <a
-                  href="#terms"
-                  onClick={(e) => e.stopPropagation()}
-                  className="text-card-foreground hover:underline font-medium"
-                >
-                  Terms of Service
-                </a>{' '}
-                and{' '}
-                <a
-                  href="#privacy"
-                  onClick={(e) => e.stopPropagation()}
-                  className="text-card-foreground hover:underline font-medium"
-                >
-                  Privacy Policy
-                </a>
-              </Label>
-              {fieldErrors.terms && (
-                <span className="text-destructive text-[11px] mt-1 block">
-                  {fieldErrors.terms}
-                </span>
+      {/* Sign In Mode Form */}
+      {mode === 'signin' && (
+        <Form {...signInForm}>
+          <form onSubmit={signInForm.handleSubmit(onSignInSubmit)} className="space-y-2.5 sm:space-y-3.5 min-[901px]:space-y-4" noValidate>
+            <FormField
+              control={signInForm.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="block text-[11px] sm:text-xs font-medium text-muted-foreground">
+                    Email address
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      type="email"
+                      placeholder="developer@example.com"
+                      disabled={isLoading}
+                      className="h-9 min-h-[36px] text-[13px] rounded-control bg-secondary text-card-foreground border-input"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage className="text-destructive text-[11px]" />
+                </FormItem>
               )}
-            </div>
-          </div>
-        )}
+            />
 
-        {/* Primary Submit Button */}
-        <Button
-          type="submit"
-          disabled={isLoading || (mode === 'signup' && !agreeToTerms)}
-          className="w-full h-9 min-h-[36px] px-3.5 rounded-control bg-primary hover:bg-primary-hover text-primary-foreground text-xs font-semibold flex items-center justify-center gap-2 transition-all shadow-scalar-1 btn-press cursor-pointer"
-        >
-          {isLoading ? (
-            <>
-              <Loader2 className="w-4 h-4 animate-spin text-primary-foreground" />
-              <span>Please wait...</span>
-            </>
-          ) : (
-            <span>{mode === 'signin' ? 'Sign In to Test Pilot' : 'Create Account'}</span>
-          )}
-        </Button>
-      </form>
+            <FormField
+              control={signInForm.control}
+              name="password"
+              render={({ field }) => (
+                <FormItem>
+                  <div className="flex items-center justify-between">
+                    <FormLabel className="text-[11px] sm:text-xs font-medium text-muted-foreground">
+                      Password
+                    </FormLabel>
+                    <a href="#forgot" className="text-[10px] sm:text-[11px] text-primary hover:underline">
+                      Forgot password?
+                    </a>
+                  </div>
+                  <div className="relative">
+                    <FormControl>
+                      <Input
+                        type={showPassword ? 'text' : 'password'}
+                        placeholder="••••••••••••"
+                        disabled={isLoading}
+                        className="h-9 min-h-[36px] text-[13px] rounded-control pr-10 bg-secondary text-card-foreground border-input"
+                        {...field}
+                      />
+                    </FormControl>
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      aria-label={showPassword ? 'Hide password' : 'Show password'}
+                      className="absolute right-2.5 top-2.5 text-muted-foreground hover:text-card-foreground focus:outline-none cursor-pointer"
+                    >
+                      {showPassword ? <EyeOff className="w-4 h-4 shrink-0" /> : <Eye className="w-4 h-4 shrink-0" />}
+                    </button>
+                  </div>
+                  <FormMessage className="text-destructive text-[11px]" />
+                </FormItem>
+              )}
+            />
+
+            <Button
+              type="submit"
+              disabled={isLoading}
+              className="w-full h-9 min-h-[36px] px-3.5 rounded-control bg-primary hover:bg-primary-hover text-primary-foreground text-xs font-semibold flex items-center justify-center gap-2 transition-all shadow-scalar-1 btn-press cursor-pointer"
+            >
+              {isLoading ? (
+                <>
+                  <Loader2 className="w-4 h-4 shrink-0 animate-spin text-primary-foreground" />
+                  <span>Please wait...</span>
+                </>
+              ) : (
+                <span>Sign In to Test Pilot</span>
+              )}
+            </Button>
+          </form>
+        </Form>
+      )}
+
+      {/* Sign Up Mode Form */}
+      {mode === 'signup' && (
+        <Form {...signUpForm}>
+          <form onSubmit={signUpForm.handleSubmit(onSignUpSubmit)} className="space-y-2.5 sm:space-y-3.5 min-[901px]:space-y-4" noValidate>
+            <FormField
+              control={signUpForm.control}
+              name="displayName"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="block text-[11px] sm:text-xs font-medium text-muted-foreground">
+                    Full Name
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      type="text"
+                      placeholder="Ahmed Mohamed"
+                      disabled={isLoading}
+                      className="h-9 min-h-[36px] text-[13px] rounded-control bg-secondary text-card-foreground border-input"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage className="text-destructive text-[11px]" />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={signUpForm.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="block text-[11px] sm:text-xs font-medium text-muted-foreground">
+                    Email address
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      type="email"
+                      placeholder="developer@example.com"
+                      disabled={isLoading}
+                      className="h-9 min-h-[36px] text-[13px] rounded-control bg-secondary text-card-foreground border-input"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage className="text-destructive text-[11px]" />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={signUpForm.control}
+              name="password"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-[11px] sm:text-xs font-medium text-muted-foreground">
+                    Password
+                  </FormLabel>
+                  <div className="relative">
+                    <FormControl>
+                      <Input
+                        type={showPassword ? 'text' : 'password'}
+                        placeholder="••••••••••••"
+                        disabled={isLoading}
+                        className="h-9 min-h-[36px] text-[13px] rounded-control pr-10 bg-secondary text-card-foreground border-input"
+                        {...field}
+                      />
+                    </FormControl>
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      aria-label={showPassword ? 'Hide password' : 'Show password'}
+                      className="absolute right-2.5 top-2.5 text-muted-foreground hover:text-card-foreground focus:outline-none cursor-pointer"
+                    >
+                      {showPassword ? <EyeOff className="w-4 h-4 shrink-0" /> : <Eye className="w-4 h-4 shrink-0" />}
+                    </button>
+                  </div>
+                  <FormMessage className="text-destructive text-[11px]" />
+                </FormItem>
+              )}
+            />
+
+            {/* Password Strength Indicator */}
+            <div className="space-y-1 pt-0.5 sm:pt-1">
+              <div className="flex items-center justify-between text-[11px]">
+                <span className="text-muted-foreground">Password Strength</span>
+                <span
+                  className="font-semibold transition-colors duration-200"
+                  style={{
+                    color:
+                      strength.score === 1
+                        ? 'var(--destructive)'
+                        : strength.score === 2
+                        ? 'var(--color-warning)'
+                        : strength.score === 3
+                        ? 'var(--color-success)'
+                        : 'var(--muted-foreground)',
+                  }}
+                >
+                  {strength.score === 1
+                    ? 'Weak'
+                    : strength.score === 2
+                    ? 'Medium'
+                    : strength.score === 3
+                    ? 'Strong'
+                    : 'None'}
+                </span>
+              </div>
+              <div className="grid grid-cols-3 gap-1.5" aria-hidden="true">
+                <div
+                  className="h-1 rounded-full transition-all duration-300"
+                  style={{
+                    backgroundColor:
+                      strength.score === 1
+                        ? 'var(--destructive)'
+                        : strength.score === 2
+                        ? 'var(--color-warning)'
+                        : strength.score === 3
+                        ? 'var(--color-success)'
+                        : 'var(--border)',
+                  }}
+                />
+                <div
+                  className="h-1 rounded-full transition-all duration-300"
+                  style={{
+                    backgroundColor:
+                      strength.score === 2
+                        ? 'var(--color-warning)'
+                        : strength.score === 3
+                        ? 'var(--color-success)'
+                        : 'var(--border)',
+                  }}
+                />
+                <div
+                  className="h-1 rounded-full transition-all duration-300"
+                  style={{
+                    backgroundColor:
+                      strength.score === 3 ? 'var(--color-success)' : 'var(--border)',
+                  }}
+                />
+              </div>
+            </div>
+
+            {/* Checkbox: Terms Agreement */}
+            <FormField
+              control={signUpForm.control}
+              name="agreeToTerms"
+              render={({ field }) => (
+                <FormItem className="flex items-start gap-2 pt-0.5 sm:pt-1 space-y-0">
+                  <FormControl>
+                    <Checkbox
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                      disabled={isLoading}
+                      className="rounded-control mt-0.5 cursor-pointer"
+                    />
+                  </FormControl>
+                  <div className="flex-1">
+                    <FormLabel className="text-[11px] sm:text-xs text-muted-foreground select-none font-normal cursor-pointer leading-tight block">
+                      I agree to the{' '}
+                      <a
+                        href="#terms"
+                        onClick={(e) => e.stopPropagation()}
+                        className="text-card-foreground hover:underline font-medium"
+                      >
+                        Terms of Service
+                      </a>{' '}
+                      and{' '}
+                      <a
+                        href="#privacy"
+                        onClick={(e) => e.stopPropagation()}
+                        className="text-card-foreground hover:underline font-medium"
+                      >
+                        Privacy Policy
+                      </a>
+                    </FormLabel>
+                    <FormMessage className="text-destructive text-[11px]" />
+                  </div>
+                </FormItem>
+              )}
+            />
+
+            <Button
+              type="submit"
+              disabled={isLoading || !agreeToTerms}
+              className="w-full h-9 min-h-[36px] px-3.5 rounded-control bg-primary hover:bg-primary-hover text-primary-foreground text-xs font-semibold flex items-center justify-center gap-2 transition-all shadow-scalar-1 btn-press cursor-pointer"
+            >
+              {isLoading ? (
+                <>
+                  <Loader2 className="w-4 h-4 shrink-0 animate-spin text-primary-foreground" />
+                  <span>Please wait...</span>
+                </>
+              ) : (
+                <span>Create Account</span>
+              )}
+            </Button>
+          </form>
+        </Form>
+      )}
 
       {/* Footer Disclaimer */}
       {mode === 'signin' && (
