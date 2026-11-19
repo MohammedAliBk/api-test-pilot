@@ -229,3 +229,28 @@ This log tracks every engineering session on the API Test Pilot frontend.
     - FluentValidation correctly returns HTTP 400 with property validation error messages, displayed cleanly in the frontend alert banner.
     - Database persistence connection update (`appsettings.Production.json`) committed by Ahmed in `a50618e` on `origin/Init-service`.
 - **Resume here**: Waiting for Memo's review and further instructions. Ready to test live registration once the remote database deployment finishes.
+
+---
+
+## Session 2026-11-19: Base-Mira Theme, Legal Pages, Collapsible Sidebar, Home Page & TanStack Router
+
+- **Timestamp**: 2026-11-19T22:25:00+02:00
+- **Operator**: Frontend Agent Orchestrator & Memo (Frontend Developer)
+- **Active Branch**: `feat/fe-home-shell`
+- **User Requests & Approved Actions**:
+  1. Standardize design system to shadcn preset `b6Wxuc3c3f` (`base-mira`) in `design/reference/tokens.css`, `tailwind.preset.js`, `tailwind.config.ts`, and `src/globals.css`.
+  2. Implement responsive icon sizing rules (`icon-sm: 14px`, `icon-md: 16px`, `icon-lg: 20px`, mandatory `shrink-0`) across all buttons, inputs, headers, and pages.
+  3. Integrate `react-hook-form` + `zod` (`authSchemas.ts`) in `AuthCard.tsx` with `mode: 'onSubmit'` validation.
+  4. Create standalone Terms of Service (`/terms`) and Privacy Policy (`/privacy`) pages with responsive 50/50 equal-width action buttons, zero horizontal scroll, and user-provided copy.
+  5. Build official shadcn/ui collapsible sidebar (`collapsible="icon"`, `AppSidebar`, `AppHeader`, `AppShell`, `NavUser` with logged-in user profile, and `Platform Workspace` nav group).
+  6. Build Home Page (`/`) with centered sleeping-head Lottie animation (`sleeping-head-L617p2W31T`) and status text *"Waiting for Backend and AI to finish work"*.
+  7. Migrate client-side routing to `@tanstack/react-router` with route guards (`/` protected, redirects to `/login`; unauthenticated visitors cannot access `/`; clean URLs without `#`).
+  8. Run full verification suite, remove dead code, commit changes, and open Pull Request #8 targeting `Init-service`.
+- **Commit**: `069aaf2` (`feat(fe-shell): implement auth flow, home page shell, legal pages, and tanstack router`)
+- **Pull Request**: [#8](https://github.com/MohammedAliBk/api-test-pilot/pull/8) on `MohammedAliBk/api-test-pilot`
+- **Verification Evidence (100% Green)**:
+  - `check-tokens.mjs`: 0 violations across 50 scanned files.
+  - `pnpm run type-check`: 0 errors.
+  - `vitest run`: 23/23 tests passed.
+  - `pnpm run build`: Production build succeeded in 9.21s.
+
