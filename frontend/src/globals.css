@@ -1,21 +1,36 @@
+@import url("https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Oxanium:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap");
 @import '../design/reference/tokens.css';
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
-  * {
-    @apply border-line;
+@layer utilities {
+  @keyframes streak {
+    0% { transform: translateX(-30%); opacity: 0; }
+    40% { opacity: 1; }
+    100% { transform: translateX(0); opacity: 1; }
   }
 
+  .animate-streak {
+    animation: streak 1.2s ease-out infinite alternate;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html,
   body {
-    background-color: var(--color-surface);
-    color: var(--color-text-primary);
+    @apply bg-background text-foreground;
     font-family: var(--font-sans);
     min-height: 100vh;
+    min-height: 100dvh;
     margin: 0;
     padding: 0;
+    overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
   }
 }
@@ -25,7 +40,26 @@
   transform: scale(0.98);
 }
 
+.focus-ring:focus,
 .focus-ring:focus-visible {
+  border-color: var(--color-primary);
+  outline: none;
+}
+
+/* Scalar technical input styling */
+.scalar-input {
+  min-height: 36px;
+  padding: 6px 12px;
+  border-radius: var(--radius-control);
+  border: 1px solid var(--color-line-strong);
+  background-color: var(--color-surface);
+  color: var(--color-text-primary);
+  font-family: var(--font-sans);
+  font-size: 13px;
+  transition: border-color var(--duration-fast) var(--ease-out);
+}
+
+.scalar-input:focus {
   border-color: var(--color-primary);
   outline: none;
 }

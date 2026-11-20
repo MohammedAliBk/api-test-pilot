@@ -17,3 +17,11 @@ For every page or major UI component:
 - **Gate GD — Design Choice**: Present comparison table and recommendation to Memo. Wait for explicit choice. Copy chosen version to `chosen.html`.
 - **Step 4 — Implementation**: Build in React + TypeScript under `src/` matching `chosen.html` 1:1.
 - **Step 5 — Close**: Update page spec, docs, and changelog.
+
+## 3. Component Library Standard (shadcn/ui via TanStack)
+
+- **Official Source**: All production React UI components and primitives must be sourced directly from **shadcn/ui** following the TanStack / React / Vite guidelines: [https://ui.shadcn.com/docs/installation/tanstack](https://ui.shadcn.com/docs/installation/tanstack).
+- **Configuration**: Root `components.json` is configured with path aliases (`@/components/ui`, `@/lib/utils`).
+- **Adding Components**: Add components using `pnpm dlx shadcn@latest add <component>`.
+- **Location**: Primitives reside under `src/components/ui/` (e.g., `button.tsx`, `card.tsx`, `input.tsx`, `label.tsx`, `checkbox.tsx`, `tabs.tsx`).
+- **Token Adaptation**: All shadcn component classes must harmonize with the project's design tokens in `design/reference/tokens.css` and the 36px control metric in `docs/conventions/UI_CONVENTIONS.md`.

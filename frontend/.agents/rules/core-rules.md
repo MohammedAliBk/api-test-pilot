@@ -3,8 +3,13 @@
 ## 1. Non-Negotiable Rules
 
 1. **Never decide on Memo's behalf.** Any decision (architecture, library choice, new/removed dependency, routing/state approach, token change, API-contract assumption, deleting/renaming files, behavior or scope change, version bump) needs explicit approval first. Ask, wait, then act.
-2. **Never merge or push without explicit approval.** Never push to `main`/`master`. Never open a PR unless asked.
-3. **One branch per task.** Never mix unrelated work. Branch format: `feat/fe-<slug>`, `fix/fe-<slug>`, `chore/fe-<slug>`, `docs/fe-<slug>`.
+2. **Never commit without Memo's review.** After modifying files on the branch, stop and wait for Memo to review and edit. Only commit after Memo explicitly approves.
+3. **Commit & Pull Request Protocol:**
+   - On branch completion, draft and present exact PR details (title, summary, changes, test evidence) to Memo in chat.
+   - Wait for Memo to review and refine the description.
+   - Only when Memo says *"اعمل بول ريكويست"*, execute a final verification test suite (`check-tokens`, `type-check`, `test`, `build`), confirm 100% green, and open the PR.
+4. **Never merge or push to main without explicit approval.** Never push to `main`/`master`.
+5. **One branch per task.** Never mix unrelated work. Branch format: `feat/fe-<slug>`, `fix/fe-<slug>`, `chore/fe-<slug>`, `docs/fe-<slug>`.
 4. **Never guess.** If something is unclear or missing, say so and ask. Do not invent files, endpoints, props, functions, or backend behavior.
 5. **Never trust docs or memory blindly.** Verify against real code (and against the real OpenAPI from the backend when it exists).
 6. **No destructive actions without approval:** no force-push, no history rewrite, no `reset --hard` on shared branches, no deleting branches/tags, no `rm -rf`, no deleting someone else's files.
@@ -14,6 +19,15 @@
 10. **No new dependency (npm package) without a DEC and explicit approval.** Check license, maintenance, bundle size, and security first.
 11. **Never fake evidence.** Nothing is "passing", "tested", or "working in the browser" unless actually run in this session.
 12. **Stay in scope.** Problems noticed elsewhere go to "Backlog / Proposed" in `TASKS.md`, never silently fixed.
+13. **Production-Grade Standard Only:** Never add dummy/demo UI, debug user-ID cards, or temporary sign-out boxes inside authentication cards or production pages. Everything built is enterprise production code.
+14. **Task Ingestion & Pre-Execution Plan Protocol (Strict Gate G1)**:
+    - When Memo assigns a new task: check `git status` for uncommitted/unfinished work from prior tasks, register the task in `TASKS.md`, and verify or create its dedicated task branch. One branch per task.
+    - Formulate and present a comprehensive plan in chat: specify exactly what will be modified/created, the list of affected files, and explicitly ask Memo any questions for decisions that need to be made.
+    - Stop and wait: Never touch code until Memo reviews the plan, makes decisions, and gives the explicit command: *"نفذ"*.
+  - **Responsive Icon Sizing & Shrink-Proof Rule**:
+    - All icons must follow token sizes (`icon-sm: 14px`, `icon-md: 16px`, `icon-lg: 20px`).
+    - Every icon inside flex layouts/buttons/inputs must include `shrink-0` to avoid squishing.
+    - Audit all layouts down to 320px mobile viewports to ensure zero horizontal scroll (`overflow-x`). Use responsive text truncation or hiding (`hidden sm:inline`) while keeping icons intact.
 
 ---
 

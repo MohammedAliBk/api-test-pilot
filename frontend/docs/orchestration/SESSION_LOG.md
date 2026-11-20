@@ -72,3 +72,185 @@ This log tracks every engineering session on the API Test Pilot frontend.
   - Committed on `chore/fe-tooling-vite-bootstrap` under `chore: bootstrap vite react typescript tooling, tailwind, tanstack query, and vitest`.
   - Set TASK-002 status to `DONE`.
 - **Resume here**: Start TASK-004: Page Pipeline — Import Spec View (`/new-page import-spec`).
+
+---
+
+## Session 2026-11-17: TASK-003 Brand Identity & Design Tokens Alignment with Landing Page
+
+- **Timestamp**: 2026-11-17T13:56:47+02:00
+- **Operator**: Frontend Agent Orchestrator & Memo (Frontend Developer)
+- **Active Branch**: `chore/fe-brand-tokens-sync`
+- **Starting State**: Main merged with PR #1 and PR #2. User requested scraping the official landing page (`https://api-test-pilot-landing.lovable.app/#top`) to extract brand identity (colors, glows, shadows, typography) and align all design tokens.
+- **Approved Scope (Gate G1)**:
+  - Scrape landing page HTML and CSS bundle (`/assets/styles-DXBUoOZB.css`).
+  - Convert OKLCH landing colors to dual-theme tokens in `tokens.css`.
+  - Update `tailwind.preset.js` with Space Grotesk, electric azure/violet primary and glow, and glow box-shadows.
+  - Update `reference.html` and `index.html` to load Google Fonts (`Space Grotesk`, `Inter`, `JetBrains Mono`).
+  - Align `UI_CONVENTIONS.md` sections 1 and 8.
+  - Record decision `DEC-012` in `DECISIONS.md`.
+  - Execute full test loop with 0 violations.
+- **Decisions Recorded**: `DEC-012` added to `DECISIONS.md`.
+- **Task Registered**: `TASK-003` created in `TASKS.md` with status `READY_FOR_REVIEW`.
+- **Execution Completed**:
+  - Scraped live landing page, extracted color definitions, typography, shadows, gradients, and subtle noise/grid patterns.
+  - Updated `design/reference/tokens.css` with obsidian dark canvas (`#07080d`), raised cards (`#0d1017`), subtle rows (`#141722`), electric azure (`#518eff`), and electric violet glow (`#8d5ef9`).
+  - Added 8 first-class domain test state tokens with dual-theme hex values.
+  - Updated `design/reference/tailwind.preset.js` and `design/reference/CHANGELOG.md` (v1.1.0 release).
+  - Cleaned literal `#hex` strings from `reference.html` labels to satisfy `check-tokens.mjs`.
+  - Added Space Grotesk font links to `index.html` and `reference.html`.
+  - Synchronized `UI_CONVENTIONS.md`.
+- **What Was Verified**:
+  - `node design/tools/check-tokens.mjs`: PASSED (7 files scanned, 0 token violations).
+  - `pnpm type-check`: PASSED (0 errors).
+  - `pnpm test`: PASSED (1 test file, 4 tests passed, 0 failed).
+  - `pnpm build`: PASSED (production build completed in 6.09s).
+  - Scope Lock Audit: `git status` confirmed 100% of untracked/modified files are under `frontend/`. Zero files touched outside `frontend/`.
+- **Resume here**: Memo to review Gate G3 and approve commit / PR merge into `main`. Once merged, proceed to TASK-004: Page Pipeline — Import Spec View.
+
+---
+
+## Session 2026-11-17 (Part 2): Hybrid Design System (Scalar Shapes + Landing Palette) & Commit/PR Rules Protocol
+
+- **Timestamp**: 2026-11-17T14:08:20+02:00
+- **Operator**: Frontend Agent Orchestrator & Memo (Frontend Developer)
+- **Active Branch**: `chore/fe-brand-tokens-sync`
+- **User Requests**:
+  1. Extract favicon and brand logo from the landing page.
+  2. Scrape `https://mohamed1551.runasp.net/scalar/` to extract design shapes, input boxes, typography, hairlines, and shadows.
+  3. Merge Scalar's technical structure with the landing page's brand colors.
+  4. Codify strict rule: After modifying files, agent MUST stop and wait for Memo to review and edit before committing. On branch completion, draft PR details, wait for Memo's edits, and upon explicit "اعمل بول ريكويست", run final tests first, then open PR.
+- **Decisions Recorded**:
+  - `DEC-013`: Hybrid Visual Architecture — Scalar Control Shapes & Typography with Landing Page Palette.
+  - `DEC-014`: Commit & Pull Request Workflow Protocol.
+- **Execution Completed**:
+  - Downloaded official favicon SVG to `public/favicon.svg` and linked in `index.html` and `reference.html`.
+  - Built token-driven reusable `<Logo />` component in `src/components/ui/Logo.tsx` with accessible wordmark and zero hardcoded colors.
+  - Scraped `https://mohamed1551.runasp.net/scalar/scalar.js` (280KB CSS bundle); extracted 4px compact control radii, hairline borders (0.5px), pill badge styles, and technical shadows (`--shadow-scalar-1`, `--shadow-scalar-2`).
+  - Updated `tokens.css`, `tailwind.preset.js`, `globals.css`, `App.tsx`, and `reference.html`.
+  - Codified the Pre-Commit Review and Pre-PR Verification Protocol in `AGENTS.md`, `.agents/rules/core-rules.md`, and `OPERATING_MANUAL.md`.
+  - Halted immediately without committing, per Memo's strict rule, waiting for Memo's review and adjustments.
+- **Resume here**: Waiting for Memo's review and edits on the modified files. Once Memo approves, proceed to commit.
+
+
+---
+
+## Session 2026-11-17 (Part 3): Authentication Pipeline & 4 Standalone HTML Prototypes (Gate GD)
+
+- **Timestamp**: 2026-11-17T15:10:00+02:00
+- **Operator**: Frontend Agent Orchestrator & Memo (Frontend Developer)
+- **Active Branch**: `feat/fe-auth-page`
+- **User Requests**:
+  1. Build login and registration (account creation) page.
+  2. Target backend: `https://mohamed1551.runasp.net/scalar/#description/introduction`.
+  3. First deliver prototypes for login and registration, review and choose direction together (Gate GD), then implement React code and integrate with backend.
+- **Decisions Recorded**:
+  - `DEC-015`: Authentication & Account Management Architecture & Prototype Matrix.
+- **Execution Completed**:
+  - Analyzed OpenAPI 3.1.1 spec at `https://mohamed1551.runasp.net/openapi/v1.json` for endpoints: `POST /api/Auth/register`, `POST /api/Auth/login`, `POST /api/Auth/firebase-login`, `GET /api/Auth/me`, and RFC 7807 `ProblemDetails`.
+  - Created task branch `feat/fe-auth-page`.
+  - Authored Page Specification: `docs/page-specs/auth.md`.
+  - Authored Design Research: `docs/research/auth.md` (benchmarking Clerk, Supabase, Linear, Postman, Vercel).
+  - Built 4 standalone HTML prototypes in `design/prototypes/auth/`:
+    - `v1.html`: Split-screen brand showcase with live test runner telemetry.
+    - `v2.html`: Obsidian centered glass card (minimalist & frictionless).
+    - `v3.html`: Interactive dual-pane sliding deck with kinetic transitions.
+    - `v4.html`: Terminal & bento developer workflow with live cURL previews.
+    - `index.html`: Multi-device comparison launcher and responsive preview frame.
+    - `NOTES.md`: Prototype hypotheses, trade-offs, and Gate GD recommendation.
+  - Registered `TASK-008` in `docs/orchestration/tasks/TASK-008-auth-page-login-register.md` and `TASKS.md`.
+  - Verified token compliance: `node design/tools/check-tokens.mjs` passed with 0 violations across 14 files.
+  - Installed verified skill `add-globe-study` (`.agents/skills/add-globe-study/SKILL.md`) for Canvas 2D Text Path Studies.
+  - Implemented exact authored source code for `FIG 07 Codex Outline Typeflow` (`D_OPENAI` multi-loop SVG geometry, `polylines` SVG sampling, `atLength` wrap, `qang` quantization, `speed` hover acceleration, `kick` click burst, pointer proximity illumination).
+  - The entire Codex logo is completely woven of flowing typography across all its 6 petals and central loops, scaled large (78% of viewport) with zero clutter on the left side, and added dynamic toggle between Codex and Arrow marks in `design/prototypes/auth/v1.html`.
+- **Resume here**: Prototypes presented to Memo; awaiting selection of Direction (Gate GD) before starting React production implementation.
+
+---
+
+## Session 2026-11-17 (Part 4): shadcn/ui Standardization, Laser Matrix WebGL & React Auth Implementation
+
+- **Timestamp**: 2026-11-17T22:58:00+02:00
+- **Operator**: Frontend Agent Orchestrator & Memo (Frontend Developer)
+- **Active Branch**: `feat/fe-auth-page`
+- **User Requests**:
+  1. Replace 3D animation with Laser Matrix WebGL canvas spanning 100% of viewport with smooth iridescent wave overlay and seamless right-side gradient blend under auth card.
+  2. Remove top segmented tabs; replace with clean inline toggle link under the form header.
+  3. Fix light mode animation washout by anchoring solid black base behind WebGL canvas.
+  4. Standardize on shadcn/ui following TanStack guidelines (`https://ui.shadcn.com/docs/installation/tanstack`) and record rule for all agents.
+  5. Convert approved prototype (`chosen.html`) into production React & TypeScript code under `src/features/auth/` using installed shadcn/ui primitives.
+- **Decisions Recorded**:
+  - `DEC-016`: shadcn/ui TanStack React Vite Component Standardization.
+- **Execution Completed**:
+  - Refined `design/prototypes/auth/v1.html` according to Memo's exact specifications and copied to `chosen.html` (Gate GD passed).
+  - Initialized `components.json` with TanStack guidelines and installed standard shadcn components: `button`, `card`, `checkbox`, `input`, `label`, `tabs` in `src/components/ui/`.
+  - Built complete `src/features/auth/` feature modules:
+    - `types.ts`: Domain models (`User`, `AuthResponse`, `LoginCredentials`, `RegisterCredentials`, `ProblemDetails`, `AuthMode`).
+    - `api/authApi.ts`: Client for .NET 10 endpoints (`login`, `register`, `firebase-login`, `me`) with RFC 7807 error parsing (`AuthApiError`).
+    - `hooks/useAuth.ts`: TanStack Query mutation hook with local session persistence.
+    - `components/MatrixJunctionCanvas.tsx`: Raw WebGL canvas spanning full viewport with resize and cleanup.
+    - `components/AuthAtmosphere.tsx`: Full-screen background stack with canvas, masked ribbon wave texture, and continuous right blend.
+    - `components/AuthCard.tsx`: Form card using shadcn UI primitives, inline mode switch, RFC 7807 problem details alert, password strength indicator, and Google SSO button.
+    - `components/AuthLayout.tsx`: Dual-pane layout with desktop left-side branding and top-right theme switcher (dark/light).
+    - `pages/AuthPage.tsx`: Top-level page coordinating `useAuth`, `AuthLayout`, and `AuthCard`.
+    - `index.ts`: Public feature exports.
+  - Updated `src/App.tsx` with view switcher supporting both `AuthPage` and `TeamShowcase`.
+  - Added comprehensive test suites: `AuthCard.test.tsx`, `authApi.test.ts`, `AuthPage.test.tsx`, and updated `App.test.tsx`.
+  - Full verification suite:
+    - `node design/tools/check-tokens.mjs`: 34/34 files compliant (0 violations, 100% green).
+    - `pnpm type-check`: 0 errors (100% green).
+    - `pnpm test`: 4/4 files passed, 19/19 tests passed (100% green).
+    - `pnpm build`: built production bundle in 10.52s (100% green).
+- **Resume here**: Memo reviewed and approved commits and merging `origin/Init-service` into `feat/fe-auth-page`.
+
+---
+
+## Session 2026-11-18: Auth UX Refinements, Branch Synchronization & Backend Contract Integration
+
+- **Timestamp**: 2026-11-18T02:15:00+02:00
+- **Operator**: Frontend Agent Orchestrator & Memo (Frontend Developer)
+- **Active Branch**: `feat/fe-auth-page`
+- **User Requests & Approved Actions**:
+  1. Replace checklist text (`• 8+ chars`, `• Uppercase`, etc.) with visual 3-stage colored strength bars (Red = Weak, Yellow = Medium, Green = Strong).
+  2. Invert `"faster"` text in left branding into a high-contrast white-on-black capsule (`bg-white text-black font-black text-2xl md:text-3xl px-2.5 py-0.5 rounded border border-white`).
+  3. Remove bottom dev showcase tabs; make `AuthPage` the initial view when opening the project unauthenticated, smoothly transitioning to the dashboard upon login with header sign-out.
+  4. Setup Firebase & Google Single Sign-On (`src/lib/firebase.ts`, `.env.example`, `.env`) with backend handoff to `POST /api/Auth/firebase-login`.
+  5. Configure local development CORS via Vite reverse proxy (`/api` -> `https://mohamed1551.runasp.net` with `changeOrigin: true` and COOP header `same-origin-allow-popups`).
+  6. Commit all auth work safely to `feat/fe-auth-page` (`e43392b`).
+  7. Fetch and merge `origin/Init-service` into `feat/fe-auth-page` (`c58058c`) with zero merge conflicts.
+- **Execution & Integration Results**:
+  - `git commit` on `feat/fe-auth-page`: `e43392b` ("feat(auth): implement login and registration page with shadcn/ui, webgl matrix, and firebase sso").
+  - `git merge origin/Init-service`: `c58058c` (41 files merged cleanly).
+  - Verification suite post-merge:
+    - `node design/tools/check-tokens.mjs`: 35/35 files compliant (0 violations, 100% green).
+    - `pnpm type-check`: 0 errors (100% green).
+    - `pnpm test`: 4/4 files passed, 18/18 tests passed (100% green).
+    - `pnpm build`: Built production bundle in 8.03s (100% green).
+  - Live Backend Verification (`https://mohamed1551.runasp.net`):
+    - MediatR DI registration issue is 100% resolved by backend commit `de06686`.
+    - FluentValidation correctly returns HTTP 400 with property validation error messages, displayed cleanly in the frontend alert banner.
+    - Database persistence connection update (`appsettings.Production.json`) committed by Ahmed in `a50618e` on `origin/Init-service`.
+- **Resume here**: Waiting for Memo's review and further instructions. Ready to test live registration once the remote database deployment finishes.
+
+---
+
+## Session 2026-11-19: Base-Mira Theme, Legal Pages, Collapsible Sidebar, Home Page & TanStack Router
+
+- **Timestamp**: 2026-11-19T22:25:00+02:00
+- **Operator**: Frontend Agent Orchestrator & Memo (Frontend Developer)
+- **Active Branch**: `feat/fe-home-shell`
+- **User Requests & Approved Actions**:
+  1. Standardize design system to shadcn preset `b6Wxuc3c3f` (`base-mira`) in `design/reference/tokens.css`, `tailwind.preset.js`, `tailwind.config.ts`, and `src/globals.css`.
+  2. Implement responsive icon sizing rules (`icon-sm: 14px`, `icon-md: 16px`, `icon-lg: 20px`, mandatory `shrink-0`) across all buttons, inputs, headers, and pages.
+  3. Integrate `react-hook-form` + `zod` (`authSchemas.ts`) in `AuthCard.tsx` with `mode: 'onSubmit'` validation.
+  4. Create standalone Terms of Service (`/terms`) and Privacy Policy (`/privacy`) pages with responsive 50/50 equal-width action buttons, zero horizontal scroll, and user-provided copy.
+  5. Build official shadcn/ui collapsible sidebar (`collapsible="icon"`, `AppSidebar`, `AppHeader`, `AppShell`, `NavUser` with logged-in user profile, and `Platform Workspace` nav group).
+  6. Build Home Page (`/`) with centered sleeping-head Lottie animation (`sleeping-head-L617p2W31T`) and status text *"Waiting for Backend and AI to finish work"*.
+  7. Migrate client-side routing to `@tanstack/react-router` with route guards (`/` protected, redirects to `/login`; unauthenticated visitors cannot access `/`; clean URLs without `#`).
+  8. Run full verification suite, remove dead code, commit changes, and open Pull Request #8 targeting `Init-service`.
+- **Commit**: `069aaf2` (`feat(fe-shell): implement auth flow, home page shell, legal pages, and tanstack router`)
+- **Pull Request**: [#8](https://github.com/MohammedAliBk/api-test-pilot/pull/8) on `MohammedAliBk/api-test-pilot`
+- **Verification Evidence (100% Green)**:
+  - `check-tokens.mjs`: 0 violations across 50 scanned files.
+  - `pnpm run type-check`: 0 errors.
+  - `vitest run`: 23/23 tests passed.
+  - `pnpm run build`: Production build succeeded in 9.21s.
+

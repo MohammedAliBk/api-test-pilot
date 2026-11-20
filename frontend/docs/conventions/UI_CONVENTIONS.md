@@ -6,22 +6,24 @@ This document is the **single source of truth** for visual and interaction conve
 
 ## 1. Canonical Surfaces & Color Roles
 
-All visual layers resolve to CSS custom properties in `design/reference/tokens.css`:
-- **App Background**: `--color-surface` (`#0f1117` Dark / `#f8fafc` Light).
-- **Raised Surfaces (Cards, Modals, Popovers, Drawers)**: `--color-surface-raised` (`#181b23` Dark / `#ffffff` Light).
-- **Subtle / Interactive Accent / Active Table Stripe**: `--color-surface-subtle` (`#222631` Dark / `#f1f5f9` Light).
-- **Dividers & Structural Borders**: `--color-line` (1px, `#2d323f` Dark / `#e2e8f0` Light).
-- **Control Borders (Inputs, Selects, Buttons)**: `--color-line-strong` (`#404756` Dark / `#cbd5e1` Light).
-- **Primary Brand / Action Accent**: `--color-primary` (`#3b82f6` Blue / `#2563eb`), hover `--color-primary-hover`, active `--color-primary-active`.
+All visual layers resolve to CSS custom properties in `design/reference/tokens.css` (aligned with the landing page visual identity):
+- **App Background**: `--color-surface` (`#07080d` Dark / `#f7f9fd` Light).
+- **Raised Surfaces (Cards, Modals, Popovers, Drawers)**: `--color-surface-raised` (`#0d1017` Dark / `#ffffff` Light).
+- **Subtle / Interactive Accent / Active Table Stripe**: `--color-surface-subtle` (`#141722` Dark / `#edf2f9` Light).
+- **Dividers & Structural Borders**: `--color-line` (rgba(255, 255, 255, 0.08) Dark / rgba(0, 0, 0, 0.08) Light).
+- **Control Borders (Inputs, Selects, Buttons)**: `--color-line-strong` (rgba(255, 255, 255, 0.16) Dark / rgba(0, 0, 0, 0.18) Light).
+- **Primary Brand / Action Accent**: `--color-primary` (`#518eff` Electric Azure / `#2563eb`), hover `--color-primary-hover`, active `--color-primary-active`.
+- **Brand Glow Accent**: `--color-primary-glow` (`#8d5ef9` Electric Violet / `#7c3aed`).
+- **Brand Gradients**: `.gradient-text` (`linear-gradient(100deg, var(--color-primary), var(--color-primary-glow))`).
 - **Domain Test State Colors**:
-  - `queued`: Slate (`--color-state-queued-bg`, `--color-state-queued-fg`, `--color-state-queued-border`).
-  - `running`: Cyan / Blue pulse (`--color-state-running-bg`, `--color-state-running-fg`, `--color-state-running-border`).
-  - `passed`: Emerald green (`--color-state-passed-bg`, `--color-state-passed-fg`, `--color-state-passed-border`).
-  - `failed`: Rose / Red (`--color-state-failed-bg`, `--color-state-failed-fg`, `--color-state-failed-border`).
-  - `error`: Amber / Orange (`--color-state-error-bg`, `--color-state-error-fg`, `--color-state-error-border`).
-  - `retrying`: Yellow (`--color-state-retrying-bg`, `--color-state-retrying-fg`, `--color-state-retrying-border`).
-  - `recovered`: Purple / Violet (`--color-state-recovered-bg`, `--color-state-recovered-fg`, `--color-state-recovered-border`).
-  - `uncertain`: Fuchsia / Magenta stripe (`--color-state-uncertain-bg`, `--color-state-uncertain-fg`, `--color-state-uncertain-border`).
+  - `queued`: Slate (`--color-state-queued-bg`: `#141722`, `--color-state-queued-fg`: `#9ca5ba`, `--color-state-queued-border`: `#282e44`).
+  - `running`: Electric Blue pulse (`--color-state-running-bg`: `#0d2042`, `--color-state-running-fg`: `#518eff`, `--color-state-running-border`: `#1c4794`).
+  - `passed`: Neon Emerald (`--color-state-passed-bg`: `#052e1b`, `--color-state-passed-fg`: `#26e78d`, `--color-state-passed-border`: `#0f7644`).
+  - `failed`: Electric Crimson (`--color-state-failed-bg`: `#380611`, `--color-state-failed-fg`: `#ff4f6b`, `--color-state-failed-border`: `#8f122c`).
+  - `error`: Warm Orange (`--color-state-error-bg`: `#381604`, `--color-state-error-fg`: `#fb923c`, `--color-state-error-border`: `#8c3a07`).
+  - `retrying`: Warm Amber (`--color-state-retrying-bg`: `#331f05`, `--color-state-retrying-fg`: `#ffba4f`, `--color-state-retrying-border`: `#8c520a`).
+  - `recovered`: Electric Violet (`--color-state-recovered-bg`: `#231245`, `--color-state-recovered-fg`: `#8d5ef9`, `--color-state-recovered-border`: `#552bb8`).
+  - `uncertain`: Fuchsia / Magenta stripe (`--color-state-uncertain-bg`: `#330c24`, `--color-state-uncertain-fg`: `#f472b6`, `--color-state-uncertain-border`: `#7a1753`).
 
 ---
 
@@ -76,10 +78,11 @@ All interactive form controls, action buttons, segmented filter tabs, and search
 
 ## 8. Typography, Numeric Formatting & Code
 
-- **Primary UI Font**: Inter, system-ui, -apple-system, sans-serif.
-- **Code & Monospace Font**: JetBrains Mono, ui-monospace, SFMono-Regular, monospace.
+- **Display & Brand Headings**: Space Grotesk (`var(--font-display)`), sans-serif.
+- **Primary UI Font**: Inter (`var(--font-sans)`), system-ui, -apple-system, sans-serif.
+- **Code & Monospace Font**: JetBrains Mono (`var(--font-mono)`), ui-monospace, SFMono-Regular, monospace.
 - **Financial / Metric Numbers**: Always use `tabular-nums` wrapped in `<bdi>` (e.g. `<bdi className="tabular-nums">245 ms</bdi>`).
-- **Headings**: Roman style (`font-style: normal`), no italic display headings.
+- **Headings**: Roman style (`font-style: normal`), with subtle gradient accents (`.gradient-text`) for key hero highlights.
 
 ---
 
@@ -91,3 +94,26 @@ All interactive form controls, action buttons, segmented filter tabs, and search
   - Compact: `py-1.5 text-[12px]`.
   - Comfortable (default): `py-2.5 text-[13px]`.
 - **State Indicators**: Every row displays a dedicated Status Badge using domain test state tokens.
+
+---
+
+## 10. Component Library Standard (shadcn/ui via TanStack)
+
+- **Official Source**: All production React UI primitives must be sourced from **shadcn/ui** ([https://ui.shadcn.com/docs/installation/tanstack](https://ui.shadcn.com/docs/installation/tanstack)).
+- **Component Directory**: Primitives reside under `src/components/ui/` (`button.tsx`, `card.tsx`, `input.tsx`, `label.tsx`, `checkbox.tsx`, `tabs.tsx`).
+- **CLI Management**: Add components via `pnpm dlx shadcn@latest add <component>`.
+- **Integration**: Primitives strictly adhere to the project's design tokens in `design/reference/tokens.css` and the 36px control metric (`min-h-[36px]` / `h-9`).
+
+---
+
+## 11. Icon Metrics & Responsive Shrink-Proof Standard
+
+- **Canonical Icon Sizes**:
+  - `icon-sm`: 14px (`w-3.5 h-3.5`) for secondary inline badges, small buttons, and table indicators.
+  - `icon-md`: 16px (`w-4 h-4`) standard for 36px inputs, buttons, and status icons.
+  - `icon-lg`: 20px (`w-5 h-5`) for card headers, banner alerts, and section titles.
+- **Mandatory `shrink-0`**:
+  - Every icon placed inside a flex row, button, or input adornment must declare `shrink-0` (`[&_svg]:shrink-0`) to prevent squishing or aspect-ratio distortion on compact viewports.
+- **Mobile Viewport Auditing (320px - 375px)**:
+  - Button text and adjacent icons must never induce horizontal scrolling (`overflow-x`).
+  - When viewport space is constrained, prefer responsive truncation or label hiding (`hidden sm:inline` with `sr-only` screen-reader text) rather than allowing elements to expand beyond viewport width. Minimum interactive touch target remains 36px.

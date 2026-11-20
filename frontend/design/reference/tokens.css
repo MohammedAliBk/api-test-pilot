@@ -1,123 +1,158 @@
 /**
  * API Test Pilot — Design System Tokens
  * Source of Truth: design/reference/tokens.css
- * Theme: Dual Theme (Dark Default, Light via [data-theme="light"])
+ * Theme Preset: shadcn/ui Preset b6Wxuc3c3f (base-mira)
+ * Dual Theme: Dark Default (:root & .dark), Light via [data-theme="light"]
  * AA Contrast Ratio compliant (WCAG 2.1 AA)
  */
 
-:root {
+:root,
+.dark {
   /* =========================================================================
-   * 1. Surfaces & Canvas (Dark Default)
+   * 1. Official shadcn Preset b6Wxuc3c3f (base-mira) Tokens — Dark Default
    * ========================================================================= */
-  --color-surface: #0e1117;              /* App workspace canvas */
-  --color-surface-raised: #161b22;       /* Cards, elevated panels, modal backgrounds */
-  --color-surface-subtle: #21262d;       /* Hover states, active table rows, chip backgrounds */
-  --color-surface-overlay: rgba(14, 17, 23, 0.85); /* Modal backdrops with blur */
-
-  /* =========================================================================
-   * 2. Borders & Dividers
-   * ========================================================================= */
-  --color-line: #30363d;                 /* Structural dividers & card borders (1px) */
-  --color-line-strong: #484f58;          /* Control borders (inputs, selects, buttons) */
-  --color-line-focus: #3b82f6;           /* Focus border indicator */
-
-  /* =========================================================================
-   * 3. Typography & Text Hierarchy
-   * ========================================================================= */
-  --color-text-primary: #f0f6fc;         /* Main headings, active labels, body copy */
-  --color-text-secondary: #8b949e;       /* Secondary metadata, subtitles, labels */
-  --color-text-muted: #6e7681;           /* Disabled text, placeholder text */
-  --color-text-inverse: #0e1117;         /* High-contrast text on bright backgrounds */
-
-  /* =========================================================================
-   * 4. Brand & Action Accent
-   * ========================================================================= */
-  --color-primary: #3b82f6;              /* Primary action blue (contrast > 4.5:1) */
-  --color-primary-hover: #2563eb;
-  --color-primary-active: #1d4ed8;
-  --color-primary-subtle: rgba(59, 130, 246, 0.15); /* Accent tint badge */
-
-  /* =========================================================================
-   * 5. General Semantic Status Colors
-   * ========================================================================= */
-  --color-success: #10b981;
-  --color-warning: #f59e0b;
-  --color-danger: #ef4444;
-  --color-info: #06b6d4;
-
-  /* =========================================================================
-   * 6. Domain Test Execution States (First-Class Invariants)
-   * ========================================================================= */
-  /* Queued: Waiting in worker queue */
-  --color-state-queued-bg: #1e293b;
-  --color-state-queued-fg: #94a3b8;
-  --color-state-queued-border: #334155;
-
-  /* Running: Active execution */
-  --color-state-running-bg: #0c4a6e;
-  --color-state-running-fg: #38bdf8;
-  --color-state-running-border: #0284c7;
-
-  /* Passed: Deterministic assertion verified */
-  --color-state-passed-bg: #064e3b;
-  --color-state-passed-fg: #34d399;
-  --color-state-passed-border: #059669;
-
-  /* Failed: Deterministic assertion failed (target bug) */
-  --color-state-failed-bg: #4c0519;
-  --color-state-failed-fg: #fb7185;
-  --color-state-failed-border: #e11d48;
-
-  /* Error: Infrastructure/worker runtime failure */
-  --color-state-error-bg: #451a03;
-  --color-state-error-fg: #fb923c;
-  --color-state-error-border: #d97706;
-
-  /* Retrying: Bounded retry in flight */
-  --color-state-retrying-bg: #422006;
-  --color-state-retrying-fg: #facc15;
-  --color-state-retrying-border: #ca8a04;
-
-  /* Recovered: Safely recovered from crash */
-  --color-state-recovered-bg: #3b0764;
-  --color-state-recovered-fg: #c084fc;
-  --color-state-recovered-border: #9333ea;
-
-  /* Uncertain: Worker interrupted; request reached target unconfirmed */
-  --color-state-uncertain-bg: #500724;
-  --color-state-uncertain-fg: #f472b6;
-  --color-state-uncertain-border: #db2777;
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.205 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.205 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.432 0.232 292.759);
+  --primary-foreground: oklch(0.969 0.016 293.756);
+  --secondary: oklch(0.274 0.006 286.033);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --accent: oklch(0.269 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
+  --destructive-foreground: oklch(0.985 0 0);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.556 0 0);
+  --chart-1: oklch(0.828 0.111 230.318);
+  --chart-2: oklch(0.685 0.169 237.323);
+  --chart-3: oklch(0.588 0.158 241.966);
+  --chart-4: oklch(0.5 0.134 242.749);
+  --chart-5: oklch(0.443 0.11 240.79);
+  --radius: 0.45rem;
+  --sidebar: oklch(0.205 0 0);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.606 0.25 292.717);
+  --sidebar-primary-foreground: oklch(0.969 0.016 293.756);
+  --sidebar-accent: oklch(0.269 0 0);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.556 0 0);
 
   /* =========================================================================
-   * 7. AI Visual Segregation Tokens
+   * 2. Semantic Token Aliases Mapped to Preset b6Wxuc3c3f
    * ========================================================================= */
-  --color-ai-badge-bg: #1e1b4b;
-  --color-ai-badge-fg: #a5b4fc;
-  --color-ai-badge-border: #4338ca;
-  --color-ai-card-bg: rgba(30, 27, 75, 0.35);
+  --color-primary: var(--primary);
+  --color-primary-hover: oklch(0.491 0.27 292.581);
+  --color-primary-active: oklch(0.39 0.21 292.759);
+  --color-primary-subtle: oklch(0.432 0.232 292.759 / 15%);
+  --color-primary-glow: var(--sidebar-primary);
+  --color-primary-glow-subtle: oklch(0.606 0.25 292.717 / 15%);
+
+  --color-surface: var(--background);
+  --color-surface-raised: var(--card);
+  --color-surface-subtle: var(--secondary);
+  --color-surface-overlay: oklch(0.145 0 0 / 85%);
+  --color-surface-accent: var(--accent);
+
+  --color-line: var(--border);
+  --color-line-strong: var(--input);
+  --color-line-focus: var(--ring);
+
+  --color-text-primary: var(--foreground);
+  --color-text-secondary: var(--muted-foreground);
+  --color-text-muted: oklch(0.556 0 0);
+  --color-text-inverse: oklch(0.145 0 0);
+
+  --color-success: oklch(0.765 0.177 163.223);
+  --color-warning: oklch(0.828 0.189 84.429);
+  --color-danger: var(--destructive);
+  --color-info: var(--chart-2);
 
   /* =========================================================================
-   * 8. Typography Scale
+   * 3. Domain Test Execution States
    * ========================================================================= */
-  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  /* Queued */
+  --color-state-queued-bg: var(--muted);
+  --color-state-queued-fg: var(--muted-foreground);
+  --color-state-queued-border: var(--border);
+
+  /* Running */
+  --color-state-running-bg: oklch(0.432 0.232 292.759 / 20%);
+  --color-state-running-fg: var(--sidebar-primary);
+  --color-state-running-border: oklch(0.606 0.25 292.717 / 40%);
+  --color-shimmer-highlight: var(--foreground);
+
+  /* Passed */
+  --color-state-passed-bg: oklch(0.765 0.177 163.223 / 15%);
+  --color-state-passed-fg: oklch(0.765 0.177 163.223);
+  --color-state-passed-border: oklch(0.765 0.177 163.223 / 35%);
+
+  /* Failed */
+  --color-state-failed-bg: oklch(0.704 0.191 22.216 / 15%);
+  --color-state-failed-fg: var(--destructive);
+  --color-state-failed-border: oklch(0.704 0.191 22.216 / 35%);
+
+  /* Error */
+  --color-state-error-bg: oklch(0.75 0.183 55.934 / 15%);
+  --color-state-error-fg: oklch(0.75 0.183 55.934);
+  --color-state-error-border: oklch(0.75 0.183 55.934 / 35%);
+
+  /* Retrying */
+  --color-state-retrying-bg: oklch(0.828 0.189 84.429 / 15%);
+  --color-state-retrying-fg: oklch(0.828 0.189 84.429);
+  --color-state-retrying-border: oklch(0.828 0.189 84.429 / 35%);
+
+  /* Recovered */
+  --color-state-recovered-bg: oklch(0.606 0.25 292.717 / 18%);
+  --color-state-recovered-fg: oklch(0.71 0.2 292.717);
+  --color-state-recovered-border: oklch(0.606 0.25 292.717 / 40%);
+
+  /* Uncertain */
+  --color-state-uncertain-bg: oklch(0.718 0.202 349.761 / 15%);
+  --color-state-uncertain-fg: oklch(0.718 0.202 349.761);
+  --color-state-uncertain-border: oklch(0.718 0.202 349.761 / 35%);
+
+  /* =========================================================================
+   * 4. AI Visual Segregation Tokens
+   * ========================================================================= */
+  --color-ai-badge-bg: oklch(0.606 0.25 292.717 / 15%);
+  --color-ai-badge-fg: oklch(0.81 0.12 293);
+  --color-ai-badge-border: oklch(0.606 0.25 292.717 / 40%);
+  --color-ai-card-bg: oklch(0.606 0.25 292.717 / 8%);
+
+  /* =========================================================================
+   * 5. Typography Scale & Font Families (Space Grotesk + Oxanium / Inter)
+   * ========================================================================= */
+  --font-display: 'Space Grotesk', 'Oxanium', 'Inter', system-ui, sans-serif;
+  --font-sans: 'Oxanium', 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+  --font-serif: 'Playfair Display', 'Instrument Serif', Georgia, serif;
   --font-arabic: 'Tajawal', var(--font-sans);
 
   --text-2xs: 10px;
   --text-xs: 11px;
   --text-sm: 12px;
-  --text-base: 13px; /* Standard 13px control & table body font */
+  --text-base: 13px;
   --text-md: 14px;
   --text-lg: 16px;
   --text-xl: 18px;
   --text-2xl: 22px;
+  --text-3xl: 28px;
+  --text-4xl: 36px;
 
   --leading-none: 1;
   --leading-tight: 1.25;
   --leading-normal: 1.5;
 
   /* =========================================================================
-   * 9. Spacing & Dimensions (4px Grid)
+   * 6. Spacing & Control Metrics
    * ========================================================================= */
   --space-0-5: 2px;
   --space-1: 4px;
@@ -132,8 +167,7 @@
   --space-8: 32px;
   --space-10: 40px;
 
-  /* Element Dimensions */
-  --control-height: 36px;       /* Mandatory 36px control metric */
+  --control-height: 36px;
   --control-height-sm: 28px;
   --control-height-lg: 44px;
 
@@ -148,36 +182,39 @@
 
   --sidebar-width: 260px;
   --sidebar-collapsed-width: 64px;
-  --topbar-height: 52px;
+  --topbar-height: 56px;
   --drawer-width: 440px;
 
   /* =========================================================================
-   * 10. Radii & Shape
+   * 7. Radii & Shape (Synchronized with --radius: 0.45rem from b6Wxuc3c3f)
    * ========================================================================= */
-  --radius-control: 6px;        /* Buttons, inputs, segmented controls */
-  --radius-card: 10px;          /* Cards, menus, popovers, dropdowns */
-  --radius-panel: 14px;         /* Modals, sliding drawers, main panels */
+  --radius-control: calc(var(--radius) - 2px);
+  --radius-card: var(--radius);
+  --radius-panel: calc(var(--radius) + 4px);
   --radius-pill: 9999px;
 
   /* =========================================================================
-   * 11. Shadows & Depth
+   * 8. Shadows & Elevations
    * ========================================================================= */
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
   --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.5), 0 2px 4px -2px rgba(0, 0, 0, 0.5);
   --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.6), 0 4px 6px -4px rgba(0, 0, 0, 0.6);
   --shadow-panel: 0 20px 25px -5px rgba(0, 0, 0, 0.7);
+  --shadow-scalar-1: 0 1px 3px 0 rgba(0, 0, 0, 0.25);
+  --shadow-scalar-2: 0 13px 20px 0 rgba(0, 0, 0, 0.35), 0 3px 8px 0 rgba(0, 0, 0, 0.2), inset 0 0 0 1px var(--border);
+  --shadow-card: 0 0 0 1px var(--border), 0 20px 50px -24px rgba(0, 0, 0, 0.7);
+  --shadow-hero: 0 0 0 1px var(--border), 0 16px 40px -12px rgba(0, 0, 0, 0.65);
+  --shadow-glow: 0 0 24px -6px var(--primary);
+  --shadow-glow-purple: 0 0 24px -6px var(--sidebar-primary);
 
   /* =========================================================================
-   * 12. Transitions & Motion
+   * 9. Transitions & Z-Index
    * ========================================================================= */
   --duration-fast: 100ms;
   --duration-normal: 150ms;
   --duration-slow: 250ms;
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
 
-  /* =========================================================================
-   * 13. Z-Index Layers
-   * ========================================================================= */
   --z-base: 1;
   --z-sticky: 100;
   --z-dropdown: 200;
@@ -185,81 +222,163 @@
   --z-toast: 1000;
   --z-tooltip: 1100;
 
-  /* =========================================================================
-   * 14. Responsive Shell Breakpoint
-   * ========================================================================= */
   --breakpoint-shell: 900px;
 }
 
 /* ===========================================================================
- * LIGHT THEME OVERRIDES
+ * LIGHT THEME OVERRIDES — Official Preset b6Wxuc3c3f (base-mira) Light Values
  * =========================================================================== */
 [data-theme="light"] {
-  --color-surface: #f8fafc;
-  --color-surface-raised: #ffffff;
-  --color-surface-subtle: #f1f5f9;
-  --color-surface-overlay: rgba(248, 250, 252, 0.85);
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.145 0 0);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.145 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.145 0 0);
+  --primary: oklch(0.491 0.27 292.581);
+  --primary-foreground: oklch(0.969 0.016 293.756);
+  --secondary: oklch(0.967 0.001 286.375);
+  --secondary-foreground: oklch(0.21 0.006 285.885);
+  --muted: oklch(0.97 0 0);
+  --muted-foreground: oklch(0.556 0 0);
+  --accent: oklch(0.97 0 0);
+  --accent-foreground: oklch(0.205 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  --destructive-foreground: oklch(0.985 0 0);
+  --border: oklch(0.922 0 0);
+  --input: oklch(0.922 0 0);
+  --ring: oklch(0.708 0 0);
+  --chart-1: oklch(0.828 0.111 230.318);
+  --chart-2: oklch(0.685 0.169 237.323);
+  --chart-3: oklch(0.588 0.158 241.966);
+  --chart-4: oklch(0.5 0.134 242.749);
+  --chart-5: oklch(0.443 0.11 240.79);
+  --radius: 0.45rem;
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.145 0 0);
+  --sidebar-primary: oklch(0.541 0.281 293.009);
+  --sidebar-primary-foreground: oklch(0.969 0.016 293.756);
+  --sidebar-accent: oklch(0.97 0 0);
+  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar-border: oklch(0.922 0 0);
+  --sidebar-ring: oklch(0.708 0 0);
 
-  --color-line: #e2e8f0;
-  --color-line-strong: #cbd5e1;
-  --color-line-focus: #2563eb;
+  --color-primary: var(--primary);
+  --color-primary-hover: oklch(0.432 0.232 292.759);
+  --color-primary-active: oklch(0.38 0.21 292.759);
+  --color-primary-subtle: oklch(0.491 0.27 292.581 / 10%);
+  --color-primary-glow: var(--sidebar-primary);
+  --color-primary-glow-subtle: oklch(0.541 0.281 293.009 / 10%);
 
-  --color-text-primary: #0f172a;
-  --color-text-secondary: #475569;
-  --color-text-muted: #94a3b8;
-  --color-text-inverse: #ffffff;
+  --color-surface: var(--background);
+  --color-surface-raised: var(--card);
+  --color-surface-subtle: var(--secondary);
+  --color-surface-overlay: oklch(1 0 0 / 85%);
+  --color-surface-accent: var(--accent);
 
-  --color-primary: #2563eb;
-  --color-primary-hover: #1d4ed8;
-  --color-primary-active: #1e40af;
-  --color-primary-subtle: #eff6ff;
+  --color-line: var(--border);
+  --color-line-strong: var(--input);
+  --color-line-focus: var(--ring);
 
-  --color-success: #059669;
-  --color-warning: #d97706;
-  --color-danger: #dc2626;
-  --color-info: #0891b2;
+  --color-text-primary: var(--foreground);
+  --color-text-secondary: var(--muted-foreground);
+  --color-text-muted: oklch(0.556 0 0);
+  --color-text-inverse: oklch(0.985 0 0);
+
+  --color-success: oklch(0.596 0.145 163.225);
+  --color-warning: oklch(0.666 0.179 58.318);
+  --color-danger: var(--destructive);
+  --color-info: var(--chart-3);
 
   /* Domain Test States (Light Mode) */
-  --color-state-queued-bg: #f1f5f9;
-  --color-state-queued-fg: #475569;
-  --color-state-queued-border: #cbd5e1;
+  --color-state-queued-bg: var(--muted);
+  --color-state-queued-fg: var(--muted-foreground);
+  --color-state-queued-border: var(--border);
 
-  --color-state-running-bg: #e0f2fe;
-  --color-state-running-fg: #0369a1;
-  --color-state-running-border: #7dd3fc;
+  --color-state-running-bg: oklch(0.491 0.27 292.581 / 10%);
+  --color-state-running-fg: var(--primary);
+  --color-state-running-border: oklch(0.491 0.27 292.581 / 30%);
+  --color-shimmer-highlight: var(--sidebar-primary);
 
-  --color-state-passed-bg: #ecfdf5;
-  --color-state-passed-fg: #047857;
-  --color-state-passed-border: #a7f3d0;
+  --color-state-passed-bg: oklch(0.596 0.145 163.225 / 12%);
+  --color-state-passed-fg: oklch(0.508 0.118 165.612);
+  --color-state-passed-border: oklch(0.596 0.145 163.225 / 30%);
 
-  --color-state-failed-bg: #fff1f2;
-  --color-state-failed-fg: #be123c;
-  --color-state-failed-border: #fecdd3;
+  --color-state-failed-bg: oklch(0.577 0.245 27.325 / 10%);
+  --color-state-failed-fg: var(--destructive);
+  --color-state-failed-border: oklch(0.577 0.245 27.325 / 30%);
 
-  --color-state-error-bg: #fffbeb;
-  --color-state-error-fg: #b45309;
-  --color-state-error-border: #fde68a;
+  --color-state-error-bg: oklch(0.666 0.179 58.318 / 12%);
+  --color-state-error-fg: oklch(0.553 0.195 38.402);
+  --color-state-error-border: oklch(0.666 0.179 58.318 / 30%);
 
-  --color-state-retrying-bg: #fefce8;
-  --color-state-retrying-fg: #a16207;
-  --color-state-retrying-border: #fef08a;
+  --color-state-retrying-bg: oklch(0.769 0.188 70.08 / 15%);
+  --color-state-retrying-fg: oklch(0.554 0.135 66.442);
+  --color-state-retrying-border: oklch(0.769 0.188 70.08 / 35%);
 
-  --color-state-recovered-bg: #faf5ff;
-  --color-state-recovered-fg: #7e22ce;
-  --color-state-recovered-border: #e9d5ff;
+  --color-state-recovered-bg: oklch(0.541 0.281 293.009 / 10%);
+  --color-state-recovered-fg: var(--primary);
+  --color-state-recovered-border: oklch(0.541 0.281 293.009 / 30%);
 
-  --color-state-uncertain-bg: #fdf2f8;
-  --color-state-uncertain-fg: #be185d;
-  --color-state-uncertain-border: #fbcfe8;
+  --color-state-uncertain-bg: oklch(0.592 0.249 0.584 / 10%);
+  --color-state-uncertain-fg: oklch(0.525 0.223 3.958);
+  --color-state-uncertain-border: oklch(0.592 0.249 0.584 / 30%);
 
-  /* AI Segregation (Light Mode) */
-  --color-ai-badge-bg: #eef2ff;
-  --color-ai-badge-fg: #4338ca;
-  --color-ai-badge-border: #c7d2fe;
-  --color-ai-card-bg: #f5f7ff;
+  --color-ai-badge-bg: oklch(0.491 0.27 292.581 / 12%);
+  --color-ai-badge-fg: var(--primary);
+  --color-ai-badge-border: oklch(0.491 0.27 292.581 / 30%);
+  --color-ai-card-bg: oklch(0.491 0.27 292.581 / 5%);
 
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -2px rgba(0, 0, 0, 0.08);
   --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
   --shadow-panel: 0 20px 25px -5px rgba(0, 0, 0, 0.15);
+  --shadow-card: 0 0 0 1px var(--border), 0 4px 12px -2px rgba(0, 0, 0, 0.08);
+  --shadow-hero: 0 0 0 1px var(--border), 0 12px 30px -10px rgba(0, 0, 0, 0.12);
+  --shadow-glow: 0 0 20px -5px oklch(0.491 0.27 292.581 / 30%);
+  --shadow-glow-purple: 0 0 20px -5px oklch(0.541 0.281 293.009 / 30%);
+}
+
+/* ===========================================================================
+ * Shared Visual Identity Utility Classes
+ * =========================================================================== */
+.gradient-text {
+  background-image: linear-gradient(100deg, var(--color-primary), var(--color-primary-glow));
+  color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+.hero-glow {
+  box-shadow: var(--shadow-hero);
+}
+
+.bg-grid {
+  background-image: linear-gradient(90deg, var(--border) 1px, transparent 1px),
+                    linear-gradient(var(--border) 1px, transparent 1px);
+  background-size: 56px 56px;
+}
+
+@keyframes text-shimmer {
+  0% {
+    background-position: 100% 0;
+  }
+  100% {
+    background-position: -100% 0;
+  }
+}
+
+.shimmer-text {
+  background-image: linear-gradient(
+    90deg,
+    var(--color-state-running-fg) 0%,
+    var(--color-shimmer-highlight) 50%,
+    var(--color-state-running-fg) 100%
+  );
+  background-size: 200% 100%;
+  color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
+  animation: text-shimmer 2.2s linear infinite;
+  display: inline-block;
 }

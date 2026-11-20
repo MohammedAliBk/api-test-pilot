@@ -9,6 +9,22 @@ export default defineConfig({
       '@': path.resolve(__dirname, './src'),
     },
   },
+  server: {
+  // Cloudeflare TLS
+    allowedHosts: [
+      '.trycloudflare.com',
+    ],
+    headers: {
+      'Cross-Origin-Opener-Policy': 'same-origin-allow-popups',
+    },
+    proxy: {
+      '/api': {
+        target: 'https://mohamed1551.runasp.net',
+        changeOrigin: true,
+        secure: false,
+      },
+    },
+  },
   test: {
     globals: true,
     environment: 'jsdom',

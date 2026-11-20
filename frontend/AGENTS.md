@@ -11,10 +11,40 @@ API Test Pilot is an AI-assisted API testing platform featuring intelligent Open
 
 1. **FE_ROOT Boundary (Mandatory)**: All file creation, editing, and deletion must remain strictly inside `frontend/`. Writing outside `frontend/` (e.g., in `backend/`, `ai-service/`, `deploy/`, root `README.MD`, root `.github/`) is strictly prohibited.
 2. **Authority & Decisions**: Never make decisions on behalf of Memo (the frontend developer). Every architectural, library, schema, contract, or design decision requires explicit approval and is recorded in [DECISIONS.md](file:///Volumes/disk1/Projects/api-test-pilot/frontend/docs/orchestration/DECISIONS.md).
-3. **Communication vs. Persistence Language**:
+3. **Commit & Pull Request Protocol (Memo's Strict Workflow)**:
+   - **Wait for Review Before Committing**: After making any code, design, or doc changes on a branch, **NEVER commit immediately**. Present the modifications to Memo in chat (Egyptian Arabic). Stop and wait for Memo to inspect, review, and make any edits or adjustments. Only create the git commit after Memo explicitly approves.
+   - **Branch Completion & PR Details Draft**: When work on the branch is complete, draft the exact Pull Request details (title, summary, changes list, test evidence) and present them to Memo in chat.
+   - **Memo's Description Review**: Stop and wait for Memo to review, edit, or adjust the PR description.
+   - **Pre-PR Verification & Execution**: Only when Memo explicitly instructs: *"اعمل بول ريكويست"* (Create the pull request):
+     1. Run the final verification suite (`check-tokens`, `type-check`, `test`, `build`).
+     2. Verify 100% green pass.
+     3. Only after green evidence is confirmed, open the Pull Request on GitHub with the approved description.
+4. **Communication vs. Persistence Language**:
    - Conversations with Memo in chat: **Egyptian Arabic (عامية مصرية)**. Technical terms stay in English.
    - Everything written to disk: **English only** (code, docs, task files, commit messages, comments).
    - Exception: End-user visible UI copy follows project UI language decisions ([DEC-001](file:///Volumes/disk1/Projects/api-test-pilot/frontend/docs/orchestration/DECISIONS.md)).
+5. **Component Library & Primitives Standard (shadcn/ui via TanStack)**:
+   - All UI components, form controls, dialogs, and layout primitives must be sourced from **shadcn/ui** following the TanStack / React / Vite guidelines: [https://ui.shadcn.com/docs/installation/tanstack](https://ui.shadcn.com/docs/installation/tanstack).
+   - Components are configured via `components.json` and generated into `src/components/ui/` using `pnpm dlx shadcn@latest add <component>`.
+   - All shadcn primitives must strictly respect the project's design tokens in `tokens.css` and the 36px control metric in `UI_CONVENTIONS.md`.
+6. **Production-Grade Standard (Zero Demo / Debug / Mock UI)**:
+   - We build strictly for **Production**. Never inject demo cards, debug profile displays, fake "Authenticated Successfully / Sign Out" placeholders inside auth cards, or playground showcases into production views. Every component and page must meet enterprise production quality.
+7. **Task Ingestion & Pre-Execution Plan Protocol (Memo's Strict Gate G1)**:
+   - **Task Registration & Unfinished Work Check**: Whenever Memo assigns a new task:
+     1. First check `git status` and previous tasks to verify if any uncommitted or unfinished work exists. Never mix tasks.
+     2. Immediately register the new task in `docs/orchestration/TASKS.md` with its dedicated tracking file.
+     3. Every task must have its own dedicated branch (`feat/fe-<slug>`, `fix/fe-<slug>`, `chore/fe-<slug>`).
+   - **Formulate & Present Full Plan**:
+     - Before writing, modifying, or creating any code, formulate a clear, detailed plan in chat (Egyptian Arabic) specifying:
+       - What will be modified and what will be created?
+       - The exact list of files to be changed or created.
+       - Any architectural, design, token, or behavior decisions that need to be made.
+   - **Decision Authority Belongs Strictly to Memo**: If there are decisions to be made, formulate questions and ask Memo explicitly. Never assume or make decisions unilaterally.
+   - **Stop and Wait for Memo's Review & "نفذ" (Execute) Command**: Stop completely and wait for Memo to review and adjust the plan. Do NOT start executing or modifying code until Memo explicitly reviews the plan and instructs: *"نفذ"* (or gives explicit approval).
+8. **Responsive Icon Sizing & Shrink-Proof Rule**:
+   - **Tokenized Standard Metrics**: All icons (Lucide React or SVG) must strictly follow design token metrics: `icon-sm: 14px` (`w-3.5 h-3.5`), `icon-md: 16px` (`w-4 h-4`), `icon-lg: 20px` (`w-5 h-5`).
+   - **Mandatory `shrink-0`**: Whenever an icon is placed inside a Flex container, Button, Input adornment, or Header, it MUST include `shrink-0` to guarantee it never gets squished, distorted, or crushed when screen space contracts.
+   - **Small Screen & Mobile Auditing (down to 320px)**: When designing or adapting any page, meticulously audit icon-and-label layouts on mobile viewports (320px - 375px). Ensure zero horizontal overflow (`overflow-x`). If horizontal space is constrained, responsively abbreviate or hide labels (`hidden sm:inline` with `sr-only` accessibility), while preserving the icon's dimensions and the 36px minimum control touch target.
 
 ---
 
