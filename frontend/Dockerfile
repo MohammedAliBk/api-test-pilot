@@ -6,7 +6,7 @@ FROM node:20-alpine AS builder
 WORKDIR /app
 
 # 1. Copy package files and pnpm lockfile
-COPY package.json pnpm-lock.yaml ./
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 
 # 2. Enable Corepack and activate pnpm
 RUN corepack enable && corepack prepare pnpm@latest --activate
@@ -14,7 +14,7 @@ RUN corepack enable && corepack prepare pnpm@latest --activate
 # 3. Install dependencies using pnpm
 # 3. Install dependencies using pnpm and allow build scripts
 #RUN pnpm install --unsafe-perm=true --no-frozen-lockfile --allow-build=esbuild
-RUN pnpm install --frzen-lockfile
+RUN pnpm install --frozen-lockfile
 # 4. Copy configuration files and source code
 COPY tsconfig*.json ./
 COPY vite.config.* ./
