@@ -36,6 +36,7 @@ services:
     environment:
       ASPNETCORE_ENVIRONMENT: Development
       ASPNETCORE_HTTP_PORTS: 8080
+      ASPNETCORE_FORWARDEDHEADERS_ENABLED: "true"
       ConnectionStrings__DefaultConnection: "Server=sqlserver,1433;Database=APITestPilot;User Id=sa;Password=DevOps_P@ssw0rd2026!;Encrypt=True;TrustServerCertificate=True"
     depends_on:
       sqlserver:
@@ -48,6 +49,7 @@ services:
       context: ./frontend
       dockerfile: Dockerfile
     container_name: pilot_frontend
+    restart: unless-stopped
     ports:
       - "5173:80"
     # environment:
@@ -57,4 +59,3 @@ services:
 
 volumes:
   sqlserver_data:
-
